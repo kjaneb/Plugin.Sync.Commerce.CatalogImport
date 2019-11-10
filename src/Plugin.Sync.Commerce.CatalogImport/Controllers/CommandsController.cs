@@ -40,12 +40,10 @@ namespace Plugin.Sync.Commerce.CatalogImport.Controllers
             try
             {
                 var command = Command<ImportCategoryCommand>();
-                var policy = CurrentContext.GetPolicy<CategoryMappingPolicy>();
-                throw new NotImplementedException();
-                //var argument = new ImportCategoryArgument(request.GetFieldValues(policy), request);
+                var argument = new ImportCommerceEntityArgument(request);
+                var result = await command.Process(CurrentContext, argument);
 
-                //var response = await command.Process(CurrentContext, argument);
-                //return response != null ? new ObjectResult(response) : new NotFoundObjectResult("Error importing Category data");
+                return result != null ? new ObjectResult(result) : new NotFoundObjectResult("Error importing Category data");
             }
             catch (Exception ex)
             {
@@ -69,12 +67,8 @@ namespace Plugin.Sync.Commerce.CatalogImport.Controllers
             try
             {
                 var command = Command<ImportSellableItemCommand>();
-                var policy = CurrentContext.GetPolicy<SellableItemMappingPolicy>();
                 var argument = new ImportCommerceEntityArgument(request);
-                //{
-                //    SellableItemImages = request.ToDictionary<string>("Images"),
-                //    Prices = request.ToDictionary<decimal>("Prices")
-                //};
+
                 var result = await command.Process(CurrentContext, argument);
 
                 return result != null ? new ObjectResult(result) : new NotFoundObjectResult("Error importing SellableItem data");

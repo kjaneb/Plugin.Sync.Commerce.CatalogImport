@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Plugin.Sync.Commerce.CatalogImport.Entities;
+﻿using Plugin.Sync.Commerce.CatalogImport.Entities;
 using Plugin.Sync.Commerce.CatalogImport.Pipelines;
 using Plugin.Sync.Commerce.CatalogImport.Pipelines.Arguments;
 using Sitecore.Commerce.Core;
 using Sitecore.Commerce.Core.Commands;
-using Sitecore.Commerce.Plugin.Catalog;
+using System;
+using System.Threading.Tasks;
 
 namespace Plugin.Sync.Commerce.CatalogImport.Commands
 {
@@ -19,7 +17,7 @@ namespace Plugin.Sync.Commerce.CatalogImport.Commands
             this._pipeline = pipeline;
         }
 
-        public async Task<ImportCategoryResponse> Process(CommerceContext commerceContext, ImportCategoryArgument args)
+        public async Task<ImportCommerceEntityResponse> Process(CommerceContext commerceContext, ImportCommerceEntityArgument args)
         {
             using (var activity = CommandActivity.Start(commerceContext, this))
             {

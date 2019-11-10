@@ -1,4 +1,5 @@
-﻿using Plugin.Sync.Commerce.CatalogImport.Entities;
+﻿using Newtonsoft.Json.Linq;
+using Plugin.Sync.Commerce.CatalogImport.Entities;
 using Plugin.Sync.Commerce.CatalogImport.Extensions;
 using Plugin.Sync.Commerce.CatalogImport.Pipelines.Arguments;
 using Plugin.Sync.Commerce.CatalogImport.Policies;
@@ -16,7 +17,7 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
     /// Import data into an existing SellableItem or new SellableItem entity
     /// </summary>
     [PipelineDisplayName("ImportSellableItemBlock")]
-    public class ImportSellableItemBlock : PipelineBlock<ImportCommerceEntityArgument, SellableItemResponse, CommercePipelineExecutionContext>
+    public class ImportSellableItemBlock : PipelineBlock<ImportCommerceEntityArgument, ImportCommerceEntityResponse, CommercePipelineExecutionContext>
     {
         #region Private fields
         private readonly CommerceCommander _commerceCommander;
@@ -45,7 +46,7 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
         /// <param name="arg"></param>
         /// <param name="context"></param>
         /// <returns></returns>
-        public override async Task<SellableItemResponse> Run(ImportCommerceEntityArgument arg, CommercePipelineExecutionContext context)
+        public override async Task<ImportCommerceEntityResponse> Run(ImportCommerceEntityArgument arg, CommercePipelineExecutionContext context)
         {
             //TODO: add an option to only import data if SellableItem already exists (don't create a new one)
             //TODO: add an option to only import data if SellableItem don't exist (don't update existing ones)
@@ -59,7 +60,7 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
             _importHelper.AssertCatalogExists(context, catalogName);
 
             //Get or create sellable item
-            SellableItem sellableItem = await GetOrCreateSellableItem(arg, context, mappingPolicy, itemId);
+            SellableItem sellableItem = await GetOrCreateSellableItem(arg.JsonData, context, mappingPolicy, itemId);
 
             //Associate catalog and category
             var categoryName = _importHelper.GetParentCategoryName(arg.JsonData, mappingPolicy);
@@ -67,9 +68,9 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
 
             //Import SellableIltem field values
             sellableItem = await _importHelper.ImportComposerViewsFields(sellableItem, arg.JsonData, mappingPolicy, context.CommerceContext) as SellableItem;
-            return new SellableItemResponse
+            return new ImportCommerceEntityResponse
             {
-                SellableItem = sellableItem
+                CommerceEntity = sellableItem
             };
         }
         #endregion
@@ -108,15 +109,15 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
         /// <param name="mappingPolicy"></param>
         /// <param name="itemId"></param>
         /// <returns></returns>
-        private async Task<SellableItem> GetOrCreateSellableItem(ImportCommerceEntityArgument arg, CommercePipelineExecutionContext context, SellableItemMappingPolicy mappingPolicy, string itemId)
+        private async Task<SellableItem> GetOrCreateSellableItem(JObject jsonData, CommercePipelineExecutionContext context, SellableItemMappingPolicy mappingPolicy, string itemId)
         {
             var commerceEntityId = $"{CommerceEntity.IdPrefix<SellableItem>()}{itemId}";
             var sellableItem = await _commerceCommander.Command<FindEntityCommand>().Process(context.CommerceContext, typeof(SellableItem), commerceEntityId) as SellableItem;
             if (sellableItem == null)
             {
-                var name = arg.JsonData.SelectValue<string>(mappingPolicy.NamePath) ?? itemId;
-                var displayName = arg.JsonData.SelectValue<string>(mappingPolicy.DisplayNamePath) ?? name;
-                var description = arg.JsonData.SelectValue<string>(mappingPolicy.DescriptionPath);
+                var name = jsonData.SelectValue<string>(mappingPolicy.NamePath) ?? itemId;
+                var displayName = jsonData.SelectValue<string>(mappingPolicy.DisplayNamePath) ?? name;
+                var description = jsonData.SelectValue<string>(mappingPolicy.DescriptionPath);
 
                 await _commerceCommander.Command<CreateSellableItemCommand>().Process(context.CommerceContext, itemId, name, displayName, description);
                 sellableItem = await _commerceCommander.Command<FindEntityCommand>().Process(context.CommerceContext, typeof(SellableItem), commerceEntityId) as SellableItem;

@@ -7,9 +7,9 @@ using Sitecore.Framework.Conditions;
 
 namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Arguments
 {
-    public class ImportSellableItemArgument : PipelineArgument
+    public class ImportCommerceEntityArgument : PipelineArgument
     {
-        public ImportSellableItemArgument(JObject jsonData)
+        public ImportCommerceEntityArgument(JObject jsonData)
         {
             Condition.Requires<JObject>(jsonData).IsNull("jsonData can not be null");
             this.JsonData = jsonData;

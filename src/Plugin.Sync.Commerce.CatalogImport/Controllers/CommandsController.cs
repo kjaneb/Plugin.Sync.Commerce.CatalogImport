@@ -70,7 +70,7 @@ namespace Plugin.Sync.Commerce.CatalogImport.Controllers
             {
                 var command = Command<ImportSellableItemCommand>();
                 var policy = CurrentContext.GetPolicy<SellableItemMappingPolicy>();
-                var argument = new ImportSellableItemArgument(request.GetFieldValues(policy), request);
+                var argument = new ImportCommerceEntityArgument(request);
                 //{
                 //    SellableItemImages = request.ToDictionary<string>("Images"),
                 //    Prices = request.ToDictionary<decimal>("Prices")

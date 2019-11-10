@@ -1,24 +1,48 @@
 ﻿using Newtonsoft.Json.Linq;
+using Plugin.Sync.Commerce.CatalogImport.Pipelines.Arguments;
 using Plugin.Sync.Commerce.CatalogImport.Policies;
-using Sitecore.Commerce.Core;
-using Sitecore.Commerce.EntityViews;
-using Sitecore.Commerce.Plugin.Catalog;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Serilog;
-using Sitecore.Commerce.EntityViews.Commands;
-using Sitecore.Commerce.Plugin.Composer;
+using Sitecore.Commerce.Core;
 using Sitecore.Commerce.Core.Commands;
+using Sitecore.Commerce.EntityViews;
+using Sitecore.Commerce.EntityViews.Commands;
+using Sitecore.Commerce.Plugin.Catalog;
+using Sitecore.Commerce.Plugin.Composer;
+using Sitecore.Framework.Conditions;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Plugin.Sync.Commerce.CatalogImport.Extensions
 {
+    /// <summary>
+    /// Helper methods shared by Import Sellable Item and Import Category blocks
+    /// </summary>
     public class CommerceEntityImportHelper
     {
+        #region Private fields
         private readonly CommerceCommander _commerceCommander;
-        public void AssetCatalogExists(CommercePipelineExecutionContext context, string catalogName)
+        private readonly ComposerCommander _composerCommander;
+        #endregion
+
+        /// <summary>
+        /// Public constructor
+        /// </summary>
+        /// <param name="commerceCommander"></param>
+        /// <param name="composerCommander"></param>
+        public CommerceEntityImportHelper(CommerceCommander commerceCommander, ComposerCommander composerCommander)
+        {
+            _commerceCommander = commerceCommander;
+            _composerCommander = composerCommander;
+        }
+
+        #region Public methods
+        /// <summary>
+        /// Check if Catalog entity exists in Commerce DB and thorw exception if not
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="catalogName"></param>
+        public void AssertCatalogExists(CommercePipelineExecutionContext context, string catalogName)
         {
             var commerceCatalogId = $"{CommerceEntity.IdPrefix<Catalog>()}{catalogName}";
             Catalog catalog = Task.Run<CommerceEntity>(async () => await _commerceCommander.Command<FindEntityCommand>().Process(context.CommerceContext, typeof(Catalog), commerceCatalogId)).Result as Catalog;
@@ -28,28 +52,62 @@ namespace Plugin.Sync.Commerce.CatalogImport.Extensions
             }
         }
 
-        public async Task AssociateWithParentCategory(CommercePipelineExecutionContext context, string catalogName, CommerceEntity commerceEntity, string categoryName)
+        /// <summary>
+        /// Assert if all main fields are present in input Json Object, throw exception if one or more are missing
+        /// </summary>
+        /// <param name="arg"></param>
+        /// <param name="mappingPolicy"></param>
+        public void AssertRootFields(ImportCommerceEntityArgument arg, MappingPolicyBase mappingPolicy)
         {
-            string parentCategoryCommerceId = null;
-            if (!string.IsNullOrEmpty(categoryName))
+            Condition.Requires(mappingPolicy, nameof(mappingPolicy)).IsNotNull();
+            Condition.Requires(arg.JsonData, nameof(arg.JsonData)).IsNotNull();
+            Condition.Requires(mappingPolicy.IdPath, nameof(mappingPolicy.IdPath)).IsNotNullOrEmpty();
+            Condition.Requires(mappingPolicy.NamePath, nameof(mappingPolicy.NamePath)).IsNotNullOrEmpty();
+        }
+
+        /// <summary>
+        /// Get Catalog name from input Json or fallback to default Catalog name in Mapping Policy configuration
+        /// </summary>
+        /// <param name="jsonData"></param>
+        /// <param name="mappingPolicy"></param>
+        /// <returns></returns>
+        public string GetCatalogName(JObject jsonData, MappingPolicyBase mappingPolicy)
+        {
+            var catalogName = jsonData.SelectValue<string>(mappingPolicy.CatalogNamePath);
+            if (string.IsNullOrEmpty(catalogName) && !string.IsNullOrEmpty(mappingPolicy.DefaultCatalogName))
             {
-                var categoryCommerceId = $"{CommerceEntity.IdPrefix<Category>()}{catalogName}-{categoryName}";
-                var parentCategory = await _commerceCommander.Command<FindEntityCommand>().Process(context.CommerceContext, typeof(Category), categoryCommerceId) as Category;
-                parentCategoryCommerceId = parentCategory?.Id;
+                catalogName = mappingPolicy.DefaultCatalogName;
+            }
+            Condition.Requires(catalogName, "Catalog Name must be present in input JSON data or set in SellableItemMappingPolicy").IsNotNullOrEmpty();
+            return catalogName;
+        }
+
+        /// <summary>
+        /// Get Parent Category name from input Json or fallback to default Category name in Mapping Policy configuration
+        /// </summary>
+        /// <param name="jsonData"></param>
+        /// <param name="mappingPolicy"></param>
+        /// <returns></returns>
+        public string GetParentCategoryName(JObject jsonData, MappingPolicyBase mappingPolicy)
+        {
+            var categoryName = jsonData.SelectValue<string>(mappingPolicy.ParentCategoryNamePath);
+            if (string.IsNullOrEmpty(categoryName) && !string.IsNullOrEmpty(mappingPolicy.DefaultCategoryName))
+            {
+                categoryName = mappingPolicy.DefaultCategoryName;
             }
 
-            var catalogCommerceId = $"{CommerceEntity.IdPrefix<Catalog>()}{catalogName}";
-            var sellableItemAssociation = await _commerceCommander.Command<AssociateSellableItemToParentCommand>().Process(context.CommerceContext,
-                catalogCommerceId,
-                parentCategoryCommerceId ?? catalogCommerceId,
-                commerceEntity.Id);
+            return categoryName;
         }
 
-        public CommerceEntityImportHelper(CommerceCommander commerceCommander)
-        {
-            _commerceCommander = commerceCommander;
-        }
-        public async Task<CommerceEntity> SyncChildViews(CommerceEntity commerceEntity, JObject jsonData, MappingPolicyBase mappingPolicy, CommerceContext context)
+        /// <summary>
+        /// Import fields defined in Item's composer views
+        /// </summary>
+        /// <param name="commerceEntity"></param>
+        /// <param name="jsonData"></param>
+        /// <param name="mappingPolicy"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public async Task<CommerceEntity> ImportComposerViewsFields(CommerceEntity commerceEntity, JObject jsonData, MappingPolicyBase mappingPolicy, CommerceContext context)
         {
             var masterView = await _commerceCommander.Command<GetEntityViewCommand>().Process(
                 context, commerceEntity.Id,
@@ -104,8 +162,9 @@ namespace Plugin.Sync.Commerce.CatalogImport.Extensions
                 await _composerCommander.PersistEntity(context, commerceEntity);
             }
 
-            return await _findEntityCommand.Process(context, typeof(SellableItem), commerceEntity.Id);
+            return await _commerceCommander.Command<FindEntityCommand>().Process(context, typeof(CommerceEntity), commerceEntity.Id);
         }
 
+        #endregion
     }
 }

@@ -10,9 +10,9 @@
       {
         "$type": "Sitecore.Commerce.Plugin.SQL.EntityStoreSqlPolicy, Sitecore.Commerce.Plugin.SQL",
         "TrustedConnection": true,
-        "UserName": "",
-        "Password": "",
-        "Server": ".",
+        "UserName": "DESKTOP-KR3J3LS\\CSFndRuntimeUser",
+        "Password": "sqlsa",
+        "Server": "DESKTOP-KR3J3LS",
         "Database": "SitecoreCommerce9_SharedEnvironments",
         "AdditionalParameters": "",
         "ConnectTimeout": 120000,

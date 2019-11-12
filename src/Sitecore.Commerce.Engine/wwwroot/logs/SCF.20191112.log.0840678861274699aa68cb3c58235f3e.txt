@@ -1,0 +1,173 @@
+00001 11:42:50 INFO Loading Global Environment using Filesystem Provider from: C:\Src\SyncPlugins\src\Sitecore.Commerce.Engine\wwwroot\Bootstrap\
+00001 11:42:50 INFO [NodeStartup] GlobalEnvironmentFrom='Configuration: Global'
+00001 11:42:50 INFO [NodeStartup] Status='Started',GlobalEnvironmentName='GlobalEnvironment'
+00001 11:42:51 INFO Bootstrapping Application ...
+00001 11:42:52 INFO Instantiating "Sitecore.Framework.Caching.ConfigureSitecore"
+00001 11:42:52 INFO Invoking ConfigureServices on "Sitecore.Framework.Caching.ConfigureSitecore"
+00001 11:42:52 INFO Instantiating "Sitecore.Framework.Caching.Memory.ConfigureSitecore"
+00001 11:42:52 INFO Invoking ConfigureServices on "Sitecore.Framework.Caching.Memory.ConfigureSitecore"
+00001 11:42:52 INFO Instantiating "Eventing.ConfigureSitecore"
+00001 11:42:52 INFO Invoking ConfigureServices on "Eventing.ConfigureSitecore"
+00001 11:42:52 INFO Configuring event defaults
+00001 11:42:52 INFO Instantiating "Pipelines.ConfigureSitecore"
+00001 11:42:52 INFO Invoking ConfigureServices on "Pipelines.ConfigureSitecore"
+00001 11:42:52 INFO Configuring pipeline defaults
+00001 11:42:52 INFO Instantiating "Sitecore.Commerce.Core.ConfigureSitecore"
+00001 11:42:52 INFO Invoking ConfigureServices on "Sitecore.Commerce.Core.ConfigureSitecore"
+00001 11:42:52 INFO Instantiating "Sitecore.Commerce.Plugin.ManagedLists.ConfigureSitecore"
+00001 11:42:52 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.ManagedLists.ConfigureSitecore"
+00001 11:42:52 INFO Instantiating "Sitecore.Framework.Rules.ConfigureSitecore"
+00001 11:42:52 INFO Invoking ConfigureServices on "Sitecore.Framework.Rules.ConfigureSitecore"
+00001 11:42:52 INFO Instantiating "Sitecore.Commerce.Plugin.Rules.ConfigureSitecore"
+00001 11:42:52 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Rules.ConfigureSitecore"
+00001 11:42:52 INFO Instantiating "Sitecore.Commerce.Plugin.Shops.ConfigureSitecore"
+00001 11:42:52 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Shops.ConfigureSitecore"
+00001 11:42:52 INFO Instantiating "Sitecore.Commerce.Plugin.Views.ConfigureSitecore"
+00001 11:42:52 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Views.ConfigureSitecore"
+00001 11:42:52 INFO Instantiating "Sitecore.Commerce.Plugin.BusinessUsers.ConfigureSitecore"
+00001 11:42:52 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.BusinessUsers.ConfigureSitecore"
+00001 11:42:52 INFO Instantiating "Sitecore.Commerce.Plugin.Composer.ConfigureSitecore"
+00001 11:42:52 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Composer.ConfigureSitecore"
+00001 11:42:52 INFO Instantiating "Sitecore.Commerce.Plugin.EntityVersions.ConfigureSitecore"
+00001 11:42:52 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.EntityVersions.ConfigureSitecore"
+00001 11:42:52 INFO Instantiating "Sitecore.Commerce.Plugin.Media.ConfigureSitecore"
+00001 11:42:52 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Media.ConfigureSitecore"
+00001 11:42:52 INFO Instantiating "Sitecore.Commerce.Plugin.Pricing.ConfigureSitecore"
+00001 11:42:52 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Pricing.ConfigureSitecore"
+00001 11:42:52 INFO Instantiating "Sitecore.Commerce.Plugin.Carts.ConfigureSitecore"
+00001 11:42:52 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Carts.ConfigureSitecore"
+00001 11:42:52 INFO Instantiating "Sitecore.Commerce.Plugin.Search.ConfigureSitecore"
+00001 11:42:52 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Search.ConfigureSitecore"
+00001 11:42:52 INFO Instantiating "Sitecore.Commerce.Plugin.Promotions.ConfigureSitecore"
+00001 11:42:52 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Promotions.ConfigureSitecore"
+00001 11:42:52 INFO Instantiating "Sitecore.Commerce.Plugin.SQL.ConfigureSitecore"
+00001 11:42:52 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.SQL.ConfigureSitecore"
+00001 11:42:52 INFO Instantiating "Sitecore.Commerce.Plugin.Workflow.ConfigureSitecore"
+00001 11:42:52 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Workflow.ConfigureSitecore"
+00001 11:42:52 INFO Instantiating "Sitecore.Commerce.Plugin.Catalog.ConfigureSitecore"
+00001 11:42:52 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Catalog.ConfigureSitecore"
+00001 11:42:52 INFO Instantiating "Sitecore.Commerce.Plugin.Availability.ConfigureSitecore"
+00001 11:42:52 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Availability.ConfigureSitecore"
+00001 11:42:52 INFO Instantiating "Sitecore.Commerce.Plugin.Orders.ConfigureSitecore"
+00001 11:42:52 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Orders.ConfigureSitecore"
+00001 11:42:52 INFO Instantiating "Sitecore.Commerce.Plugin.Fulfillment.ConfigureSitecore"
+00001 11:42:52 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Fulfillment.ConfigureSitecore"
+00001 11:42:52 INFO Instantiating "Sitecore.Commerce.Plugin.Customers.ConfigureSitecore"
+00001 11:42:52 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Customers.ConfigureSitecore"
+00001 11:42:52 INFO Instantiating "Sitecore.Commerce.Plugin.Entitlements.ConfigureSitecore"
+00001 11:42:52 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Entitlements.ConfigureSitecore"
+00001 11:42:52 INFO Instantiating "Sitecore.Commerce.Plugin.DigitalItems.ConfigureSitecore"
+00001 11:42:52 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.DigitalItems.ConfigureSitecore"
+00001 11:42:52 INFO Instantiating "Sitecore.Commerce.Plugin.Payments.ConfigureSitecore"
+00001 11:42:52 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Payments.ConfigureSitecore"
+00001 11:42:52 INFO Instantiating "Sitecore.Commerce.Plugin.GiftCards.ConfigureSitecore"
+00001 11:42:52 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.GiftCards.ConfigureSitecore"
+00001 11:42:52 INFO Instantiating "Sitecore.Commerce.Plugin.Returns.ConfigureSitecore"
+00001 11:42:52 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Returns.ConfigureSitecore"
+00001 11:42:52 INFO Instantiating "Sitecore.Commerce.Plugin.Management.ConfigureSitecore"
+00001 11:42:52 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Management.ConfigureSitecore"
+00001 11:42:52 INFO Instantiating "Sitecore.Commerce.Plugin.Content.ConfigureSitecore"
+00001 11:42:52 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Content.ConfigureSitecore"
+00001 11:42:52 INFO Instantiating "Sitecore.Commerce.Plugin.Inventory.ConfigureSitecore"
+00001 11:42:52 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Inventory.ConfigureSitecore"
+00001 11:42:52 INFO Instantiating "Sitecore.Commerce.Plugin.Backorderable.ConfigureSitecore"
+00001 11:42:52 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Backorderable.ConfigureSitecore"
+00001 11:42:52 INFO Instantiating "Sitecore.Commerce.Plugin.Preorderable.ConfigureSitecore"
+00001 11:42:52 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Preorderable.ConfigureSitecore"
+00001 11:42:52 INFO Instantiating "Sitecore.Commerce.Plugin.Orders.DelayedAvailability.ConfigureSitecore"
+00001 11:42:52 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Orders.DelayedAvailability.ConfigureSitecore"
+00001 11:42:52 INFO Instantiating "Sitecore.Commerce.Plugin.FaultInjection.ConfigureSitecore"
+00001 11:42:52 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.FaultInjection.ConfigureSitecore"
+00001 11:42:52 INFO Instantiating "Sitecore.Commerce.Plugin.Journaling.ConfigureSitecore"
+00001 11:42:52 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Journaling.ConfigureSitecore"
+00001 11:42:52 INFO Instantiating "Sitecore.Commerce.Plugin.Search.Azure.ConfigureSitecore"
+00001 11:42:52 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Search.Azure.ConfigureSitecore"
+00001 11:42:52 INFO Instantiating "Sitecore.Commerce.Plugin.Search.Solr.ConfigureSitecore"
+00001 11:42:52 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Search.Solr.ConfigureSitecore"
+00001 11:42:52 INFO Instantiating "Sitecore.Commerce.Plugin.Tax.ConfigureSitecore"
+00001 11:42:52 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Tax.ConfigureSitecore"
+00001 11:42:52 INFO Instantiating "Sitecore.Commerce.Plugin.Coupons.ConfigureSitecore"
+00001 11:42:52 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Coupons.ConfigureSitecore"
+00001 11:42:52 INFO Instantiating "Plugin.Sample.Habitat.ConfigureSitecore"
+00001 11:42:52 INFO Invoking ConfigureServices on "Plugin.Sample.Habitat.ConfigureSitecore"
+00001 11:42:54 INFO Core required DB Version [9.2.0] and DB Version [9.2.0]
+00005 11:42:54 INFO [NodeStartup] ContactId='Deployment01_0840678861274699aa68cb3c58235f3e',Environment='GlobalEnvironment'
+00001 11:42:57 INFO [EnvironmentStartup] StartEnvironment=HabitatAuthoring
+00006 11:42:57 INFO DeserializeEntityBlock: Deserialize entity failed, trying to migrate. Error=Could not load assembly 'Plugin.Sample.Payments.Braintree'.
+00005 11:42:57 WARN Core.block.LoadPolicySets: PolicySet Entity-PolicySet-BraintreePolicySet was not found.
+00005 11:42:57 INFO [EnvironmentStartup] Environment='HabitatAuthoring'
+00001 11:43:00 WARN Unable to bind to "http://localhost:5000" on the "IPv4 loopback" interface: '"An attempt was made to access a socket in a way forbidden by its access permissions"'.
+00001 11:43:00 WARN Unable to bind to "http://localhost:5000" on the "IPv6 loopback" interface: '"An attempt was made to access a socket in a way forbidden by its access permissions"'.
+00001 11:43:00 INFO Unable to start Kestrel.
+System.IO.IOException: Failed to bind to address http://localhost:5000. ---> System.AggregateException: One or more errors occurred. ---> System.Net.Sockets.SocketException: An attempt was made to access a socket in a way forbidden by its access permissions
+   at System.Net.Sockets.Socket.DoBind(EndPoint endPointSnapshot, SocketAddress socketAddress)
+   at System.Net.Sockets.Socket.Bind(EndPoint localEP)
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketTransport.BindAsync()
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServer.<>c__DisplayClass22_0`1.<<StartAsync>g__OnBind|0>d.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.<BindEndpointAsync>d__3.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.LocalhostListenOptions.<BindAsync>d__2.MoveNext()
+   --- End of inner exception stack trace ---
+   --- End of inner exception stack trace ---
+   at Microsoft.AspNetCore.Server.Kestrel.Core.LocalhostListenOptions.<BindAsync>d__2.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.AddressesStrategy.<BindAsync>d__2.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.<BindAsync>d__0.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServer.<StartAsync>d__22`1.MoveNext()
+00001 11:43:01 INFO Host terminated unexpectedly.
+System.IO.IOException: Failed to bind to address http://localhost:5000. ---> System.AggregateException: One or more errors occurred. ---> System.Net.Sockets.SocketException: An attempt was made to access a socket in a way forbidden by its access permissions
+   at System.Net.Sockets.Socket.DoBind(EndPoint endPointSnapshot, SocketAddress socketAddress)
+   at System.Net.Sockets.Socket.Bind(EndPoint localEP)
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketTransport.BindAsync()
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServer.<>c__DisplayClass22_0`1.<<StartAsync>g__OnBind|0>d.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.<BindEndpointAsync>d__3.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.LocalhostListenOptions.<BindAsync>d__2.MoveNext()
+   --- End of inner exception stack trace ---
+   --- End of inner exception stack trace ---
+   at Microsoft.AspNetCore.Server.Kestrel.Core.LocalhostListenOptions.<BindAsync>d__2.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.AddressesStrategy.<BindAsync>d__2.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.<BindAsync>d__0.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServer.<StartAsync>d__22`1.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.AspNetCore.Hosting.Internal.WebHost.<StartAsync>d__26.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.AspNetCore.Hosting.WebHostExtensions.<RunAsync>d__5.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.AspNetCore.Hosting.WebHostExtensions.<RunAsync>d__4.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.AspNetCore.Hosting.WebHostExtensions.Run(IWebHost host)
+   at Sitecore.Commerce.Engine.Program.Main(String[] args)

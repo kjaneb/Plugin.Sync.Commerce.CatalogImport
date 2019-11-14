@@ -3,18 +3,21 @@ using Newtonsoft.Json.Linq;
 using Plugin.Sync.Commerce.CatalogImport.Entities;
 using Plugin.Sync.Commerce.CatalogImport.Models;
 using Sitecore.Commerce.Core;
+using Sitecore.Commerce.Plugin.Catalog;
 using Sitecore.Framework.Conditions;
 
 namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Arguments
 {
-    public class ImportCommerceEntityArgument : PipelineArgument
+    public class ImportSellableItemArgument : PipelineArgument
     {
-        public ImportCommerceEntityArgument(JObject jsonData)
+        public ImportSellableItemArgument(JObject jsonData)
         {
-            Condition.Requires<JObject>(jsonData).IsNull("jsonData can not be null");
+            Condition.Requires<JObject>(jsonData).IsNotNull("jsonData can not be null");
             this.JsonData = jsonData;
         }
         
         public JObject JsonData { get; set; }
+        public CatalogEntityData EntityData { get; set; }
+        public SellableItem SellableItem { get; set; }
     }
 }

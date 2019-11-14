@@ -10,9 +10,9 @@ namespace Plugin.Sync.Commerce.CatalogImport.Extensions
 {
     public static class SellableItemExtensions
     {
-        public static void AddListPrice(this ImportCommerceEntityResponse sellableItem, decimal sellableItemListPrice)
+        public static void AddListPrice(this ImportSellableItemResponse sellableItem, decimal sellableItemListPrice)
         {
-            var listPricingPolicy = sellableItem.CommerceEntity.GetPolicy<ListPricingPolicy>();
+            var listPricingPolicy = sellableItem.SellableItem.GetPolicy<ListPricingPolicy>();
             listPricingPolicy.ClearPrices();
             if (sellableItemListPrice == 0)
             {
@@ -36,7 +36,7 @@ namespace Plugin.Sync.Commerce.CatalogImport.Extensions
             return listPricingPolicy.Prices.ToList()[0].Amount;
         }
 
-        public static void AddVariantListPrice(this ImportCommerceEntityResponse sellableItem, decimal sellableItemListPrice, ItemVariationComponent variant)
+        public static void AddVariantListPrice(this ImportSellableItemResponse sellableItem, decimal sellableItemListPrice, ItemVariationComponent variant)
         {
             if (sellableItemListPrice == 0)
             {

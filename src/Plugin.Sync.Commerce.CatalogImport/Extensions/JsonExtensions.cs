@@ -17,6 +17,24 @@ namespace Plugin.Sync.Commerce.CatalogImport.Extensions
             return token != null ? token.Value<T>() : default(T);
         }
 
+        public static Dictionary<string, string> SelectMappedValues(this JToken jObj, Dictionary<string, string> mappings)
+        {
+            var fieldValues = new Dictionary<string, string>();
+            foreach (var key in mappings.Keys)
+            {
+                if (!string.IsNullOrEmpty(mappings[key]))
+                {
+                    var value = jObj.SelectValue<string>(mappings[key]);
+                    if (!string.IsNullOrEmpty(value))
+                    {
+                        fieldValues.Add(key, value);
+                    }
+                }
+            }
+
+            return fieldValues;
+        }
+
         public static T QueryMappedValue<T>(this JToken jData, string fieldName, string fieldPath, IEnumerable<string> rootPaths)
         {
             if (!string.IsNullOrEmpty(fieldName) && !string.IsNullOrEmpty(fieldPath))

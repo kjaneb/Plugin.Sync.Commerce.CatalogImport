@@ -12,8 +12,46 @@ namespace Plugin.Sync.Commerce.CatalogImport.Extensions
     /// </summary>
     public static class JObjectExtensions
     {
-        private static string GetFieldValue(JObject jsonData, string jsonPath)
+        /// <summary>
+        /// Get Catalog name from input Json or fallback to default Catalog name in Mapping Policy configuration
+        /// </summary>
+        /// <param name="jsonData"></param>
+        /// <param name="mappingPolicy"></param>
+        /// <returns></returns>
+        public static string GetCatalogName(this JObject jsonData, MappingPolicyBase mappingPolicy)
         {
+            var catalogName = jsonData.SelectValue<string>(mappingPolicy.CatalogNamePath);
+            if (string.IsNullOrEmpty(catalogName) && !string.IsNullOrEmpty(mappingPolicy.DefaultCatalogName))
+            {
+                catalogName = mappingPolicy.DefaultCatalogName;
+            }
+            return catalogName;
+        }
+
+        /// <summary>
+        /// Get Parent Category name from input Json or fallback to default Category name in Mapping Policy configuration
+        /// </summary>
+        /// <param name="jsonData"></param>
+        /// <param name="mappingPolicy"></param>
+        /// <returns></returns>
+        public static string GetParentCategoryName(this JObject jsonData, MappingPolicyBase mappingPolicy)
+        {
+            var categoryName = jsonData.SelectValue<string>(mappingPolicy.ParentCategoryNamePath);
+            if (string.IsNullOrEmpty(categoryName) && !string.IsNullOrEmpty(mappingPolicy.DefaultCategoryName))
+            {
+                categoryName = mappingPolicy.DefaultCategoryName;
+            }
+
+            return categoryName;
+        }
+
+        public static string GetFieldValue(JObject jsonData, string jsonPath)
+        {
+            if (string.IsNullOrEmpty(jsonPath))
+            {
+                return null;
+            }
+
             var token = jsonData.SelectToken(jsonPath);
             if (token != null)
             {
@@ -34,7 +72,7 @@ namespace Plugin.Sync.Commerce.CatalogImport.Extensions
             //entityData.Id = 
             //var fieldValues = new Dictionary<string, string>(comparer);
 
-            foreach (var mapping in mappingPolicy.FieldPaths)
+            foreach (var mapping in mappingPolicy.ComposerFieldsPaths)
             {
                 if (!string.IsNullOrEmpty(mapping.Key) && !string.IsNullOrEmpty(mapping.Value))
                 {

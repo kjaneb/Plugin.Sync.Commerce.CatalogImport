@@ -17,7 +17,7 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
     /// Import data into an existing SellableItem or new SellableItem entity
     /// </summary>
     [PipelineDisplayName("ImportCategoryBlock")]
-    public class ImportCategoryBlock : PipelineBlock<ImportCommerceEntityArgument, ImportCommerceEntityResponse, CommercePipelineExecutionContext>
+    public class ImportCategoryBlock : PipelineBlock<ImportSellableItemArgument, ImportSellableItemResponse, CommercePipelineExecutionContext>
     {
         #region Private fields
         private readonly CommerceCommander _commerceCommander;
@@ -32,12 +32,11 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
         /// <param name="commerceCommander"></param>
         /// <param name="composerCommander"></param>
         /// <param name="importHelper"></param>
-        public ImportCategoryBlock(CommerceCommander commerceCommander, ComposerCommander composerCommander, CommerceEntityImportHelper importHelper
-            )
+        public ImportCategoryBlock(CommerceCommander commerceCommander, ComposerCommander composerCommander)
         {
             _commerceCommander = commerceCommander;
             _composerCommander = composerCommander;
-            _importHelper = importHelper;
+            _importHelper = new CommerceEntityImportHelper(commerceCommander, composerCommander);
         }
 
         /// <summary>
@@ -46,7 +45,7 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
         /// <param name="arg"></param>
         /// <param name="context"></param>
         /// <returns></returns>
-        public override async Task<ImportCommerceEntityResponse> Run(ImportCommerceEntityArgument arg, CommercePipelineExecutionContext context)
+        public override async Task<ImportSellableItemResponse> Run(ImportSellableItemArgument arg, CommercePipelineExecutionContext context)
         {
             //TODO: add an option to only import data if Category already exists (don't create a new one)
             //TODO: add an option to only import data if Category don't exist (don't update existing ones)
@@ -68,9 +67,9 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
 
             //Import Category field values
             category = await _importHelper.ImportComposerViewsFields(category, arg.JsonData, mappingPolicy, context.CommerceContext) as Category;
-            return new ImportCommerceEntityResponse
+            return new ImportSellableItemResponse
             {
-                CommerceEntity = category
+                SellableItem = category
             };
         }
         #endregion

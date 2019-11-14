@@ -24,11 +24,11 @@ namespace Plugin.Sync.Commerce.CatalogImport
         {
             Condition.Requires(modelBuilder).IsNotNull($"{this.Name}: The argument cannot be null.");
 
-            var syncCategory = modelBuilder.Action("ImportCategory");
-            syncCategory.ReturnsFromEntitySet<CommerceCommand>("Commands");
+            var importCategory = modelBuilder.Action("ImportCategory");
+            importCategory.ReturnsFromEntitySet<CommerceCommand>("Commands");
 
-            var syncProductGroup = modelBuilder.Action("ImportSellableItem");
-            syncProductGroup.ReturnsFromEntitySet<CommerceCommand>("Commands");
+            var importSellableItem = modelBuilder.Action("ImportSellableItem");
+            importSellableItem.ReturnsFromEntitySet<CommerceCommand>("Commands");
 
             return Task.FromResult(modelBuilder);
         }

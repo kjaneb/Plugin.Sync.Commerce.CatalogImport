@@ -1,0 +1,152 @@
+00001 18:25:30 INFO Loading Global Environment using Filesystem Provider from: C:\Src\SyncPlugins\src\Sitecore.Commerce.Engine\wwwroot\Bootstrap\
+00001 18:25:31 INFO [NodeStartup] GlobalEnvironmentFrom='Configuration: Global'
+00001 18:25:31 INFO [NodeStartup] Status='Started',GlobalEnvironmentName='GlobalEnvironment'
+00001 18:25:32 INFO Bootstrapping Application ...
+00001 18:25:32 INFO Instantiating "Sitecore.Framework.Caching.ConfigureSitecore"
+00001 18:25:32 INFO Invoking ConfigureServices on "Sitecore.Framework.Caching.ConfigureSitecore"
+00001 18:25:32 INFO Instantiating "Sitecore.Framework.Caching.Memory.ConfigureSitecore"
+00001 18:25:32 INFO Invoking ConfigureServices on "Sitecore.Framework.Caching.Memory.ConfigureSitecore"
+00001 18:25:32 INFO Instantiating "Eventing.ConfigureSitecore"
+00001 18:25:32 INFO Invoking ConfigureServices on "Eventing.ConfigureSitecore"
+00001 18:25:32 INFO Configuring event defaults
+00001 18:25:32 INFO Instantiating "Pipelines.ConfigureSitecore"
+00001 18:25:32 INFO Invoking ConfigureServices on "Pipelines.ConfigureSitecore"
+00001 18:25:32 INFO Configuring pipeline defaults
+00001 18:25:32 INFO Instantiating "Sitecore.Commerce.Core.ConfigureSitecore"
+00001 18:25:32 INFO Invoking ConfigureServices on "Sitecore.Commerce.Core.ConfigureSitecore"
+00001 18:25:32 INFO Instantiating "Sitecore.Commerce.Plugin.ManagedLists.ConfigureSitecore"
+00001 18:25:32 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.ManagedLists.ConfigureSitecore"
+00001 18:25:32 INFO Instantiating "Sitecore.Framework.Rules.ConfigureSitecore"
+00001 18:25:32 INFO Invoking ConfigureServices on "Sitecore.Framework.Rules.ConfigureSitecore"
+00001 18:25:32 INFO Instantiating "Sitecore.Commerce.Plugin.Rules.ConfigureSitecore"
+00001 18:25:32 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Rules.ConfigureSitecore"
+00001 18:25:32 INFO Instantiating "Sitecore.Commerce.Plugin.Shops.ConfigureSitecore"
+00001 18:25:32 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Shops.ConfigureSitecore"
+00001 18:25:32 INFO Instantiating "Sitecore.Commerce.Plugin.Views.ConfigureSitecore"
+00001 18:25:32 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Views.ConfigureSitecore"
+00001 18:25:32 INFO Instantiating "Sitecore.Commerce.Plugin.BusinessUsers.ConfigureSitecore"
+00001 18:25:32 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.BusinessUsers.ConfigureSitecore"
+00001 18:25:32 INFO Instantiating "Sitecore.Commerce.Plugin.Composer.ConfigureSitecore"
+00001 18:25:32 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Composer.ConfigureSitecore"
+00001 18:25:32 INFO Instantiating "Sitecore.Commerce.Plugin.EntityVersions.ConfigureSitecore"
+00001 18:25:32 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.EntityVersions.ConfigureSitecore"
+00001 18:25:32 INFO Instantiating "Sitecore.Commerce.Plugin.Media.ConfigureSitecore"
+00001 18:25:32 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Media.ConfigureSitecore"
+00001 18:25:32 INFO Instantiating "Sitecore.Commerce.Plugin.Pricing.ConfigureSitecore"
+00001 18:25:32 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Pricing.ConfigureSitecore"
+00001 18:25:32 INFO Instantiating "Sitecore.Commerce.Plugin.Carts.ConfigureSitecore"
+00001 18:25:32 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Carts.ConfigureSitecore"
+00001 18:25:32 INFO Instantiating "Sitecore.Commerce.Plugin.Search.ConfigureSitecore"
+00001 18:25:32 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Search.ConfigureSitecore"
+00001 18:25:32 INFO Instantiating "Sitecore.Commerce.Plugin.Promotions.ConfigureSitecore"
+00001 18:25:32 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Promotions.ConfigureSitecore"
+00001 18:25:32 INFO Instantiating "Sitecore.Commerce.Plugin.SQL.ConfigureSitecore"
+00001 18:25:32 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.SQL.ConfigureSitecore"
+00001 18:25:32 INFO Instantiating "Sitecore.Commerce.Plugin.Workflow.ConfigureSitecore"
+00001 18:25:32 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Workflow.ConfigureSitecore"
+00001 18:25:32 INFO Instantiating "Sitecore.Commerce.Plugin.Catalog.ConfigureSitecore"
+00001 18:25:32 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Catalog.ConfigureSitecore"
+00001 18:25:33 INFO Instantiating "Sitecore.Commerce.Plugin.Availability.ConfigureSitecore"
+00001 18:25:33 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Availability.ConfigureSitecore"
+00001 18:25:33 INFO Instantiating "Sitecore.Commerce.Plugin.Orders.ConfigureSitecore"
+00001 18:25:33 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Orders.ConfigureSitecore"
+00001 18:25:33 INFO Instantiating "Sitecore.Commerce.Plugin.Fulfillment.ConfigureSitecore"
+00001 18:25:33 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Fulfillment.ConfigureSitecore"
+00001 18:25:33 INFO Instantiating "Sitecore.Commerce.Plugin.Customers.ConfigureSitecore"
+00001 18:25:33 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Customers.ConfigureSitecore"
+00001 18:25:33 INFO Instantiating "Sitecore.Commerce.Plugin.Entitlements.ConfigureSitecore"
+00001 18:25:33 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Entitlements.ConfigureSitecore"
+00001 18:25:33 INFO Instantiating "Sitecore.Commerce.Plugin.DigitalItems.ConfigureSitecore"
+00001 18:25:33 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.DigitalItems.ConfigureSitecore"
+00001 18:25:33 INFO Instantiating "Sitecore.Commerce.Plugin.Payments.ConfigureSitecore"
+00001 18:25:33 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Payments.ConfigureSitecore"
+00001 18:25:33 INFO Instantiating "Sitecore.Commerce.Plugin.GiftCards.ConfigureSitecore"
+00001 18:25:33 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.GiftCards.ConfigureSitecore"
+00001 18:25:33 INFO Instantiating "Sitecore.Commerce.Plugin.Returns.ConfigureSitecore"
+00001 18:25:33 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Returns.ConfigureSitecore"
+00001 18:25:33 INFO Instantiating "Sitecore.Commerce.Plugin.Management.ConfigureSitecore"
+00001 18:25:33 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Management.ConfigureSitecore"
+00001 18:25:33 INFO Instantiating "Sitecore.Commerce.Plugin.Content.ConfigureSitecore"
+00001 18:25:33 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Content.ConfigureSitecore"
+00001 18:25:33 INFO Instantiating "Sitecore.Commerce.Plugin.Inventory.ConfigureSitecore"
+00001 18:25:33 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Inventory.ConfigureSitecore"
+00001 18:25:33 INFO Instantiating "Sitecore.Commerce.Plugin.Backorderable.ConfigureSitecore"
+00001 18:25:33 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Backorderable.ConfigureSitecore"
+00001 18:25:33 INFO Instantiating "Sitecore.Commerce.Plugin.Preorderable.ConfigureSitecore"
+00001 18:25:33 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Preorderable.ConfigureSitecore"
+00001 18:25:33 INFO Instantiating "Sitecore.Commerce.Plugin.Orders.DelayedAvailability.ConfigureSitecore"
+00001 18:25:33 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Orders.DelayedAvailability.ConfigureSitecore"
+00001 18:25:33 INFO Instantiating "Sitecore.Commerce.Plugin.FaultInjection.ConfigureSitecore"
+00001 18:25:33 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.FaultInjection.ConfigureSitecore"
+00001 18:25:33 INFO Instantiating "Sitecore.Commerce.Plugin.Journaling.ConfigureSitecore"
+00001 18:25:33 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Journaling.ConfigureSitecore"
+00001 18:25:33 INFO Instantiating "Sitecore.Commerce.Plugin.Search.Azure.ConfigureSitecore"
+00001 18:25:33 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Search.Azure.ConfigureSitecore"
+00001 18:25:33 INFO Instantiating "Sitecore.Commerce.Plugin.Search.Solr.ConfigureSitecore"
+00001 18:25:33 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Search.Solr.ConfigureSitecore"
+00001 18:25:33 INFO Instantiating "Sitecore.Commerce.Plugin.Tax.ConfigureSitecore"
+00001 18:25:33 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Tax.ConfigureSitecore"
+00001 18:25:33 INFO Instantiating "Sitecore.Commerce.Plugin.Coupons.ConfigureSitecore"
+00001 18:25:33 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Coupons.ConfigureSitecore"
+00001 18:25:33 INFO Instantiating "Plugin.Sample.Habitat.ConfigureSitecore"
+00001 18:25:33 INFO Invoking ConfigureServices on "Plugin.Sample.Habitat.ConfigureSitecore"
+00001 18:25:33 INFO Instantiating "Plugin.Sync.Commerce.CatalogImport.ConfigureSitecore"
+00001 18:25:33 INFO Invoking ConfigureServices on "Plugin.Sync.Commerce.CatalogImport.ConfigureSitecore"
+00001 18:25:34 INFO Core required DB Version [9.2.0] and DB Version [9.2.0]
+00005 18:25:34 INFO [NodeStartup] ContactId='Deployment01_d9dd21a2f27f4c75abf723cde70250b9',Environment='GlobalEnvironment'
+00001 18:25:38 INFO [EnvironmentStartup] StartEnvironment=HabitatAuthoring
+00006 18:25:39 INFO [EnvironmentStartup] Environment='HabitatAuthoring'
+00011 18:26:03 INFO Request starting HTTP/1.1 POST https://localhost:5001/api/SyncSellableItem() application/json 102
+00024 18:26:04 INFO Successfully validated the token.
+00024 18:26:04 ERROR An unhandled exception has occurred while executing the request.
+Microsoft.OData.Core.UriParser.ODataUnrecognizedPathException: Resource not found for the segment 'SyncSellableItem'.
+   at Microsoft.OData.Core.UriParser.Parsers.ODataPathParser.CreateFirstSegment(String segmentText)
+   at Microsoft.OData.Core.UriParser.Parsers.ODataPathParser.ParsePath(ICollection`1 segments)
+   at Microsoft.OData.Core.UriParser.Parsers.ODataPathFactory.BindPath(ICollection`1 segments, ODataUriParserConfiguration configuration)
+   at Microsoft.OData.Core.UriParser.ODataUriParser.Initialize()
+   at Microsoft.AspNetCore.OData.Routing.ODataRoute.<RouteAsync>d__3.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.AspNetCore.Builder.RouterMiddleware.<Invoke>d__4.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.<Invoke>d__6.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.AspNetCore.Cors.Infrastructure.CorsMiddleware.<Invoke>d__8.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Sitecore.Commerce.Core.ClientCertificateValidationMiddleware.<Invoke>d__4.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.<Invoke>d__7.MoveNext()
+00024 18:26:05 INFO Request finished in 2035.8071ms 500 text/html; charset=utf-8
+00024 18:26:05 INFO Connection id ""0HLR7OUNHLN4I"", Request id ""0HLR7OUNHLN4I:00000001"": the application completed without reading the entire request body.
+00022 18:26:29 INFO Request starting HTTP/1.1 POST https://localhost:5001/api/ImportSellableItem() application/json 102
+00022 18:26:29 INFO Successfully validated the token.
+00022 18:26:30 INFO Route matched with "{action = \"ImportSellableItem\", controller = \"Commands\"}". Executing action "Plugin.Sync.Commerce.CatalogImport.Controllers.CommandsController.ImportSellableItem (Plugin.Sync.Commerce.CatalogImport)"
+00022 18:26:30 INFO Authorization was successful.
+00006 18:26:31 INFO Creating Redis cache store '"Commerce-Redis-Store"'
+00005 18:26:33 INFO Executing action method "Plugin.Sync.Commerce.CatalogImport.Controllers.CommandsController.ImportSellableItem (Plugin.Sync.Commerce.CatalogImport)" with arguments (["{
+  \"Id\": \"123\",
+  \"Name\": \"TestSellableItemName\",
+  \"DisplayName\": \"TestSellableItemDisplayName\"
+}"]) - Validation state: Valid
+00005 18:27:02 INFO Executed action method "Plugin.Sync.Commerce.CatalogImport.Controllers.CommandsController.ImportSellableItem (Plugin.Sync.Commerce.CatalogImport)", returned result "Microsoft.AspNetCore.Mvc.ObjectResult" in 29363.6842ms.
+00005 18:27:03 INFO Executing ObjectResult, writing value of type '"System.ArgumentException"'.
+00006 18:27:03 INFO Executed action "Plugin.Sync.Commerce.CatalogImport.Controllers.CommandsController.ImportSellableItem (Plugin.Sync.Commerce.CatalogImport)" in 32375.5871ms
+00006 18:27:03 INFO Request finished in 33711.3249ms 200 application/json; charset=utf-8
+00005 18:27:27 INFO Request starting HTTP/1.1 POST https://localhost:5001/api/ImportSellableItem() application/json 102
+00005 18:27:27 INFO Successfully validated the token.
+00005 18:27:27 INFO Route matched with "{action = \"ImportSellableItem\", controller = \"Commands\"}". Executing action "Plugin.Sync.Commerce.CatalogImport.Controllers.CommandsController.ImportSellableItem (Plugin.Sync.Commerce.CatalogImport)"
+00005 18:27:27 INFO Authorization was successful.
+00013 18:27:27 INFO Executing action method "Plugin.Sync.Commerce.CatalogImport.Controllers.CommandsController.ImportSellableItem (Plugin.Sync.Commerce.CatalogImport)" with arguments (["{
+  \"Id\": \"123\",
+  \"Name\": \"TestSellableItemName\",
+  \"DisplayName\": \"TestSellableItemDisplayName\"
+}"]) - Validation state: Valid

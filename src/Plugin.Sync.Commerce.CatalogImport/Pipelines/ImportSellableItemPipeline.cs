@@ -6,7 +6,7 @@ using Sitecore.Framework.Pipelines;
 
 namespace Plugin.Sync.Commerce.CatalogImport.Pipelines
 {
-    public class ImportSellableItemPipeline :  CommercePipeline<ImportCommerceEntityArgument, ImportCommerceEntityResponse>, IImportSellableItemPipeline
+    public class ImportSellableItemPipeline :  CommercePipeline<ImportSellableItemArgument, ImportSellableItemResponse>, IImportSellableItemPipeline
     {
         public ImportSellableItemPipeline(IPipelineConfiguration<IImportSellableItemPipeline> configuration, ILoggerFactory loggerFactory) : base(configuration, loggerFactory)
         {

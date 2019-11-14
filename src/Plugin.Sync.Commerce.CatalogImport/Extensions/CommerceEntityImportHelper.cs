@@ -10,6 +10,7 @@ using Sitecore.Commerce.Plugin.Catalog;
 using Sitecore.Commerce.Plugin.Composer;
 using Sitecore.Framework.Conditions;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -57,7 +58,7 @@ namespace Plugin.Sync.Commerce.CatalogImport.Extensions
         /// </summary>
         /// <param name="arg"></param>
         /// <param name="mappingPolicy"></param>
-        public void AssertRootFields(ImportCommerceEntityArgument arg, MappingPolicyBase mappingPolicy)
+        public void AssertRootFields(ImportSellableItemArgument arg, MappingPolicyBase mappingPolicy)
         {
             Condition.Requires(mappingPolicy, nameof(mappingPolicy)).IsNotNull();
             Condition.Requires(arg.JsonData, nameof(arg.JsonData)).IsNotNull();
@@ -78,7 +79,6 @@ namespace Plugin.Sync.Commerce.CatalogImport.Extensions
             {
                 catalogName = mappingPolicy.DefaultCatalogName;
             }
-            Condition.Requires(catalogName, "Catalog Name must be present in input JSON data or set in SellableItemMappingPolicy").IsNotNullOrEmpty();
             return catalogName;
         }
 
@@ -107,7 +107,7 @@ namespace Plugin.Sync.Commerce.CatalogImport.Extensions
         /// <param name="mappingPolicy"></param>
         /// <param name="context"></param>
         /// <returns></returns>
-        public async Task<CommerceEntity> ImportComposerViewsFields(CommerceEntity commerceEntity, JObject jsonData, MappingPolicyBase mappingPolicy, CommerceContext context)
+        public async Task<CommerceEntity> ImportComposerViewsFields(CommerceEntity commerceEntity, Dictionary<string, string> composerFields, CommerceContext context)
         {
             var masterView = await _commerceCommander.Command<GetEntityViewCommand>().Process(
                 context, commerceEntity.Id,
@@ -128,40 +128,79 @@ namespace Plugin.Sync.Commerce.CatalogImport.Extensions
                 throw new ApplicationException($"No composer-generated views found on Sellable Item entity, Entity ID={commerceEntity.Id}");
             }
 
+            //masterView.
+            //_commerceCommander.Command<EditSellableItemCommand>().Process()
             var isUpdated = false;
-            foreach (var view in masterView.ChildViews)
+            foreach (EntityView view in masterView.ChildViews)
             {
-                var viewToUpdate = masterView.ChildViews.FirstOrDefault(e => e.Name.Equals(view.Name, StringComparison.OrdinalIgnoreCase)) as EntityView;
-                if (viewToUpdate != null)
+                var viewToEdit = await _commerceCommander.Command<GetEntityViewCommand>().Process(
+                        context, 
+                        commerceEntity.Id,
+                        commerceEntity.EntityVersion,
+                        view.Name,
+                        string.Empty,
+                        string.Empty);
+                //}
+                EntityView composerViewForEdit = null;
+                foreach (var viewField in view.Properties)
                 {
-                    var composerViewForEdit = Task.Run<EntityView>(async () => await commerceEntity.GetComposerView(viewToUpdate.ItemId, _commerceCommander, context)).Result;
-                    if (composerViewForEdit != null)
+                    if (composerFields.Keys.Contains(viewField.Name))
                     {
-                        foreach (var fieldProperty in composerViewForEdit.Properties)
+                        if (composerViewForEdit == null)
                         {
-                            var propertyPath = mappingPolicy.FieldPaths.ContainsKey(fieldProperty.Name) ? mappingPolicy.FieldPaths[fieldProperty.Name] : null;
-                            var fieldValue = jsonData.QueryMappedValue<string>(fieldProperty.Name, propertyPath, mappingPolicy.RootPaths);
-                            if (!string.IsNullOrEmpty(fieldValue))
+                            composerViewForEdit = Task.Run<EntityView>(async () => await commerceEntity.GetComposerView(view.ItemId, _commerceCommander, context)).Result;
+                        }
+                        if (composerViewForEdit != null)
+                        {
+                            var composerProperty = composerViewForEdit.GetProperty(viewField.Name);
+                            if (composerViewForEdit != null)
                             {
-                                fieldProperty.ParseValueAndSetEntityView(fieldValue);
-                                isUpdated = true;
-                            }
-                            else if (mappingPolicy.ClearFieldValues)
-                            {
-                                fieldProperty.RawValue = string.Empty;
-                                fieldProperty.Value = string.Empty;
+                                composerProperty.ParseValueAndSetEntityView(composerFields[viewField.Name]);
                                 isUpdated = true;
                             }
                         }
                     }
                 }
+
+                //masterView.ChildViews.FirstOrDefault(e => e.Name.Equals(view.Name, StringComparison.OrdinalIgnoreCase)) as EntityView;
+
+
+                //var viewToUpdate = masterView.ChildViews.FirstOrDefault(e => e.Name.Equals(view.Name, StringComparison.OrdinalIgnoreCase)) as EntityView;
+                //if (viewToUpdate != null)
+                //{
+                //    var composerViewForEdit = Task.Run<EntityView>(async () => await commerceEntity.GetComposerView(viewToUpdate.ItemId, _commerceCommander, context)).Result;
+                //    if (composerViewForEdit != null)
+                //    {
+                //        foreach (var fieldProperty in composerViewForEdit.Properties)
+                //        {
+                //            //var propertyPath = mappingPolicy.FieldPaths.ContainsKey(fieldProperty.Name) ? mappingPolicy.FieldPaths[fieldProperty.Name] : null;
+                //            //var fieldValue = jsonData.QueryMappedValue<string>(fieldProperty.Name, propertyPath, mappingPolicy.RootPaths);
+                //            //if (!string.IsNullOrEmpty(fieldValue))
+                //            //{
+                //            //    fieldProperty.ParseValueAndSetEntityView(fieldValue);
+                //            //    isUpdated = true;
+                //            //}
+                //            //else if (mappingPolicy.ClearFieldValues)
+                //            //{
+                //            //    fieldProperty.RawValue = string.Empty;
+                //            //    fieldProperty.Value = string.Empty;
+                //            //    isUpdated = true;
+                //            //}
+                //        }
+                //    }
+                //}
             }
 
             if (isUpdated)
             {
+                //var result = await _commerceCommander.Pipeline<IPersistEntityPipeline>().Run(new PersistEntityArgument(commerceEntity), context);
                 await _composerCommander.PersistEntity(context, commerceEntity);
+                //await _commerceCommander.PersistEntity(context, commerceEntity);
+                return await _commerceCommander.Command<FindEntityCommand>().Process(context, typeof(CommerceEntity), commerceEntity.Id);
+
             }
 
+            //return commerceEntity;
             return await _commerceCommander.Command<FindEntityCommand>().Process(context, typeof(CommerceEntity), commerceEntity.Id);
         }
 

@@ -1,14 +1,17 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Plugin.Sync.Commerce.CatalogImport.Entities;
 using Plugin.Sync.Commerce.CatalogImport.Extensions;
 using Plugin.Sync.Commerce.CatalogImport.Pipelines.Arguments;
 using Plugin.Sync.Commerce.CatalogImport.Policies;
+using Serilog;
 using Sitecore.Commerce.Core;
 using Sitecore.Commerce.Core.Commands;
 using Sitecore.Commerce.Plugin.Catalog;
 using Sitecore.Commerce.Plugin.Composer;
 using Sitecore.Framework.Conditions;
 using Sitecore.Framework.Pipelines;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
@@ -17,7 +20,7 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
     /// Import data into an existing SellableItem or new SellableItem entity
     /// </summary>
     [PipelineDisplayName("ImportSellableItemBlock")]
-    public class ImportSellableItemBlock : PipelineBlock<ImportCommerceEntityArgument, ImportCommerceEntityResponse, CommercePipelineExecutionContext>
+    public class ImportSellableItemBlock : PipelineBlock<ImportSellableItemArgument, ImportSellableItemResponse, CommercePipelineExecutionContext>
     {
         #region Private fields
         private readonly CommerceCommander _commerceCommander;
@@ -32,12 +35,11 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
         /// <param name="commerceCommander"></param>
         /// <param name="composerCommander"></param>
         /// <param name="importHelper"></param>
-        public ImportSellableItemBlock(CommerceCommander commerceCommander, ComposerCommander composerCommander, CommerceEntityImportHelper importHelper
-            )
+        public ImportSellableItemBlock(CommerceCommander commerceCommander, ComposerCommander composerCommander)
         {
             _commerceCommander = commerceCommander;
             _composerCommander = composerCommander;
-            _importHelper = importHelper;
+            _importHelper = new CommerceEntityImportHelper(commerceCommander, composerCommander);
         }
 
         /// <summary>
@@ -46,8 +48,9 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
         /// <param name="arg"></param>
         /// <param name="context"></param>
         /// <returns></returns>
-        public override async Task<ImportCommerceEntityResponse> Run(ImportCommerceEntityArgument arg, CommercePipelineExecutionContext context)
+        public override async Task<ImportSellableItemResponse> Run(ImportSellableItemArgument arg, CommercePipelineExecutionContext context)
         {
+            
             //TODO: add an option to only import data if SellableItem already exists (don't create a new one)
             //TODO: add an option to only import data if SellableItem don't exist (don't update existing ones)
             var mappingPolicy = context.CommerceContext.GetPolicy<SellableItemMappingPolicy>();
@@ -61,16 +64,20 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
 
             //Get or create sellable item
             SellableItem sellableItem = await GetOrCreateSellableItem(arg.JsonData, context, mappingPolicy, itemId);
-
+            var allFields = sellableItem.GetViewableFields();
             //Associate catalog and category
             var categoryName = _importHelper.GetParentCategoryName(arg.JsonData, mappingPolicy);
             await AssociateSellableItemWithParentEntities(catalogName, categoryName, sellableItem, context.CommerceContext);
 
             //Import SellableIltem field values
+            //sellableItem.Get
+            //sellableItem.View
+            
             sellableItem = await _importHelper.ImportComposerViewsFields(sellableItem, arg.JsonData, mappingPolicy, context.CommerceContext) as SellableItem;
-            return new ImportCommerceEntityResponse
+            var saveResult = await _commerceCommander.Pipeline<IPersistEntityPipeline>().Run(new PersistEntityArgument(sellableItem), context);
+            return new ImportSellableItemResponse
             {
-                CommerceEntity = sellableItem
+                SellableItem = sellableItem
             };
         }
         #endregion

@@ -1,0 +1,192 @@
+00001 17:39:23 INFO Loading Global Environment using Filesystem Provider from: C:\Src\SyncPlugins\src\Sitecore.Commerce.Engine\wwwroot\Bootstrap\
+00001 17:39:23 INFO [NodeStartup] GlobalEnvironmentFrom='Configuration: Global'
+00001 17:39:23 INFO [NodeStartup] Status='Started',GlobalEnvironmentName='GlobalEnvironment'
+00001 17:39:24 INFO Bootstrapping Application ...
+00001 17:39:24 INFO Instantiating "Sitecore.Framework.Caching.ConfigureSitecore"
+00001 17:39:24 INFO Invoking ConfigureServices on "Sitecore.Framework.Caching.ConfigureSitecore"
+00001 17:39:24 INFO Instantiating "Sitecore.Framework.Caching.Memory.ConfigureSitecore"
+00001 17:39:24 INFO Invoking ConfigureServices on "Sitecore.Framework.Caching.Memory.ConfigureSitecore"
+00001 17:39:24 INFO Instantiating "Eventing.ConfigureSitecore"
+00001 17:39:24 INFO Invoking ConfigureServices on "Eventing.ConfigureSitecore"
+00001 17:39:24 INFO Configuring event defaults
+00001 17:39:24 INFO Instantiating "Pipelines.ConfigureSitecore"
+00001 17:39:24 INFO Invoking ConfigureServices on "Pipelines.ConfigureSitecore"
+00001 17:39:24 INFO Configuring pipeline defaults
+00001 17:39:24 INFO Instantiating "Sitecore.Commerce.Core.ConfigureSitecore"
+00001 17:39:24 INFO Invoking ConfigureServices on "Sitecore.Commerce.Core.ConfigureSitecore"
+00001 17:39:24 INFO Instantiating "Sitecore.Commerce.Plugin.ManagedLists.ConfigureSitecore"
+00001 17:39:24 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.ManagedLists.ConfigureSitecore"
+00001 17:39:24 INFO Instantiating "Sitecore.Framework.Rules.ConfigureSitecore"
+00001 17:39:24 INFO Invoking ConfigureServices on "Sitecore.Framework.Rules.ConfigureSitecore"
+00001 17:39:24 INFO Instantiating "Sitecore.Commerce.Plugin.Rules.ConfigureSitecore"
+00001 17:39:24 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Rules.ConfigureSitecore"
+00001 17:39:24 INFO Instantiating "Sitecore.Commerce.Plugin.Shops.ConfigureSitecore"
+00001 17:39:24 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Shops.ConfigureSitecore"
+00001 17:39:24 INFO Instantiating "Sitecore.Commerce.Plugin.Views.ConfigureSitecore"
+00001 17:39:24 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Views.ConfigureSitecore"
+00001 17:39:24 INFO Instantiating "Sitecore.Commerce.Plugin.BusinessUsers.ConfigureSitecore"
+00001 17:39:24 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.BusinessUsers.ConfigureSitecore"
+00001 17:39:24 INFO Instantiating "Sitecore.Commerce.Plugin.Composer.ConfigureSitecore"
+00001 17:39:24 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Composer.ConfigureSitecore"
+00001 17:39:24 INFO Instantiating "Sitecore.Commerce.Plugin.EntityVersions.ConfigureSitecore"
+00001 17:39:24 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.EntityVersions.ConfigureSitecore"
+00001 17:39:24 INFO Instantiating "Sitecore.Commerce.Plugin.Media.ConfigureSitecore"
+00001 17:39:24 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Media.ConfigureSitecore"
+00001 17:39:24 INFO Instantiating "Sitecore.Commerce.Plugin.Pricing.ConfigureSitecore"
+00001 17:39:24 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Pricing.ConfigureSitecore"
+00001 17:39:24 INFO Instantiating "Sitecore.Commerce.Plugin.Carts.ConfigureSitecore"
+00001 17:39:24 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Carts.ConfigureSitecore"
+00001 17:39:24 INFO Instantiating "Sitecore.Commerce.Plugin.Search.ConfigureSitecore"
+00001 17:39:24 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Search.ConfigureSitecore"
+00001 17:39:25 INFO Instantiating "Sitecore.Commerce.Plugin.Promotions.ConfigureSitecore"
+00001 17:39:25 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Promotions.ConfigureSitecore"
+00001 17:39:25 INFO Instantiating "Sitecore.Commerce.Plugin.SQL.ConfigureSitecore"
+00001 17:39:25 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.SQL.ConfigureSitecore"
+00001 17:39:25 INFO Instantiating "Sitecore.Commerce.Plugin.Workflow.ConfigureSitecore"
+00001 17:39:25 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Workflow.ConfigureSitecore"
+00001 17:39:25 INFO Instantiating "Sitecore.Commerce.Plugin.Catalog.ConfigureSitecore"
+00001 17:39:25 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Catalog.ConfigureSitecore"
+00001 17:39:25 INFO Instantiating "Sitecore.Commerce.Plugin.Availability.ConfigureSitecore"
+00001 17:39:25 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Availability.ConfigureSitecore"
+00001 17:39:25 INFO Instantiating "Sitecore.Commerce.Plugin.Orders.ConfigureSitecore"
+00001 17:39:25 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Orders.ConfigureSitecore"
+00001 17:39:25 INFO Instantiating "Sitecore.Commerce.Plugin.Fulfillment.ConfigureSitecore"
+00001 17:39:25 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Fulfillment.ConfigureSitecore"
+00001 17:39:25 INFO Instantiating "Sitecore.Commerce.Plugin.Customers.ConfigureSitecore"
+00001 17:39:25 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Customers.ConfigureSitecore"
+00001 17:39:25 INFO Instantiating "Sitecore.Commerce.Plugin.Entitlements.ConfigureSitecore"
+00001 17:39:25 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Entitlements.ConfigureSitecore"
+00001 17:39:25 INFO Instantiating "Sitecore.Commerce.Plugin.DigitalItems.ConfigureSitecore"
+00001 17:39:25 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.DigitalItems.ConfigureSitecore"
+00001 17:39:25 INFO Instantiating "Sitecore.Commerce.Plugin.Payments.ConfigureSitecore"
+00001 17:39:25 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Payments.ConfigureSitecore"
+00001 17:39:25 INFO Instantiating "Sitecore.Commerce.Plugin.GiftCards.ConfigureSitecore"
+00001 17:39:25 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.GiftCards.ConfigureSitecore"
+00001 17:39:25 INFO Instantiating "Sitecore.Commerce.Plugin.Returns.ConfigureSitecore"
+00001 17:39:25 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Returns.ConfigureSitecore"
+00001 17:39:25 INFO Instantiating "Sitecore.Commerce.Plugin.Management.ConfigureSitecore"
+00001 17:39:25 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Management.ConfigureSitecore"
+00001 17:39:25 INFO Instantiating "Sitecore.Commerce.Plugin.Content.ConfigureSitecore"
+00001 17:39:25 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Content.ConfigureSitecore"
+00001 17:39:25 INFO Instantiating "Sitecore.Commerce.Plugin.Inventory.ConfigureSitecore"
+00001 17:39:25 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Inventory.ConfigureSitecore"
+00001 17:39:25 INFO Instantiating "Sitecore.Commerce.Plugin.Backorderable.ConfigureSitecore"
+00001 17:39:25 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Backorderable.ConfigureSitecore"
+00001 17:39:25 INFO Instantiating "Sitecore.Commerce.Plugin.Preorderable.ConfigureSitecore"
+00001 17:39:25 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Preorderable.ConfigureSitecore"
+00001 17:39:25 INFO Instantiating "Sitecore.Commerce.Plugin.Orders.DelayedAvailability.ConfigureSitecore"
+00001 17:39:25 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Orders.DelayedAvailability.ConfigureSitecore"
+00001 17:39:25 INFO Instantiating "Sitecore.Commerce.Plugin.FaultInjection.ConfigureSitecore"
+00001 17:39:25 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.FaultInjection.ConfigureSitecore"
+00001 17:39:25 INFO Instantiating "Sitecore.Commerce.Plugin.Journaling.ConfigureSitecore"
+00001 17:39:25 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Journaling.ConfigureSitecore"
+00001 17:39:25 INFO Instantiating "Sitecore.Commerce.Plugin.Search.Azure.ConfigureSitecore"
+00001 17:39:25 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Search.Azure.ConfigureSitecore"
+00001 17:39:25 INFO Instantiating "Sitecore.Commerce.Plugin.Search.Solr.ConfigureSitecore"
+00001 17:39:25 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Search.Solr.ConfigureSitecore"
+00001 17:39:25 INFO Instantiating "Sitecore.Commerce.Plugin.Tax.ConfigureSitecore"
+00001 17:39:25 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Tax.ConfigureSitecore"
+00001 17:39:25 INFO Instantiating "Sitecore.Commerce.Plugin.Coupons.ConfigureSitecore"
+00001 17:39:25 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Coupons.ConfigureSitecore"
+00001 17:39:25 INFO Instantiating "Plugin.Sample.Habitat.ConfigureSitecore"
+00001 17:39:25 INFO Invoking ConfigureServices on "Plugin.Sample.Habitat.ConfigureSitecore"
+00001 17:39:25 INFO Instantiating "Plugin.Sync.Commerce.CatalogImport.ConfigureSitecore"
+00001 17:39:25 INFO Invoking ConfigureServices on "Plugin.Sync.Commerce.CatalogImport.ConfigureSitecore"
+00001 17:39:26 INFO Core required DB Version [9.2.0] and DB Version [9.2.0]
+00005 17:39:26 INFO [NodeStartup] ContactId='Deployment01_5d0e20901d2044e08446bd8f5d0a076e',Environment='GlobalEnvironment'
+00001 17:39:29 INFO [EnvironmentStartup] StartEnvironment=HabitatAuthoring
+00006 17:39:30 INFO [EnvironmentStartup] Environment='HabitatAuthoring'
+00022 17:39:41 INFO Request starting HTTP/1.1 POST https://localhost:5001/commerceops/Bootstrap()  0
+00003 17:39:41 INFO Successfully validated the token.
+00003 17:39:42 INFO Route matched with "{action = \"Bootstrap\", controller = \"Commands\"}". Executing action "Sitecore.Commerce.Core.CommandsController.Bootstrap (Sitecore.Commerce.Core)"
+00003 17:39:42 INFO Authorization was successful.
+00005 17:39:42 INFO Executing action method "Sitecore.Commerce.Core.CommandsController.Bootstrap (Sitecore.Commerce.Core)" - Validation state: Valid
+00006 17:39:43 INFO Core.block.BootStrapImportJsonsBlock.ImportPolicySetFromFile: File=C:\Src\SyncPlugins\src\Sitecore.Commerce.Engine\wwwroot\data\environments\Core.ControllerMethodRoles.PolicySet-1.0.0.json
+00005 17:39:43 INFO Creating Redis cache store '"Commerce-Redis-Store"'
+00006 17:39:44 INFO SQL:block:persistentity.PolicySet: EntityId=Entity-PolicySet-ControllerMethodRolesPolicySet
+00005 17:39:44 INFO Core.block.BootStrapImportJsonsBlock.PolicySetImported: PolicySetId=Entity-PolicySet-ControllerMethodRolesPolicySet|File=C:\Src\SyncPlugins\src\Sitecore.Commerce.Engine\wwwroot\data\environments\Core.ControllerMethodRoles.PolicySet-1.0.0.json
+00005 17:39:44 INFO Core.block.BootStrapImportJsonsBlock.ImportPolicySetFromFile: File=C:\Src\SyncPlugins\src\Sitecore.Commerce.Engine\wwwroot\data\environments\PlugIn.AccessByRoles.PolicySet-1.0.0.json
+00006 17:39:44 INFO SQL:block:persistentity.PolicySet: EntityId=Entity-PolicySet-AccessByRolesPolicySet
+00006 17:39:44 INFO Core.block.BootStrapImportJsonsBlock.PolicySetImported: PolicySetId=Entity-PolicySet-AccessByRolesPolicySet|File=C:\Src\SyncPlugins\src\Sitecore.Commerce.Engine\wwwroot\data\environments\PlugIn.AccessByRoles.PolicySet-1.0.0.json
+00006 17:39:44 INFO Core.block.BootStrapImportJsonsBlock.ImportEnvironmentFromFile: File=C:\Src\SyncPlugins\src\Sitecore.Commerce.Engine\wwwroot\data\environments\PlugIn.AdventureWorks.CommerceAuthoring-1.0.0.json
+00005 17:39:44 INFO SQL:block:persistentity.CommerceEnvironment: EntityId=Entity-CommerceEnvironment-AdventureWorksAuthoring
+00005 17:39:44 INFO Resetting Node Context for environment 'Entity-CommerceEnvironment-AdventureWorksAuthoring|5d0e20901d2044e08446bd8f5d0a076e'
+00015 17:39:44 INFO Core.block.BootStrapImportJsonsBlock.EnvironmentImported: EnvironmentId=Entity-CommerceEnvironment-AdventureWorksAuthoring|File=C:\Src\SyncPlugins\src\Sitecore.Commerce.Engine\wwwroot\data\environments\PlugIn.AdventureWorks.CommerceAuthoring-1.0.0.json
+00015 17:39:44 INFO Core.block.BootStrapImportJsonsBlock.ImportEnvironmentFromFile: File=C:\Src\SyncPlugins\src\Sitecore.Commerce.Engine\wwwroot\data\environments\PlugIn.AdventureWorks.CommerceMinions-1.0.0.json
+00005 17:39:44 INFO SQL:block:persistentity.CommerceEnvironment: EntityId=Entity-CommerceEnvironment-AdventureWorksMinions
+00005 17:39:44 INFO Resetting Node Context for environment 'Entity-CommerceEnvironment-AdventureWorksMinions|5d0e20901d2044e08446bd8f5d0a076e'
+00022 17:39:44 INFO Core.block.BootStrapImportJsonsBlock.EnvironmentImported: EnvironmentId=Entity-CommerceEnvironment-AdventureWorksMinions|File=C:\Src\SyncPlugins\src\Sitecore.Commerce.Engine\wwwroot\data\environments\PlugIn.AdventureWorks.CommerceMinions-1.0.0.json
+00022 17:39:44 INFO Core.block.BootStrapImportJsonsBlock.ImportEnvironmentFromFile: File=C:\Src\SyncPlugins\src\Sitecore.Commerce.Engine\wwwroot\data\environments\PlugIn.AdventureWorks.CommerceShops-1.0.0.json
+00015 17:39:45 INFO SQL:block:persistentity.CommerceEnvironment: EntityId=Entity-CommerceEnvironment-AdventureWorksShops
+00018 17:39:45 INFO Resetting Node Context for environment 'Entity-CommerceEnvironment-AdventureWorksShops|5d0e20901d2044e08446bd8f5d0a076e'
+00005 17:39:45 INFO Core.block.BootStrapImportJsonsBlock.EnvironmentImported: EnvironmentId=Entity-CommerceEnvironment-AdventureWorksShops|File=C:\Src\SyncPlugins\src\Sitecore.Commerce.Engine\wwwroot\data\environments\PlugIn.AdventureWorks.CommerceShops-1.0.0.json
+00005 17:39:45 INFO Core.block.BootStrapImportJsonsBlock.ImportPolicySetFromFile: File=C:\Src\SyncPlugins\src\Sitecore.Commerce.Engine\wwwroot\data\environments\PlugIn.Caching.PolicySet-1.0.0.json
+00015 17:39:45 INFO SQL:block:persistentity.PolicySet: EntityId=Entity-PolicySet-CachingPolicySet
+00015 17:39:45 INFO Core.block.BootStrapImportJsonsBlock.PolicySetImported: PolicySetId=Entity-PolicySet-CachingPolicySet|File=C:\Src\SyncPlugins\src\Sitecore.Commerce.Engine\wwwroot\data\environments\PlugIn.Caching.PolicySet-1.0.0.json
+00015 17:39:45 INFO Core.block.BootStrapImportJsonsBlock.ImportPolicySetFromFile: File=C:\Src\SyncPlugins\src\Sitecore.Commerce.Engine\wwwroot\data\environments\PlugIn.Catalog.PolicySet-1.0.0.json
+00015 17:39:45 INFO SQL:block:persistentity.PolicySet: EntityId=Entity-PolicySet-CatalogPolicySet
+00005 17:39:45 INFO Core.block.BootStrapImportJsonsBlock.PolicySetImported: PolicySetId=Entity-PolicySet-CatalogPolicySet|File=C:\Src\SyncPlugins\src\Sitecore.Commerce.Engine\wwwroot\data\environments\PlugIn.Catalog.PolicySet-1.0.0.json
+00005 17:39:45 INFO Core.block.BootStrapImportJsonsBlock.ImportPolicySetFromFile: File=C:\Src\SyncPlugins\src\Sitecore.Commerce.Engine\wwwroot\data\environments\PlugIn.CatalogImport.CategoryMappingPolicySet-1.0.0.json
+00019 17:39:45 INFO SQL:block:persistentity.PolicySet: EntityId=Entity-PolicySet-CategoryMappingPolicySet
+00018 17:39:45 INFO Core.block.BootStrapImportJsonsBlock.PolicySetImported: PolicySetId=Entity-PolicySet-CategoryMappingPolicySet|File=C:\Src\SyncPlugins\src\Sitecore.Commerce.Engine\wwwroot\data\environments\PlugIn.CatalogImport.CategoryMappingPolicySet-1.0.0.json
+00018 17:39:45 INFO Core.block.BootStrapImportJsonsBlock.ImportPolicySetFromFile: File=C:\Src\SyncPlugins\src\Sitecore.Commerce.Engine\wwwroot\data\environments\PlugIn.CatalogImport.SellableItemMappingPolicySet-1.0.0.json
+00015 17:39:45 INFO SQL:block:persistentity.PolicySet: EntityId=Entity-PolicySet-SellableItemMappingPolicySet
+00015 17:39:45 INFO Core.block.BootStrapImportJsonsBlock.PolicySetImported: PolicySetId=Entity-PolicySet-SellableItemMappingPolicySet|File=C:\Src\SyncPlugins\src\Sitecore.Commerce.Engine\wwwroot\data\environments\PlugIn.CatalogImport.SellableItemMappingPolicySet-1.0.0.json
+00015 17:39:45 INFO Core.block.BootStrapImportJsonsBlock.ImportPolicySetFromFile: File=C:\Src\SyncPlugins\src\Sitecore.Commerce.Engine\wwwroot\data\environments\PlugIn.CatalogIndexing.PolicySet-1.0.0.json
+00015 17:39:45 INFO SQL:block:persistentity.PolicySet: EntityId=Entity-PolicySet-SitecoreCatalogIndexingPolicySet
+00005 17:39:45 INFO Core.block.BootStrapImportJsonsBlock.PolicySetImported: PolicySetId=Entity-PolicySet-SitecoreCatalogIndexingPolicySet|File=C:\Src\SyncPlugins\src\Sitecore.Commerce.Engine\wwwroot\data\environments\PlugIn.CatalogIndexing.PolicySet-1.0.0.json
+00005 17:39:45 INFO Core.block.BootStrapImportJsonsBlock.ImportPolicySetFromFile: File=C:\Src\SyncPlugins\src\Sitecore.Commerce.Engine\wwwroot\data\environments\PlugIn.Content.PolicySet-1.0.0.json
+00015 17:39:45 INFO SQL:block:persistentity.PolicySet: EntityId=Entity-PolicySet-ContentPolicySet
+00005 17:39:45 INFO Core.block.BootStrapImportJsonsBlock.PolicySetImported: PolicySetId=Entity-PolicySet-ContentPolicySet|File=C:\Src\SyncPlugins\src\Sitecore.Commerce.Engine\wwwroot\data\environments\PlugIn.Content.PolicySet-1.0.0.json
+00005 17:39:45 INFO Core.block.BootStrapImportJsonsBlock.ImportEnvironmentFromFile: File=C:\Src\SyncPlugins\src\Sitecore.Commerce.Engine\wwwroot\data\environments\PlugIn.Habitat.CommerceAuthoring-1.0.0.json
+00015 17:39:45 INFO SQL:block:persistentity.CommerceEnvironment: EntityId=Entity-CommerceEnvironment-HabitatAuthoring
+00015 17:39:45 INFO Resetting Node Context for environment 'Entity-CommerceEnvironment-HabitatAuthoring|5d0e20901d2044e08446bd8f5d0a076e'
+00005 17:39:45 INFO Core.block.BootStrapImportJsonsBlock.EnvironmentImported: EnvironmentId=Entity-CommerceEnvironment-HabitatAuthoring|File=C:\Src\SyncPlugins\src\Sitecore.Commerce.Engine\wwwroot\data\environments\PlugIn.Habitat.CommerceAuthoring-1.0.0.json
+00005 17:39:45 INFO Core.block.BootStrapImportJsonsBlock.ImportEnvironmentFromFile: File=C:\Src\SyncPlugins\src\Sitecore.Commerce.Engine\wwwroot\data\environments\PlugIn.Habitat.CommerceMinions-1.0.0.json
+00015 17:39:45 INFO SQL:block:persistentity.CommerceEnvironment: EntityId=Entity-CommerceEnvironment-HabitatMinions
+00005 17:39:45 INFO Resetting Node Context for environment 'Entity-CommerceEnvironment-HabitatMinions|5d0e20901d2044e08446bd8f5d0a076e'
+00015 17:39:45 INFO Core.block.BootStrapImportJsonsBlock.EnvironmentImported: EnvironmentId=Entity-CommerceEnvironment-HabitatMinions|File=C:\Src\SyncPlugins\src\Sitecore.Commerce.Engine\wwwroot\data\environments\PlugIn.Habitat.CommerceMinions-1.0.0.json
+00015 17:39:45 INFO Core.block.BootStrapImportJsonsBlock.ImportEnvironmentFromFile: File=C:\Src\SyncPlugins\src\Sitecore.Commerce.Engine\wwwroot\data\environments\PlugIn.Habitat.CommerceShops-1.0.0.json
+00015 17:39:45 INFO SQL:block:persistentity.CommerceEnvironment: EntityId=Entity-CommerceEnvironment-HabitatShops
+00005 17:39:45 INFO Resetting Node Context for environment 'Entity-CommerceEnvironment-HabitatShops|5d0e20901d2044e08446bd8f5d0a076e'
+00015 17:39:45 INFO Core.block.BootStrapImportJsonsBlock.EnvironmentImported: EnvironmentId=Entity-CommerceEnvironment-HabitatShops|File=C:\Src\SyncPlugins\src\Sitecore.Commerce.Engine\wwwroot\data\environments\PlugIn.Habitat.CommerceShops-1.0.0.json
+00015 17:39:45 INFO Core.block.BootStrapImportJsonsBlock.ImportPolicySetFromFile: File=C:\Src\SyncPlugins\src\Sitecore.Commerce.Engine\wwwroot\data\environments\PlugIn.LocalizeEntities.PolicySet-1.0.0.json
+00015 17:39:45 INFO SQL:block:persistentity.PolicySet: EntityId=Entity-PolicySet-LocalizeEntitiesPolicySet
+00015 17:39:45 INFO Core.block.BootStrapImportJsonsBlock.PolicySetImported: PolicySetId=Entity-PolicySet-LocalizeEntitiesPolicySet|File=C:\Src\SyncPlugins\src\Sitecore.Commerce.Engine\wwwroot\data\environments\PlugIn.LocalizeEntities.PolicySet-1.0.0.json
+00015 17:39:45 INFO Core.block.BootStrapImportJsonsBlock.ImportPolicySetFromFile: File=C:\Src\SyncPlugins\src\Sitecore.Commerce.Engine\wwwroot\data\environments\PlugIn.Minions.PolicySet-1.0.0.json
+00005 17:39:45 INFO SQL:block:persistentity.PolicySet: EntityId=Entity-PolicySet-MinionsPolicySet
+00005 17:39:45 INFO Core.block.BootStrapImportJsonsBlock.PolicySetImported: PolicySetId=Entity-PolicySet-MinionsPolicySet|File=C:\Src\SyncPlugins\src\Sitecore.Commerce.Engine\wwwroot\data\environments\PlugIn.Minions.PolicySet-1.0.0.json
+00005 17:39:45 INFO Core.block.BootStrapImportJsonsBlock.ImportPolicySetFromFile: File=C:\Src\SyncPlugins\src\Sitecore.Commerce.Engine\wwwroot\data\environments\PlugIn.Plugin.PolicySet-1.0.0.json
+00005 17:39:45 INFO SQL:block:persistentity.PolicySet: EntityId=Entity-PolicySet-PluginPolicySet
+00015 17:39:45 INFO Core.block.BootStrapImportJsonsBlock.PolicySetImported: PolicySetId=Entity-PolicySet-PluginPolicySet|File=C:\Src\SyncPlugins\src\Sitecore.Commerce.Engine\wwwroot\data\environments\PlugIn.Plugin.PolicySet-1.0.0.json
+00015 17:39:45 INFO Core.block.BootStrapImportJsonsBlock.ImportPolicySetFromFile: File=C:\Src\SyncPlugins\src\Sitecore.Commerce.Engine\wwwroot\data\environments\PlugIn.Relationships.PolicySet-1.0.0.json
+00015 17:39:45 INFO SQL:block:persistentity.PolicySet: EntityId=Entity-PolicySet-RelationshipsPolicySet
+00005 17:39:45 INFO Core.block.BootStrapImportJsonsBlock.PolicySetImported: PolicySetId=Entity-PolicySet-RelationshipsPolicySet|File=C:\Src\SyncPlugins\src\Sitecore.Commerce.Engine\wwwroot\data\environments\PlugIn.Relationships.PolicySet-1.0.0.json
+00005 17:39:45 INFO Core.block.BootStrapImportJsonsBlock.ImportPolicySetFromFile: File=C:\Src\SyncPlugins\src\Sitecore.Commerce.Engine\wwwroot\data\environments\PlugIn.Search.PolicySet-1.0.0.json
+00015 17:39:45 INFO SQL:block:persistentity.PolicySet: EntityId=Entity-PolicySet-SearchPolicySet
+00005 17:39:45 INFO Core.block.BootStrapImportJsonsBlock.PolicySetImported: PolicySetId=Entity-PolicySet-SearchPolicySet|File=C:\Src\SyncPlugins\src\Sitecore.Commerce.Engine\wwwroot\data\environments\PlugIn.Search.PolicySet-1.0.0.json
+00005 17:39:45 INFO Core.block.BootStrapImportJsonsBlock.ImportPolicySetFromFile: File=C:\Src\SyncPlugins\src\Sitecore.Commerce.Engine\wwwroot\data\environments\PlugIn.Search.Solr.PolicySet-1.0.0.json
+00015 17:39:45 INFO SQL:block:persistentity.PolicySet: EntityId=Entity-PolicySet-SolrSearchPolicySet
+00015 17:39:45 INFO Core.block.BootStrapImportJsonsBlock.PolicySetImported: PolicySetId=Entity-PolicySet-SolrSearchPolicySet|File=C:\Src\SyncPlugins\src\Sitecore.Commerce.Engine\wwwroot\data\environments\PlugIn.Search.Solr.PolicySet-1.0.0.json
+00015 17:39:45 INFO Core.block.BootStrapImportJsonsBlock.ImportPolicySetFromFile: File=C:\Src\SyncPlugins\src\Sitecore.Commerce.Engine\wwwroot\data\environments\Plugin.SQL.PolicySet-1.0.0.json
+00015 17:39:45 INFO SQL:block:persistentity.PolicySet: EntityId=Entity-PolicySet-SqlPolicySet
+00005 17:39:45 INFO Core.block.BootStrapImportJsonsBlock.PolicySetImported: PolicySetId=Entity-PolicySet-SqlPolicySet|File=C:\Src\SyncPlugins\src\Sitecore.Commerce.Engine\wwwroot\data\environments\Plugin.SQL.PolicySet-1.0.0.json
+00005 17:39:45 INFO Core.block.BootStrapImportJsonsBlock.ImportPolicySetFromFile: File=C:\Src\SyncPlugins\src\Sitecore.Commerce.Engine\wwwroot\data\environments\PlugIn.SQL.Sharding.PolicySet-1.0.0.json
+00015 17:39:45 INFO SQL:block:persistentity.PolicySet: EntityId=Entity-PolicySet-ShardingPolicySet
+00005 17:39:45 INFO Core.block.BootStrapImportJsonsBlock.PolicySetImported: PolicySetId=Entity-PolicySet-ShardingPolicySet|File=C:\Src\SyncPlugins\src\Sitecore.Commerce.Engine\wwwroot\data\environments\PlugIn.SQL.Sharding.PolicySet-1.0.0.json
+00005 17:39:45 INFO Core.block.BootStrapImportJsonsBlock.ImportPolicySetFromFile: File=C:\Src\SyncPlugins\src\Sitecore.Commerce.Engine\wwwroot\data\environments\PlugIn.Validation.PolicySet-1.0.0.json
+00015 17:39:46 INFO SQL:block:persistentity.PolicySet: EntityId=Entity-PolicySet-ValidationPolicySet
+00005 17:39:46 INFO Core.block.BootStrapImportJsonsBlock.PolicySetImported: PolicySetId=Entity-PolicySet-ValidationPolicySet|File=C:\Src\SyncPlugins\src\Sitecore.Commerce.Engine\wwwroot\data\environments\PlugIn.Validation.PolicySet-1.0.0.json
+00005 17:39:46 INFO Core.block.BootStrapImportJsonsBlock.ImportPolicySetFromFile: File=C:\Src\SyncPlugins\src\Sitecore.Commerce.Engine\wwwroot\data\environments\PlugIn.Versioning.PolicySet-1.0.0.json
+00015 17:39:46 INFO SQL:block:persistentity.PolicySet: EntityId=Entity-PolicySet-VersioningPolicySet
+00005 17:39:46 INFO Core.block.BootStrapImportJsonsBlock.PolicySetImported: PolicySetId=Entity-PolicySet-VersioningPolicySet|File=C:\Src\SyncPlugins\src\Sitecore.Commerce.Engine\wwwroot\data\environments\PlugIn.Versioning.PolicySet-1.0.0.json
+00005 17:39:46 INFO Core.block.BootStrapImportJsonsBlock.ImportPolicySetFromFile: File=C:\Src\SyncPlugins\src\Sitecore.Commerce.Engine\wwwroot\data\environments\PlugIn.ViewTemplateComposer.PolicySet-1.0.0.json
+00005 17:39:46 INFO SQL:block:persistentity.PolicySet: EntityId=Entity-PolicySet-ViewTemplateComposer
+00005 17:39:46 INFO Core.block.BootStrapImportJsonsBlock.PolicySetImported: PolicySetId=Entity-PolicySet-ViewTemplateComposer|File=C:\Src\SyncPlugins\src\Sitecore.Commerce.Engine\wwwroot\data\environments\PlugIn.ViewTemplateComposer.PolicySet-1.0.0.json
+00005 17:39:46 INFO Core.block.BootStrapImportJsonsBlock.ImportPolicySetFromFile: File=C:\Src\SyncPlugins\src\Sitecore.Commerce.Engine\wwwroot\data\environments\PlugIn.Workflow.PolicySet-1.0.0.json
+00005 17:39:46 INFO SQL:block:persistentity.PolicySet: EntityId=Entity-PolicySet-WorkflowPolicySet
+00005 17:39:46 INFO Core.block.BootStrapImportJsonsBlock.PolicySetImported: PolicySetId=Entity-PolicySet-WorkflowPolicySet|File=C:\Src\SyncPlugins\src\Sitecore.Commerce.Engine\wwwroot\data\environments\PlugIn.Workflow.PolicySet-1.0.0.json
+00005 17:39:46 INFO Executed action method "Sitecore.Commerce.Core.CommandsController.Bootstrap (Sitecore.Commerce.Core)", returned result "Microsoft.AspNetCore.Mvc.ObjectResult" in 3255.0738ms.
+00005 17:39:46 INFO Executing ObjectResult, writing value of type '"Sitecore.Commerce.Core.Commands.BootstrapCommand"'.
+00015 17:39:47 INFO Executed action "Sitecore.Commerce.Core.CommandsController.Bootstrap (Sitecore.Commerce.Core)" in 4210.0953ms
+00015 17:39:47 INFO Request finished in 5946.8905ms 200 application/json; odata.metadata=minimal; odata.streaming=true; charset=utf-8

@@ -1,0 +1,38 @@
+{
+  "$type": "Sitecore.Commerce.Core.PolicySet, Sitecore.Commerce.Core",
+  "Id": "Entity-PolicySet-SellableItemMappingPolicySet",
+  "Version": 1,
+  "IsPersisted": false,
+  "Name": "SellableItemMappingPolicySet",
+  "Policies": {
+    "$type": "System.Collections.Generic.List`1[[Sitecore.Commerce.Core.Policy, Sitecore.Commerce.Core]], mscorlib",
+    "$values": [
+      {
+        "$type": "Plugin.Sync.Commerce.CatalogImport.Policies.SellableItemMappingPolicy, Plugin.Sync.Commerce.CatalogImport",
+        "ClearFieldValues": true,
+        "IdPath": "Id",
+        "NamePath": "Name",
+        "DisplayNamePath": "DisplayName",
+        "DescriptionPath": "Description",
+        "ParentCategoryNamePath": "ParentCategory",
+        "CatalogNamePath": "CatalogName",
+        "UpdatedItemsList": "ImportedItems",
+        "DefaultCatalogName": "Habitat_Master",
+        "DefaultCategoryName": "TestCategory",
+        "ListPricePath": "ListPrice",
+        "ComposerFieldsPaths": {
+          "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.String, mscorlib]], mscorlib",
+          "one": "One",
+          "two": "twoVal",
+          "three": "threeVal"
+        },
+        "CustomFieldsPaths": {
+          "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.String, mscorlib]], mscorlib",
+          "one": "One",
+          "two": "twoVal",
+          "three": "threeVal"
+        }
+      }
+    ]
+  }
+}

@@ -12,7 +12,8 @@ namespace Plugin.Sync.Commerce.CatalogImport.Extensions
     {
         public static T SelectValue<T>(this JToken jObj, string jsonPath)
         {
-            Condition.Requires(jsonPath, nameof(jsonPath)).IsNotNullOrEmpty();
+            if (string.IsNullOrEmpty(jsonPath)) return default(T);
+
             var token = jObj.SelectToken(jsonPath);
             return token != null ? token.Value<T>() : default(T);
         }
@@ -33,6 +34,31 @@ namespace Plugin.Sync.Commerce.CatalogImport.Extensions
             }
 
             return fieldValues;
+        }
+
+        public static Dictionary<string, string> QueryMappedValuesFromRoot(this JToken jData, List<string> rootPaths)
+        {
+            var results = new Dictionary<string, string>();
+            foreach (var rootPath in rootPaths)
+            {
+                if (!string.IsNullOrEmpty(rootPath))
+                {
+                    var rootToken = jData.SelectToken(rootPath);
+                    if (rootToken != null)
+                    {
+                        //var dict = rootToken.ToDictionary<string>();
+                        foreach (var prop in rootToken.Children<JProperty>())
+                        {
+                            if (prop != null && !string.IsNullOrEmpty(prop.Name) && prop.Value != null && prop.Value.Type == JTokenType.String)
+                            {
+                                results.Add(prop.Name, (string)prop);
+                            }
+                        }
+                    }
+                }
+            }
+
+            return results;
         }
 
         public static T QueryMappedValue<T>(this JToken jData, string fieldName, string fieldPath, IEnumerable<string> rootPaths)

@@ -200,8 +200,8 @@ namespace Plugin.Sync.Commerce.CatalogImport.Extensions
 
             }
 
-            //return commerceEntity;
-            return await _commerceCommander.Command<FindEntityCommand>().Process(context, typeof(CommerceEntity), commerceEntity.Id);
+            return commerceEntity;
+            //return await _commerceCommander.Command<FindEntityCommand>().Process(context, typeof(CommerceEntity), commerceEntity.Id);
         }
 
         #endregion

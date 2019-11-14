@@ -14,22 +14,39 @@
         "NamePath": "Name",
         "DisplayNamePath": "DisplayName",
         "DescriptionPath": "Description",
+        "BrandPath": "Brand",
+        "ManufacturerPath": "Manufacturer",
+        "TypeOfGoodsPath": "TypeOfGoods",
         "ParentCategoryNamePath": "ParentCategory",
         "CatalogNamePath": "CatalogName",
         "UpdatedItemsList": "ImportedItems",
         "DefaultCatalogName": "Habitat_Master",
         "DefaultCategoryName": "TestCategory",
         "ListPricePath": "ListPrice",
+        "ComposerFieldsRootPaths": {
+          "$type": "System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib",
+          "$values": [
+            "ComposerFieldsRootOne",
+            "ComposerFieldsRootTwo"
+          ]
+        },
         "ComposerFieldsPaths": {
           "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.String, mscorlib]], mscorlib",
-          "one": "One",
-          "two": "twoVal",
+          "ComposerFieldAtRootA_key": "ComposerFieldAtRootA",
+          "ComposerFieldAtRootB_key": "ComposerFieldAtRootB",
           "three": "threeVal"
+        },
+        "CustomFieldsRootPaths": {
+          "$type": "System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib",
+          "$values": [
+            "CustomFieldsRootOne",
+            "CustomFieldsRootTwo"
+          ]
         },
         "CustomFieldsPaths": {
           "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.String, mscorlib]], mscorlib",
-          "one": "One",
-          "two": "twoVal",
+          "CustomFieldAtRootA_key": "CustomFieldAtRootA",
+          "CustomFieldAtRootB_key": "CustomFieldAtRootB",
           "three": "threeVal"
         }
       }

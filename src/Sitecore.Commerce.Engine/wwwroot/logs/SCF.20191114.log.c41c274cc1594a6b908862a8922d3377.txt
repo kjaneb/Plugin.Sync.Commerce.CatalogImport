@@ -1,0 +1,136 @@
+00001 17:32:55 INFO Loading Global Environment using Filesystem Provider from: C:\Src\SyncPlugins\src\Sitecore.Commerce.Engine\wwwroot\Bootstrap\
+00001 17:32:55 INFO [NodeStartup] GlobalEnvironmentFrom='Configuration: Global'
+00001 17:32:55 INFO [NodeStartup] Status='Started',GlobalEnvironmentName='GlobalEnvironment'
+00001 17:32:56 INFO Bootstrapping Application ...
+00001 17:32:56 INFO Instantiating "Sitecore.Framework.Caching.ConfigureSitecore"
+00001 17:32:56 INFO Invoking ConfigureServices on "Sitecore.Framework.Caching.ConfigureSitecore"
+00001 17:32:56 INFO Instantiating "Sitecore.Framework.Caching.Memory.ConfigureSitecore"
+00001 17:32:56 INFO Invoking ConfigureServices on "Sitecore.Framework.Caching.Memory.ConfigureSitecore"
+00001 17:32:56 INFO Instantiating "Eventing.ConfigureSitecore"
+00001 17:32:56 INFO Invoking ConfigureServices on "Eventing.ConfigureSitecore"
+00001 17:32:56 INFO Configuring event defaults
+00001 17:32:56 INFO Instantiating "Pipelines.ConfigureSitecore"
+00001 17:32:56 INFO Invoking ConfigureServices on "Pipelines.ConfigureSitecore"
+00001 17:32:56 INFO Configuring pipeline defaults
+00001 17:32:56 INFO Instantiating "Sitecore.Commerce.Core.ConfigureSitecore"
+00001 17:32:56 INFO Invoking ConfigureServices on "Sitecore.Commerce.Core.ConfigureSitecore"
+00001 17:32:56 INFO Instantiating "Sitecore.Commerce.Plugin.ManagedLists.ConfigureSitecore"
+00001 17:32:56 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.ManagedLists.ConfigureSitecore"
+00001 17:32:56 INFO Instantiating "Sitecore.Framework.Rules.ConfigureSitecore"
+00001 17:32:56 INFO Invoking ConfigureServices on "Sitecore.Framework.Rules.ConfigureSitecore"
+00001 17:32:56 INFO Instantiating "Sitecore.Commerce.Plugin.Rules.ConfigureSitecore"
+00001 17:32:56 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Rules.ConfigureSitecore"
+00001 17:32:56 INFO Instantiating "Sitecore.Commerce.Plugin.Shops.ConfigureSitecore"
+00001 17:32:56 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Shops.ConfigureSitecore"
+00001 17:32:56 INFO Instantiating "Sitecore.Commerce.Plugin.Views.ConfigureSitecore"
+00001 17:32:56 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Views.ConfigureSitecore"
+00001 17:32:56 INFO Instantiating "Sitecore.Commerce.Plugin.BusinessUsers.ConfigureSitecore"
+00001 17:32:56 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.BusinessUsers.ConfigureSitecore"
+00001 17:32:56 INFO Instantiating "Sitecore.Commerce.Plugin.Composer.ConfigureSitecore"
+00001 17:32:56 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Composer.ConfigureSitecore"
+00001 17:32:56 INFO Instantiating "Sitecore.Commerce.Plugin.EntityVersions.ConfigureSitecore"
+00001 17:32:56 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.EntityVersions.ConfigureSitecore"
+00001 17:32:56 INFO Instantiating "Sitecore.Commerce.Plugin.Media.ConfigureSitecore"
+00001 17:32:56 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Media.ConfigureSitecore"
+00001 17:32:56 INFO Instantiating "Sitecore.Commerce.Plugin.Pricing.ConfigureSitecore"
+00001 17:32:56 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Pricing.ConfigureSitecore"
+00001 17:32:57 INFO Instantiating "Sitecore.Commerce.Plugin.Carts.ConfigureSitecore"
+00001 17:32:57 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Carts.ConfigureSitecore"
+00001 17:32:57 INFO Instantiating "Sitecore.Commerce.Plugin.Search.ConfigureSitecore"
+00001 17:32:57 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Search.ConfigureSitecore"
+00001 17:32:57 INFO Instantiating "Sitecore.Commerce.Plugin.Promotions.ConfigureSitecore"
+00001 17:32:57 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Promotions.ConfigureSitecore"
+00001 17:32:57 INFO Instantiating "Sitecore.Commerce.Plugin.SQL.ConfigureSitecore"
+00001 17:32:57 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.SQL.ConfigureSitecore"
+00001 17:32:57 INFO Instantiating "Sitecore.Commerce.Plugin.Workflow.ConfigureSitecore"
+00001 17:32:57 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Workflow.ConfigureSitecore"
+00001 17:32:57 INFO Instantiating "Sitecore.Commerce.Plugin.Catalog.ConfigureSitecore"
+00001 17:32:57 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Catalog.ConfigureSitecore"
+00001 17:32:57 INFO Instantiating "Sitecore.Commerce.Plugin.Availability.ConfigureSitecore"
+00001 17:32:57 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Availability.ConfigureSitecore"
+00001 17:32:57 INFO Instantiating "Sitecore.Commerce.Plugin.Orders.ConfigureSitecore"
+00001 17:32:57 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Orders.ConfigureSitecore"
+00001 17:32:57 INFO Instantiating "Sitecore.Commerce.Plugin.Fulfillment.ConfigureSitecore"
+00001 17:32:57 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Fulfillment.ConfigureSitecore"
+00001 17:32:57 INFO Instantiating "Sitecore.Commerce.Plugin.Customers.ConfigureSitecore"
+00001 17:32:57 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Customers.ConfigureSitecore"
+00001 17:32:57 INFO Instantiating "Sitecore.Commerce.Plugin.Entitlements.ConfigureSitecore"
+00001 17:32:57 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Entitlements.ConfigureSitecore"
+00001 17:32:57 INFO Instantiating "Sitecore.Commerce.Plugin.DigitalItems.ConfigureSitecore"
+00001 17:32:57 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.DigitalItems.ConfigureSitecore"
+00001 17:32:57 INFO Instantiating "Sitecore.Commerce.Plugin.Payments.ConfigureSitecore"
+00001 17:32:57 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Payments.ConfigureSitecore"
+00001 17:32:57 INFO Instantiating "Sitecore.Commerce.Plugin.GiftCards.ConfigureSitecore"
+00001 17:32:57 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.GiftCards.ConfigureSitecore"
+00001 17:32:57 INFO Instantiating "Sitecore.Commerce.Plugin.Returns.ConfigureSitecore"
+00001 17:32:57 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Returns.ConfigureSitecore"
+00001 17:32:57 INFO Instantiating "Sitecore.Commerce.Plugin.Management.ConfigureSitecore"
+00001 17:32:57 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Management.ConfigureSitecore"
+00001 17:32:57 INFO Instantiating "Sitecore.Commerce.Plugin.Content.ConfigureSitecore"
+00001 17:32:57 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Content.ConfigureSitecore"
+00001 17:32:57 INFO Instantiating "Sitecore.Commerce.Plugin.Inventory.ConfigureSitecore"
+00001 17:32:57 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Inventory.ConfigureSitecore"
+00001 17:32:57 INFO Instantiating "Sitecore.Commerce.Plugin.Backorderable.ConfigureSitecore"
+00001 17:32:57 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Backorderable.ConfigureSitecore"
+00001 17:32:57 INFO Instantiating "Sitecore.Commerce.Plugin.Preorderable.ConfigureSitecore"
+00001 17:32:57 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Preorderable.ConfigureSitecore"
+00001 17:32:57 INFO Instantiating "Sitecore.Commerce.Plugin.Orders.DelayedAvailability.ConfigureSitecore"
+00001 17:32:57 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Orders.DelayedAvailability.ConfigureSitecore"
+00001 17:32:57 INFO Instantiating "Sitecore.Commerce.Plugin.FaultInjection.ConfigureSitecore"
+00001 17:32:57 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.FaultInjection.ConfigureSitecore"
+00001 17:32:57 INFO Instantiating "Sitecore.Commerce.Plugin.Journaling.ConfigureSitecore"
+00001 17:32:57 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Journaling.ConfigureSitecore"
+00001 17:32:57 INFO Instantiating "Sitecore.Commerce.Plugin.Search.Azure.ConfigureSitecore"
+00001 17:32:57 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Search.Azure.ConfigureSitecore"
+00001 17:32:57 INFO Instantiating "Sitecore.Commerce.Plugin.Search.Solr.ConfigureSitecore"
+00001 17:32:57 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Search.Solr.ConfigureSitecore"
+00001 17:32:57 INFO Instantiating "Sitecore.Commerce.Plugin.Tax.ConfigureSitecore"
+00001 17:32:57 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Tax.ConfigureSitecore"
+00001 17:32:57 INFO Instantiating "Sitecore.Commerce.Plugin.Coupons.ConfigureSitecore"
+00001 17:32:57 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Coupons.ConfigureSitecore"
+00001 17:32:57 INFO Instantiating "Plugin.Sample.Habitat.ConfigureSitecore"
+00001 17:32:57 INFO Invoking ConfigureServices on "Plugin.Sample.Habitat.ConfigureSitecore"
+00001 17:32:57 INFO Instantiating "Plugin.Sync.Commerce.CatalogImport.ConfigureSitecore"
+00001 17:32:57 INFO Invoking ConfigureServices on "Plugin.Sync.Commerce.CatalogImport.ConfigureSitecore"
+00001 17:32:59 INFO Core required DB Version [9.2.0] and DB Version [9.2.0]
+00005 17:32:59 INFO [NodeStartup] ContactId='Deployment01_c41c274cc1594a6b908862a8922d3377',Environment='GlobalEnvironment'
+00001 17:33:02 INFO [EnvironmentStartup] StartEnvironment=HabitatAuthoring
+00015 17:33:03 INFO [EnvironmentStartup] Environment='HabitatAuthoring'
+00022 17:33:50 INFO Request starting HTTP/1.1 POST https://localhost:5001/api/ImportSellableItem() application/json 1182
+00024 17:33:51 INFO Successfully validated the token.
+00024 17:33:52 INFO Route matched with "{action = \"ImportSellableItem\", controller = \"Commands\"}". Executing action "Plugin.Sync.Commerce.CatalogImport.Controllers.CommandsController.ImportSellableItem (Plugin.Sync.Commerce.CatalogImport)"
+00024 17:33:52 INFO Authorization was successful.
+00006 17:33:53 INFO Creating Redis cache store '"Commerce-Redis-Store"'
+00015 17:33:53 INFO Executing action method "Plugin.Sync.Commerce.CatalogImport.Controllers.CommandsController.ImportSellableItem (Plugin.Sync.Commerce.CatalogImport)" with arguments (["{
+  \"Id\": \"6042567\",
+  \"Name\": \"Habitat Viva 4-Door 22.0 Cubic Foot Refrigerator with Ice Maker\",
+  \"DisplayName\": \"Habitat Viva 4-Door 22.0 Cubic Foot Refrigerator with Ice Maker\",
+  \"Description\": \"Test Description\",
+  \"CatalogName\": \"Habitat_Master\",
+  \"ListPrice\": 999,
+  \"ParentCategory\": \"Appliances\",
+  \"Manufacturer\": \"LWR\",
+  \"ComposerFieldAtRootA\": \"ComposerFieldAtRootA Value\",
+  \"ComposerFieldAtRootB\": \"ComposerFieldAtRootB Value\",
+  \"CustomFieldAtRootA\": \"CustomFieldAtRootA Value\",
+  \"CustomFieldAtRootB\": \"CustomFieldAtRootB Value\",
+  \"ComposerFieldsRootOne\": {
+    \"ComposerFieldOneA\": \"ComposerFieldOneA Value\",
+    \"ComposerFieldOneB\": \"ComposerFieldOneB Value\",
+    \"ComposerFieldOneC\": {
+      \"exludeThis\": \"ComposerFieldOneB Value\"
+    }
+  },
+  \"ComposerFieldsRootTwo\": {
+    \"ComposerFieldTwoA\": \"ComposerFieldTwoA Value\",
+    \"ComposerFieldTwoB\": \"ComposerFieldTwoB Value\"
+  },
+  \"CustomFieldsRootOne\": {
+    \"CustomFieldOneA\": \"CustomFieldOneA Value\",
+    \"CustomFieldOneB\": \"CustomFieldOneB Value\"
+  },
+  \"CustomFieldsRootTwo\": {
+    \"CustomFieldTwoA\": \"CustomFieldTwoA Value\",
+    \"CustomFieldTwoB\": \"CustomFieldTwoB Value\"
+  }
+}"]) - Validation state: Valid

@@ -2,7 +2,9 @@
 using Plugin.Sync.Commerce.CatalogImport.Models;
 using Plugin.Sync.Commerce.CatalogImport.Policies;
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 
 namespace Plugin.Sync.Commerce.CatalogImport.Extensions
@@ -65,55 +67,80 @@ namespace Plugin.Sync.Commerce.CatalogImport.Extensions
             return null;
         }
 
-        public static CommerceEntityData GetFieldValues<T>(this JObject requestJson, T mappingPolicy) where T : MappingPolicyBase
+        //public static CommerceEntityData GetFieldValues<T>(this JObject requestJson, T mappingPolicy) where T : MappingPolicyBase
+        //{
+        //    var comparer = StringComparer.OrdinalIgnoreCase;
+        //    var entityData = new CommerceEntityData { Fields = new Dictionary<string, string>()};
+        //    //entityData.Id = 
+        //    //var fieldValues = new Dictionary<string, string>(comparer);
+
+        //    foreach (var mapping in mappingPolicy.ComposerFieldsPaths)
+        //    {
+        //        if (!string.IsNullOrEmpty(mapping.Key) && !string.IsNullOrEmpty(mapping.Value))
+        //        {
+        //            var fieldValue = GetFieldValue(requestJson, mapping.Value);
+        //            if (!string.IsNullOrEmpty(fieldValue))
+        //            {
+        //                entityData.Fields.Add(mapping.Key, fieldValue);
+        //            }
+        //        }
+        //    }
+
+        //    if (mappingPolicy.RootPaths != null)
+        //    {
+        //        foreach (var rootPath in mappingPolicy.RootPaths)
+        //        {
+        //            var roots = requestJson.SelectTokens(rootPath);
+        //            if (roots != null)
+        //            {
+        //                foreach (var root in roots)
+        //                {
+        //                    if (root != null)
+        //                    {
+        //                        foreach (JProperty field in root.Children())
+        //                        {
+        //                            if (field != null && !string.IsNullOrEmpty(field.Name))
+        //                            {
+        //                                var fieldValue = field.Value<string>();
+        //                                if (!string.IsNullOrEmpty(fieldValue))
+        //                                {
+        //                                    entityData.Fields.Add(field.Name, fieldValue); 
+        //                                }
+        //                            }
+        //                        }
+        //                    }
+        //                }
+        //            }
+        //        }
+        //    }
+
+        //    return entityData;
+        //}
+
+        public static Dictionary<string, T> ToDictionary<T>(this object source)
         {
+            if (source == null) return new Dictionary<string, T>();
+
             var comparer = StringComparer.OrdinalIgnoreCase;
-            var entityData = new CommerceEntityData { Fields = new Dictionary<string, string>()};
-            //entityData.Id = 
-            //var fieldValues = new Dictionary<string, string>(comparer);
-
-            foreach (var mapping in mappingPolicy.ComposerFieldsPaths)
+            var dictionary = new Dictionary<string, T>(comparer);
+            foreach (PropertyDescriptor property in TypeDescriptor.GetProperties(source))
             {
-                if (!string.IsNullOrEmpty(mapping.Key) && !string.IsNullOrEmpty(mapping.Value))
+                object value = property.GetValue(source);
+                if (IsOfType<T>(value))
                 {
-                    var fieldValue = GetFieldValue(requestJson, mapping.Value);
-                    if (!string.IsNullOrEmpty(fieldValue))
-                    {
-                        entityData.Fields.Add(mapping.Key, fieldValue);
-                    }
+                    dictionary.Add(property.Name, (T)value);
+                }
+                else if (IsOfTypeListOfStrings(value))
+                {
+                    var arr = ((IEnumerable)value).Cast<object>().Select(x => x.ToString()).ToArray();
+                    object convertedValue = string.Join(",", arr);
+                    dictionary.Add(property.Name, (T)convertedValue);
                 }
             }
-
-            if (mappingPolicy.RootPaths != null)
-            {
-                foreach (var rootPath in mappingPolicy.RootPaths)
-                {
-                    var roots = requestJson.SelectTokens(rootPath);
-                    if (roots != null)
-                    {
-                        foreach (var root in roots)
-                        {
-                            if (root != null)
-                            {
-                                foreach (JProperty field in root.Children())
-                                {
-                                    if (field != null && !string.IsNullOrEmpty(field.Name))
-                                    {
-                                        var fieldValue = field.Value<string>();
-                                        if (!string.IsNullOrEmpty(fieldValue))
-                                        {
-                                            entityData.Fields.Add(field.Name, fieldValue); 
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            return entityData;
+            return dictionary;
         }
+
+       
 
         public static Dictionary<string, T> ToDictionary<T>(this JObject requestJson, string token)
         {
@@ -137,6 +164,21 @@ namespace Plugin.Sync.Commerce.CatalogImport.Extensions
                 }
             }
             return collection;
+        }
+
+        private static bool IsOfTypeListOfStrings(object value)
+        {
+            return value is List<string>;
+        }
+
+        private static bool IsOfType<T>(object value)
+        {
+            return value is T;
+        }
+
+        private static void ThrowExceptionWhenSourceArgumentIsNull()
+        {
+            throw new NullReferenceException("Unable to convert anonymous object to a dictionary. The source anonymous object is null.");
         }
     }
 }

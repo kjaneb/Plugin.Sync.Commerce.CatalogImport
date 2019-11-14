@@ -19,11 +19,25 @@
         "UpdatedItemsList": "ImportedItems",
         "DefaultCatalogName": "TestCatalog",
         "DefaultCategoryName": "TestCategory",
+        "ComposerFieldsRootPaths": {
+          "$type": "System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib",
+          "$values": [
+            "ComposerFieldsRootOne",
+            "ComposerFieldsRootTwo"
+          ]
+        },
         "ComposerFieldsPaths": {
           "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.String, mscorlib]], mscorlib",
           "one": "One",
           "two": "twoVal",
           "three": "threeVal"
+        },
+        "CustomFieldsRootPaths": {
+          "$type": "System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib",
+          "$values": [
+            "CustomFieldsRootOne",
+            "CustomFieldsRootTwo"
+          ]
         },
         "CustomFieldsPaths": {
           "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.String, mscorlib]], mscorlib",

@@ -9,6 +9,7 @@ using Sitecore.Commerce.Plugin.Catalog;
 using Sitecore.Commerce.Plugin.Composer;
 using Sitecore.Framework.Conditions;
 using Sitecore.Framework.Pipelines;
+using System;
 using System.Threading.Tasks;
 
 namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
@@ -47,30 +48,32 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
         /// <returns></returns>
         public override async Task<ImportSellableItemResponse> Run(ImportSellableItemArgument arg, CommercePipelineExecutionContext context)
         {
+            await Task.CompletedTask;
+            throw new NotImplementedException();
             //TODO: add an option to only import data if Category already exists (don't create a new one)
             //TODO: add an option to only import data if Category don't exist (don't update existing ones)
-            var mappingPolicy = context.CommerceContext.GetPolicy<CategoryMappingPolicy>();
-            _importHelper.AssertRootFields(arg, mappingPolicy);
+            //var mappingPolicy = context.CommerceContext.GetPolicy<CategoryMappingPolicy>();
+            //_importHelper.AssertRootFields(arg, mappingPolicy);
 
-            var itemId = arg.JsonData.SelectValue<string>(mappingPolicy.IdPath);
-            Condition.Requires(itemId, "Item ID is reguired in input JSON data").IsNotNullOrEmpty();
+            //var itemId = arg.JsonData.SelectValue<string>(mappingPolicy.IdPath);
+            //Condition.Requires(itemId, "Item ID is reguired in input JSON data").IsNotNullOrEmpty();
 
-            var catalogName = _importHelper.GetCatalogName(arg.JsonData, mappingPolicy);
-            _importHelper.AssertCatalogExists(context, catalogName);
-            var categoryName = _importHelper.GetParentCategoryName(arg.JsonData, mappingPolicy);
+            //var catalogName = _importHelper.GetCatalogName(arg.JsonData, mappingPolicy);
+            //_importHelper.AssertCatalogExists(context, catalogName);
+            //var categoryName = _importHelper.GetParentCategoryName(arg.JsonData, mappingPolicy);
 
-            //Get or create sellable item
-            Category category = await GetOrCreateCategory(catalogName, categoryName, arg.JsonData, mappingPolicy, context.CommerceContext);
+            ////Get or create sellable item
+            //Category category = await GetOrCreateCategory(catalogName, categoryName, arg.JsonData, mappingPolicy, context.CommerceContext);
 
-            //Associate catalog and category
-            await AssociateCategoryWithParentEntities(catalogName, categoryName, category, context.CommerceContext);
+            ////Associate catalog and category
+            //await AssociateCategoryWithParentEntities(catalogName, categoryName, category, context.CommerceContext);
 
-            //Import Category field values
-            category = await _importHelper.ImportComposerViewsFields(category, arg.JsonData, mappingPolicy, context.CommerceContext) as Category;
-            return new ImportSellableItemResponse
-            {
-                SellableItem = category
-            };
+            ////Import Category field values
+            //category = await _importHelper.ImportComposerViewsFields(category, arg.JsonData, mappingPolicy, context.CommerceContext) as Category;
+            //return new ImportSellableItemResponse
+            //{
+            //    SellableItem = category
+            //};
         }
         #endregion
 

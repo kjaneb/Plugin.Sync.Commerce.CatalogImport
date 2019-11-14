@@ -13,8 +13,12 @@ namespace Plugin.Sync.Commerce.CatalogImport.Policies
         public string DescriptionPath { get; set; }
         public string ParentCategoryNamePath { get; set; }
         public string CatalogNamePath { get; set; }
-        //public List<string> RootPaths { get; set; }
+        public string BrandPath { get; set; }
+        public string ManufacturerPath { get; set; }
+        public string TypeOfGoodsPath { get; set; }
+        public List<string> ComposerFieldsRootPaths { get; set; }
         public Dictionary<string, string> ComposerFieldsPaths { get; set; }
+        public List<string> CustomFieldsRootPaths { get; set; }
         public Dictionary<string, string> CustomFieldsPaths { get; set; }
         public string UpdatedItemsList { get; set; }
         public string DefaultCatalogName { get; set; }

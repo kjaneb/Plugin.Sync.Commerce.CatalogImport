@@ -1,0 +1,188 @@
+00001 17:55:05 INFO Loading Global Environment using Filesystem Provider from: C:\Src\SyncPlugins\src\Sitecore.Commerce.Engine\wwwroot\Bootstrap\
+00001 17:55:05 INFO [NodeStartup] GlobalEnvironmentFrom='Configuration: Global'
+00001 17:55:06 INFO [NodeStartup] Status='Started',GlobalEnvironmentName='GlobalEnvironment'
+00001 17:55:07 INFO Bootstrapping Application ...
+00001 17:55:07 INFO Instantiating "Sitecore.Framework.Caching.ConfigureSitecore"
+00001 17:55:07 INFO Invoking ConfigureServices on "Sitecore.Framework.Caching.ConfigureSitecore"
+00001 17:55:07 INFO Instantiating "Sitecore.Framework.Caching.Memory.ConfigureSitecore"
+00001 17:55:07 INFO Invoking ConfigureServices on "Sitecore.Framework.Caching.Memory.ConfigureSitecore"
+00001 17:55:07 INFO Instantiating "Eventing.ConfigureSitecore"
+00001 17:55:07 INFO Invoking ConfigureServices on "Eventing.ConfigureSitecore"
+00001 17:55:07 INFO Configuring event defaults
+00001 17:55:07 INFO Instantiating "Pipelines.ConfigureSitecore"
+00001 17:55:07 INFO Invoking ConfigureServices on "Pipelines.ConfigureSitecore"
+00001 17:55:07 INFO Configuring pipeline defaults
+00001 17:55:07 INFO Instantiating "Sitecore.Commerce.Core.ConfigureSitecore"
+00001 17:55:07 INFO Invoking ConfigureServices on "Sitecore.Commerce.Core.ConfigureSitecore"
+00001 17:55:07 INFO Instantiating "Sitecore.Commerce.Plugin.ManagedLists.ConfigureSitecore"
+00001 17:55:07 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.ManagedLists.ConfigureSitecore"
+00001 17:55:07 INFO Instantiating "Sitecore.Framework.Rules.ConfigureSitecore"
+00001 17:55:07 INFO Invoking ConfigureServices on "Sitecore.Framework.Rules.ConfigureSitecore"
+00001 17:55:07 INFO Instantiating "Sitecore.Commerce.Plugin.Rules.ConfigureSitecore"
+00001 17:55:07 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Rules.ConfigureSitecore"
+00001 17:55:07 INFO Instantiating "Sitecore.Commerce.Plugin.Shops.ConfigureSitecore"
+00001 17:55:07 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Shops.ConfigureSitecore"
+00001 17:55:07 INFO Instantiating "Sitecore.Commerce.Plugin.Views.ConfigureSitecore"
+00001 17:55:07 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Views.ConfigureSitecore"
+00001 17:55:07 INFO Instantiating "Sitecore.Commerce.Plugin.BusinessUsers.ConfigureSitecore"
+00001 17:55:07 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.BusinessUsers.ConfigureSitecore"
+00001 17:55:07 INFO Instantiating "Sitecore.Commerce.Plugin.Composer.ConfigureSitecore"
+00001 17:55:07 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Composer.ConfigureSitecore"
+00001 17:55:07 INFO Instantiating "Sitecore.Commerce.Plugin.EntityVersions.ConfigureSitecore"
+00001 17:55:07 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.EntityVersions.ConfigureSitecore"
+00001 17:55:07 INFO Instantiating "Sitecore.Commerce.Plugin.Media.ConfigureSitecore"
+00001 17:55:07 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Media.ConfigureSitecore"
+00001 17:55:07 INFO Instantiating "Sitecore.Commerce.Plugin.Pricing.ConfigureSitecore"
+00001 17:55:07 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Pricing.ConfigureSitecore"
+00001 17:55:07 INFO Instantiating "Sitecore.Commerce.Plugin.Carts.ConfigureSitecore"
+00001 17:55:07 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Carts.ConfigureSitecore"
+00001 17:55:07 INFO Instantiating "Sitecore.Commerce.Plugin.Search.ConfigureSitecore"
+00001 17:55:07 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Search.ConfigureSitecore"
+00001 17:55:07 INFO Instantiating "Sitecore.Commerce.Plugin.Promotions.ConfigureSitecore"
+00001 17:55:07 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Promotions.ConfigureSitecore"
+00001 17:55:07 INFO Instantiating "Sitecore.Commerce.Plugin.SQL.ConfigureSitecore"
+00001 17:55:07 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.SQL.ConfigureSitecore"
+00001 17:55:07 INFO Instantiating "Sitecore.Commerce.Plugin.Workflow.ConfigureSitecore"
+00001 17:55:07 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Workflow.ConfigureSitecore"
+00001 17:55:07 INFO Instantiating "Sitecore.Commerce.Plugin.Catalog.ConfigureSitecore"
+00001 17:55:07 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Catalog.ConfigureSitecore"
+00001 17:55:07 INFO Instantiating "Sitecore.Commerce.Plugin.Availability.ConfigureSitecore"
+00001 17:55:07 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Availability.ConfigureSitecore"
+00001 17:55:07 INFO Instantiating "Sitecore.Commerce.Plugin.Orders.ConfigureSitecore"
+00001 17:55:07 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Orders.ConfigureSitecore"
+00001 17:55:07 INFO Instantiating "Sitecore.Commerce.Plugin.Fulfillment.ConfigureSitecore"
+00001 17:55:07 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Fulfillment.ConfigureSitecore"
+00001 17:55:07 INFO Instantiating "Sitecore.Commerce.Plugin.Customers.ConfigureSitecore"
+00001 17:55:07 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Customers.ConfigureSitecore"
+00001 17:55:07 INFO Instantiating "Sitecore.Commerce.Plugin.Entitlements.ConfigureSitecore"
+00001 17:55:07 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Entitlements.ConfigureSitecore"
+00001 17:55:07 INFO Instantiating "Sitecore.Commerce.Plugin.DigitalItems.ConfigureSitecore"
+00001 17:55:07 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.DigitalItems.ConfigureSitecore"
+00001 17:55:07 INFO Instantiating "Sitecore.Commerce.Plugin.Payments.ConfigureSitecore"
+00001 17:55:07 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Payments.ConfigureSitecore"
+00001 17:55:07 INFO Instantiating "Sitecore.Commerce.Plugin.GiftCards.ConfigureSitecore"
+00001 17:55:07 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.GiftCards.ConfigureSitecore"
+00001 17:55:07 INFO Instantiating "Sitecore.Commerce.Plugin.Returns.ConfigureSitecore"
+00001 17:55:07 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Returns.ConfigureSitecore"
+00001 17:55:07 INFO Instantiating "Sitecore.Commerce.Plugin.Management.ConfigureSitecore"
+00001 17:55:07 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Management.ConfigureSitecore"
+00001 17:55:08 INFO Instantiating "Sitecore.Commerce.Plugin.Content.ConfigureSitecore"
+00001 17:55:08 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Content.ConfigureSitecore"
+00001 17:55:08 INFO Instantiating "Sitecore.Commerce.Plugin.Inventory.ConfigureSitecore"
+00001 17:55:08 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Inventory.ConfigureSitecore"
+00001 17:55:08 INFO Instantiating "Sitecore.Commerce.Plugin.Backorderable.ConfigureSitecore"
+00001 17:55:08 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Backorderable.ConfigureSitecore"
+00001 17:55:08 INFO Instantiating "Sitecore.Commerce.Plugin.Preorderable.ConfigureSitecore"
+00001 17:55:08 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Preorderable.ConfigureSitecore"
+00001 17:55:08 INFO Instantiating "Sitecore.Commerce.Plugin.Orders.DelayedAvailability.ConfigureSitecore"
+00001 17:55:08 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Orders.DelayedAvailability.ConfigureSitecore"
+00001 17:55:08 INFO Instantiating "Sitecore.Commerce.Plugin.FaultInjection.ConfigureSitecore"
+00001 17:55:08 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.FaultInjection.ConfigureSitecore"
+00001 17:55:08 INFO Instantiating "Sitecore.Commerce.Plugin.Journaling.ConfigureSitecore"
+00001 17:55:08 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Journaling.ConfigureSitecore"
+00001 17:55:08 INFO Instantiating "Sitecore.Commerce.Plugin.Search.Azure.ConfigureSitecore"
+00001 17:55:08 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Search.Azure.ConfigureSitecore"
+00001 17:55:08 INFO Instantiating "Sitecore.Commerce.Plugin.Search.Solr.ConfigureSitecore"
+00001 17:55:08 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Search.Solr.ConfigureSitecore"
+00001 17:55:08 INFO Instantiating "Sitecore.Commerce.Plugin.Tax.ConfigureSitecore"
+00001 17:55:08 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Tax.ConfigureSitecore"
+00001 17:55:08 INFO Instantiating "Sitecore.Commerce.Plugin.Coupons.ConfigureSitecore"
+00001 17:55:08 INFO Invoking ConfigureServices on "Sitecore.Commerce.Plugin.Coupons.ConfigureSitecore"
+00001 17:55:08 INFO Instantiating "Plugin.Sample.Habitat.ConfigureSitecore"
+00001 17:55:08 INFO Invoking ConfigureServices on "Plugin.Sample.Habitat.ConfigureSitecore"
+00001 17:55:08 INFO Instantiating "Plugin.Sync.Commerce.CatalogImport.ConfigureSitecore"
+00001 17:55:08 INFO Invoking ConfigureServices on "Plugin.Sync.Commerce.CatalogImport.ConfigureSitecore"
+00001 17:55:09 INFO Core required DB Version [9.2.0] and DB Version [9.2.0]
+00006 17:55:09 INFO [NodeStartup] ContactId='Deployment01_20979e74a0924f85b25249d3c3bfcc8b',Environment='GlobalEnvironment'
+00001 17:55:13 INFO [EnvironmentStartup] StartEnvironment=HabitatAuthoring
+00006 17:55:13 INFO [EnvironmentStartup] Environment='HabitatAuthoring'
+00023 17:55:21 INFO Request starting HTTP/1.1 POST https://localhost:5001/api/ImportSellableItem() application/json 1182
+00003 17:55:22 INFO Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo: '11/14/2019 22:50:06', Current time: '11/14/2019 22:55:22'.
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, JwtSecurityToken jwtToken, TokenValidationParameters validationParameters)
+   at System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.ValidateTokenPayload(JwtSecurityToken jwtToken, TokenValidationParameters validationParameters)
+   at Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler.<HandleAuthenticateAsync>d__6.MoveNext()
+00003 17:55:22 INFO "BearerIdentityServerAuthenticationJwt" was not authenticated. Failure message: "IDX10223: Lifetime validation failed. The token is expired. ValidTo: '11/14/2019 22:50:06', Current time: '11/14/2019 22:55:22'."
+00003 17:55:22 INFO "Bearer" was not authenticated. Failure message: "IDX10223: Lifetime validation failed. The token is expired. ValidTo: '11/14/2019 22:50:06', Current time: '11/14/2019 22:55:22'."
+00003 17:55:23 INFO Route matched with "{action = \"ImportSellableItem\", controller = \"Commands\"}". Executing action "Plugin.Sync.Commerce.CatalogImport.Controllers.CommandsController.ImportSellableItem (Plugin.Sync.Commerce.CatalogImport)"
+00003 17:55:24 INFO Authorization failed.
+00003 17:55:24 INFO Authorization failed for the request at filter '"Microsoft.AspNetCore.Mvc.Authorization.AuthorizeFilter"'.
+00003 17:55:24 INFO Executing ChallengeResult with authentication schemes ([]).
+00003 17:55:24 INFO AuthenticationScheme: "BearerIdentityServerAuthenticationJwt" was challenged.
+00003 17:55:24 INFO AuthenticationScheme: "Bearer" was challenged.
+00003 17:55:24 INFO Executed action "Plugin.Sync.Commerce.CatalogImport.Controllers.CommandsController.ImportSellableItem (Plugin.Sync.Commerce.CatalogImport)" in 180.825ms
+00003 17:55:24 INFO Request finished in 2655.1513ms 401 
+00003 17:55:24 INFO Connection id ""0HLR9AMT2IVEC"", Request id ""0HLR9AMT2IVEC:00000001"": the application completed without reading the entire request body.
+00013 17:55:30 INFO Request starting HTTP/1.1 POST https://localhost:5001/api/ImportSellableItem() application/json 1182
+00013 17:55:30 INFO Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo: '11/14/2019 22:50:06', Current time: '11/14/2019 22:55:30'.
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, JwtSecurityToken jwtToken, TokenValidationParameters validationParameters)
+   at System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.ValidateTokenPayload(JwtSecurityToken jwtToken, TokenValidationParameters validationParameters)
+   at Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler.<HandleAuthenticateAsync>d__6.MoveNext()
+00013 17:55:30 INFO "BearerIdentityServerAuthenticationJwt" was not authenticated. Failure message: "IDX10223: Lifetime validation failed. The token is expired. ValidTo: '11/14/2019 22:50:06', Current time: '11/14/2019 22:55:30'."
+00013 17:55:30 INFO "Bearer" was not authenticated. Failure message: "IDX10223: Lifetime validation failed. The token is expired. ValidTo: '11/14/2019 22:50:06', Current time: '11/14/2019 22:55:30'."
+00013 17:55:30 INFO Route matched with "{action = \"ImportSellableItem\", controller = \"Commands\"}". Executing action "Plugin.Sync.Commerce.CatalogImport.Controllers.CommandsController.ImportSellableItem (Plugin.Sync.Commerce.CatalogImport)"
+00013 17:55:30 INFO Authorization failed.
+00013 17:55:30 INFO Authorization failed for the request at filter '"Microsoft.AspNetCore.Mvc.Authorization.AuthorizeFilter"'.
+00013 17:55:30 INFO Executing ChallengeResult with authentication schemes ([]).
+00013 17:55:30 INFO AuthenticationScheme: "BearerIdentityServerAuthenticationJwt" was challenged.
+00013 17:55:30 INFO AuthenticationScheme: "Bearer" was challenged.
+00013 17:55:30 INFO Executed action "Plugin.Sync.Commerce.CatalogImport.Controllers.CommandsController.ImportSellableItem (Plugin.Sync.Commerce.CatalogImport)" in 14.1561ms
+00013 17:55:30 INFO Request finished in 39.035ms 401 
+00013 17:55:30 INFO Connection id ""0HLR9AMT2IVEC"", Request id ""0HLR9AMT2IVEC:00000002"": the application completed without reading the entire request body.
+00023 17:55:45 INFO Request starting HTTP/1.1 POST https://localhost:5001/api/ImportSellableItem() application/json 1182
+00023 17:55:45 INFO Successfully validated the token.
+00023 17:55:45 INFO Route matched with "{action = \"ImportSellableItem\", controller = \"Commands\"}". Executing action "Plugin.Sync.Commerce.CatalogImport.Controllers.CommandsController.ImportSellableItem (Plugin.Sync.Commerce.CatalogImport)"
+00023 17:55:45 INFO Authorization was successful.
+00016 17:55:46 INFO Creating Redis cache store '"Commerce-Redis-Store"'
+00016 17:55:47 INFO Executing action method "Plugin.Sync.Commerce.CatalogImport.Controllers.CommandsController.ImportSellableItem (Plugin.Sync.Commerce.CatalogImport)" with arguments (["{
+  \"Id\": \"6042567\",
+  \"Name\": \"Habitat Viva 4-Door 22.0 Cubic Foot Refrigerator with Ice Maker\",
+  \"DisplayName\": \"Habitat Viva 4-Door 22.0 Cubic Foot Refrigerator with Ice Maker\",
+  \"Description\": \"Test Description\",
+  \"CatalogName\": \"Habitat_Master\",
+  \"ListPrice\": 999,
+  \"ParentCategory\": \"Appliances\",
+  \"Manufacturer\": \"LWR\",
+  \"ComposerFieldAtRootA\": \"ComposerFieldAtRootA Value\",
+  \"ComposerFieldAtRootB\": \"ComposerFieldAtRootB Value\",
+  \"CustomFieldAtRootA\": \"CustomFieldAtRootA Value\",
+  \"CustomFieldAtRootB\": \"CustomFieldAtRootB Value\",
+  \"ComposerFieldsRootOne\": {
+    \"ComposerFieldOneA\": \"ComposerFieldOneA Value\",
+    \"ComposerFieldOneB\": \"ComposerFieldOneB Value\",
+    \"ComposerFieldOneC\": {
+      \"exludeThis\": \"ComposerFieldOneB Value\"
+    }
+  },
+  \"ComposerFieldsRootTwo\": {
+    \"ComposerFieldTwoA\": \"ComposerFieldTwoA Value\",
+    \"ComposerFieldTwoB\": \"ComposerFieldTwoB Value\"
+  },
+  \"CustomFieldsRootOne\": {
+    \"CustomFieldOneA\": \"CustomFieldOneA Value\",
+    \"CustomFieldOneB\": \"CustomFieldOneB Value\"
+  },
+  \"CustomFieldsRootTwo\": {
+    \"CustomFieldTwoA\": \"CustomFieldTwoA Value\",
+    \"CustomFieldTwoB\": \"CustomFieldTwoB Value\"
+  }
+}"]) - Validation state: Valid
+00019 17:56:14 ERROR Pipeline completed with error
+System.Exception: Error processing block: ImportSellableItemCreateOrUpdateEntityBlock ---> System.ArgumentException: Object of type 'Plugin.Sync.Commerce.CatalogImport.Entities.ImportSellableItemResponse' cannot be converted to type 'Plugin.Sync.Commerce.CatalogImport.Pipelines.Arguments.ImportSellableItemArgument'.
+   at System.RuntimeType.TryChangeType(Object value, Binder binder, CultureInfo culture, Boolean needsSpecialCast)
+   at System.Reflection.MethodBase.CheckArguments(Object[] parameters, Binder binder, BindingFlags invokeAttr, CultureInfo culture, Signature sig)
+   at System.Reflection.RuntimeMethodInfo.InvokeArgumentsCheck(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+   at Sitecore.Framework.Pipelines.ReflectionPipelineBlockRunner.<InvokeBlock>d__2.MoveNext()
+   --- End of inner exception stack trace ---
+   at Sitecore.Framework.Pipelines.ReflectionPipelineBlockRunner.<InvokeBlock>d__2.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at Sitecore.Framework.Pipelines.BasePipelineBlockRunner.<Run>d__3`1.MoveNext()
+00019 17:56:14 INFO Executed action method "Plugin.Sync.Commerce.CatalogImport.Controllers.CommandsController.ImportSellableItem (Plugin.Sync.Commerce.CatalogImport)", returned result "Microsoft.AspNetCore.Mvc.ObjectResult" in 27090.7346ms.
+00019 17:56:14 INFO Executing ObjectResult, writing value of type '"Plugin.Sync.Commerce.CatalogImport.Entities.ImportSellableItemResponse"'.
+00024 17:56:15 INFO Executed action "Plugin.Sync.Commerce.CatalogImport.Controllers.CommandsController.ImportSellableItem (Plugin.Sync.Commerce.CatalogImport)" in 29480.446ms
+00024 17:56:15 INFO Request finished in 29580.6919ms 200 application/json; charset=utf-8

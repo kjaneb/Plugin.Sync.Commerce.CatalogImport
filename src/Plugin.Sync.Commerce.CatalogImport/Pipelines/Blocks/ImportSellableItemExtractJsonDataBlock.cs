@@ -17,9 +17,10 @@ using System.Threading.Tasks;
 
 namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
 {
-    public class ParseSellableItemJsonBlock : PipelineBlock<ImportSellableItemArgument, ImportSellableItemResponse, CommercePipelineExecutionContext>
+    [PipelineDisplayName("ImportSellableItemExtractJsonDataBlock")]
+    public class ImportSellableItemExtractJsonDataBlock : PipelineBlock<ImportSellableItemArgument, ImportSellableItemArgument, CommercePipelineExecutionContext>
     {
-        public ParseSellableItemJsonBlock()
+        public ImportSellableItemExtractJsonDataBlock()
         {
 
         }
@@ -30,7 +31,7 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
         /// <param name="arg"></param>
         /// <param name="context"></param>
         /// <returns></returns>
-        public override async Task<ImportSellableItemResponse> Run(ImportSellableItemArgument arg, CommercePipelineExecutionContext context)
+        public override async Task<ImportSellableItemArgument> Run(ImportSellableItemArgument arg, CommercePipelineExecutionContext context)
         {
             var mappingPolicy = context.CommerceContext.GetPolicy<SellableItemMappingPolicy>();
             arg.EntityData = new CatalogEntityData
@@ -40,10 +41,16 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
                 DisplayName = arg.JsonData.SelectValue<string>(mappingPolicy.DisplayNamePath),
                 CatalogName = arg.JsonData.SelectValue<string>(mappingPolicy.CatalogNamePath),
                 Description = arg.JsonData.SelectValue<string>(mappingPolicy.DescriptionPath),
+                Brand = arg.JsonData.SelectValue<string>(mappingPolicy.BrandPath),
+                Manufacturer = arg.JsonData.SelectValue<string>(mappingPolicy.ManufacturerPath),
+                TypeOfGoods = arg.JsonData.SelectValue<string>(mappingPolicy.TypeOfGoodsPath),
                 ParentCategoryName = arg.JsonData.SelectValue<string>(mappingPolicy.ParentCategoryNamePath),
                 ComposerFields = arg.JsonData.SelectMappedValues(mappingPolicy.ComposerFieldsPaths),
                 CustomFields = arg.JsonData.SelectMappedValues(mappingPolicy.CustomFieldsPaths),
             };
+
+            arg.EntityData.ComposerFields.AddRange(arg.JsonData.QueryMappedValuesFromRoot(mappingPolicy.ComposerFieldsRootPaths));
+            arg.EntityData.CustomFields.AddRange(arg.JsonData.QueryMappedValuesFromRoot(mappingPolicy.CustomFieldsRootPaths));
 
             if (string.IsNullOrEmpty(arg.EntityData.CatalogName))
             {
@@ -57,10 +64,7 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
 
             await Task.CompletedTask;
 
-            return new ImportSellableItemResponse
-            {
-                //TODO: clan up this 
-            };
+            return arg;
         }
     }
 }

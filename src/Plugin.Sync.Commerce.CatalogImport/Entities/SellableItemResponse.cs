@@ -5,9 +5,7 @@ namespace Plugin.Sync.Commerce.CatalogImport.Entities
 {
     public class ImportSellableItemResponse
     {
-        public SellableItem SellableItem { get; set; }
-        public int StatusCode { get; set; }
-        public bool IsNew { get; internal set; }
+        public bool Success { get; set; }
         public string ErrorMessage { get; set; }
     }
 }

@@ -3,7 +3,6 @@ using Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks;
 
 namespace Plugin.Sync.Commerce.CatalogImport
 {
-    using System.Reflection;
     using Microsoft.Extensions.DependencyInjection;
     using Sitecore.Commerce.Core;
     using Sitecore.Commerce.EntityViews;
@@ -11,6 +10,7 @@ namespace Plugin.Sync.Commerce.CatalogImport
     using Sitecore.Commerce.Plugin.SQL;
     using Sitecore.Framework.Configuration;
     using Sitecore.Framework.Pipelines.Definitions.Extensions;
+    using System.Reflection;
 
     public class ConfigureSitecore : IConfigureSitecore
     {
@@ -29,14 +29,17 @@ namespace Plugin.Sync.Commerce.CatalogImport
                 .AddPipeline<IImportSellableItemPipeline, ImportSellableItemPipeline>(
                     configure =>
                     {
-                        configure.Add<ImportSellableItemBlock>();
+                        configure.Add<ImportSellableItemExtractJsonDataBlock>()
+                                .Add<ImportSellableItemCreateOrUpdateEntityBlock>()
+                                .Add<ImportSellableItemUpdateComposerFieldsBlock>()
+                                .Add<ImportSellableItemUpdateCustomComponentsBlock>();
                     })
                  .ConfigurePipeline<IPersistEntityPipeline>(
                     configure =>
                     {
                         configure.Add<AddSellableItemToUpdatedSellableItemsListBlock>().Before<PersistEntityBlock>();
                     })
-                ); 
+                );
 
             services.RegisterAllCommands(assembly);
         }

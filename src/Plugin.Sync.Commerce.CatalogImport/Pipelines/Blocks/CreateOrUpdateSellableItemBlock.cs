@@ -14,10 +14,10 @@ using System.Threading.Tasks;
 namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
 {
     /// <summary>
-    /// Import data into an existing SellableItem or new SellableItem entity
+    /// Import data into an existing or a new SellableItem entity
     /// </summary>
-    [PipelineDisplayName("ImportSellableItemCreateOrUpdateEntityBlock")]
-    public class ImportSellableItemCreateOrUpdateEntityBlock : PipelineBlock<ImportSellableItemArgument, ImportSellableItemArgument, CommercePipelineExecutionContext>
+    [PipelineDisplayName("CreateOrUpdateSellableItemBlock")]
+    public class CreateOrUpdateSellableItemBlock : PipelineBlock<ImportCatalogEntityArgument, ImportCatalogEntityArgument, CommercePipelineExecutionContext>
     {
         #region Private fields
         private readonly CommerceCommander _commerceCommander;
@@ -31,7 +31,7 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
         /// <param name="commerceCommander"></param>
         /// <param name="composerCommander"></param>
         /// <param name="importHelper"></param>
-        public ImportSellableItemCreateOrUpdateEntityBlock(CommerceCommander commerceCommander, ComposerCommander composerCommander)
+        public CreateOrUpdateSellableItemBlock(CommerceCommander commerceCommander, ComposerCommander composerCommander)
         {
             _commerceCommander = commerceCommander;
             _importHelper = new CommerceEntityImportHelper(commerceCommander, composerCommander);
@@ -43,48 +43,45 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
         /// <param name="arg"></param>
         /// <param name="context"></param>
         /// <returns></returns>
-        public override async Task<ImportSellableItemArgument> Run(ImportSellableItemArgument arg, CommercePipelineExecutionContext context)
+        public override async Task<ImportCatalogEntityArgument> Run(ImportCatalogEntityArgument arg, CommercePipelineExecutionContext context)
         {
             //TODO: add an option to only import data if SellableItem already exists (don't create a new one)
             //TODO: add an option to only import data if SellableItem don't exist (don't update existing ones)
-            //_importHelper.AssertRootFields(arg, mappingPolicy);
 
-            //var itemId = arg.JsonData.SelectValue<string>(mappingPolicy.IdPath);
-            //Condition.Requires(itemId, "Item ID is reguired in input JSON data").IsNotNullOrEmpty();
+            var entityData = context.GetModel<CatalogEntityDataModel>();
 
-            Condition.Requires(arg.EntityData.Id, "Item ID is reguired in input JSON data").IsNotNullOrEmpty();
-            Condition.Requires(arg.EntityData.CatalogName, "Catalog Name is reguired to be present in input JSON data or set default in SellabeItemMappingPolicy").IsNotNullOrEmpty();
+            Condition.Requires(entityData, "CatalogEntityDataModel is required to exist in order for CommercePipelineExecutionContext to run").IsNotNull();
+            Condition.Requires(entityData.EntityId, "EntityId is reguired in input JSON data").IsNotNullOrEmpty();
+            Condition.Requires(entityData.EntityName, "EntityName is reguired in input JSON data").IsNotNullOrEmpty();
+            Condition.Requires(entityData.ParentCatalogName, "ParentCatalogName Name is reguired to be present in input JSON data or set default in SellabeItemMappingPolicy").IsNotNullOrEmpty();
 
             try
             {
                 //Get or create sellable item
-                arg.SellableItem = await GetOrCreateSellableItem(arg.EntityData, context);
+                var sellableItem = await GetOrCreateSellableItem(entityData, context);
                 //Associate catalog and category
-                await AssociateSellableItemWithParentEntities(arg.EntityData.CatalogName, arg.EntityData.ParentCategoryName, arg.SellableItem, context.CommerceContext);
+                await AssociateSellableItemWithParentEntities(entityData.ParentCatalogName, entityData.ParentCategoryName, sellableItem, context.CommerceContext);
 
                 //Check code running before this - this persist might be redindant
-                var persistResult = await _commerceCommander.Pipeline<IPersistEntityPipeline>().Run(new PersistEntityArgument(arg.SellableItem), context);
+                var persistResult = await _commerceCommander.Pipeline<IPersistEntityPipeline>().Run(new PersistEntityArgument(sellableItem), context);
                 if (persistResult == null || !persistResult.Success)
                 {
-                    var errorMessage = $"Error persisting changes to Sellable Item {arg.EntityData.Id}.";
+                    var errorMessage = $"Error persisting changes to SellableItem Entity withID == {entityData.EntityId}.";
                     Log.Error(errorMessage);
                     context.Abort(errorMessage, this);
                     //TODO: cleanup response
                     return arg;
                 }
-                
+
+                return arg;
             }
             catch (Exception ex)
             {
-                var errorMessage = $"Error creating or updating Sellable Item {arg.EntityData.Id}. {ex.Message}";
+                var errorMessage = $"Error creating or updating SellableItem Entity {entityData.EntityId}. {ex.Message}";
                 Log.Error(ex, errorMessage);
                 context.Abort(errorMessage, ex);
                 return arg;
             }
-            //TODO: see if persistResult.Entity is really up to date and return it instead of below line result if so
-            arg.SellableItem = await _commerceCommander.Command<FindEntityCommand>().Process(context.CommerceContext, typeof(SellableItem), arg.SellableItem.Id) as SellableItem;
-            return arg;
-
         }
         #endregion
 
@@ -102,8 +99,8 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
             string parentCategoryCommerceId = null;
             if (!string.IsNullOrEmpty(parentCategoryName))
             {
-                var categoryCommerceId = $"{CommerceEntity.IdPrefix<Category>()}{catalogName}-{parentCategoryName}";
-                var parentCategory = await _commerceCommander.Command<FindEntityCommand>().Process(context, typeof(Category), categoryCommerceId) as Category;
+                var categoryCommerceId = $"{CommerceEntity.IdPrefix<SellableItem>()}{catalogName}-{parentCategoryName}";
+                var parentCategory = await _commerceCommander.Command<FindEntityCommand>().Process(context, typeof(SellableItem), categoryCommerceId) as SellableItem;
                 parentCategoryCommerceId = parentCategory?.Id;
             }
 
@@ -115,41 +112,34 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
         }
 
         /// <summary>
-        /// Find and return an existing SellableItem or create a new one
+        /// Find and return an existing Category or create a new one
         /// </summary>
-        /// <param name="arg"></param>
+        /// <param name="entityData"></param>
         /// <param name="context"></param>
-        /// <param name="mappingPolicy"></param>
-        /// <param name="itemId"></param>
         /// <returns></returns>
-        private async Task<SellableItem> GetOrCreateSellableItem(SellableItemEntityData entityData, CommercePipelineExecutionContext context)
+        private async Task<SellableItem> GetOrCreateSellableItem(CatalogEntityDataModel entityData, CommercePipelineExecutionContext context)
         {
-            var commerceEntityId = $"{CommerceEntity.IdPrefix<SellableItem>()}{entityData.Id}";
-            var sellableItem = await _commerceCommander.Command<FindEntityCommand>().Process(context.CommerceContext, typeof(SellableItem), commerceEntityId) as SellableItem;
+            var commerceEntityId = $"{CommerceEntity.IdPrefix<SellableItem>()}{entityData.EntityId}";
+
+            SellableItem sellableItem = await _commerceCommander.Command<FindEntityCommand>().Process(context.CommerceContext, typeof(SellableItem), commerceEntityId) as SellableItem;
             if (sellableItem == null)
             {
                 await _commerceCommander.Command<CreateSellableItemCommand>().Process(context.CommerceContext,
-                    entityData.Id,
-                    entityData.Name,
-                    entityData.DisplayName,
-                    entityData.Description,
-                    entityData.Brand,
-                    entityData.Manufacturer,
-                    entityData.TypeOfGoods);
+                    entityData.EntityId,
+                    entityData.EntityName,
+                    entityData.EntityFields.ContainsKey("DisplayName") ? entityData.EntityFields["DisplayName"] : string.Empty,
+                    entityData.EntityFields.ContainsKey("Description") ? entityData.EntityFields["Description"] : string.Empty,
+                    entityData.EntityFields.ContainsKey("Brand") ? entityData.EntityFields["Brand"] : string.Empty,
+                    entityData.EntityFields.ContainsKey("Manufacturer") ? entityData.EntityFields["Manufacturer"] : string.Empty,
+                    entityData.EntityFields.ContainsKey("TypeOfGoods") ? entityData.EntityFields["TypeOfGoods"] : string.Empty);
             }
             else
             {
-                sellableItem.Description = entityData.Description;
-                sellableItem.DisplayName = entityData.DisplayName;
-                sellableItem.Brand = entityData.Brand;
-                sellableItem.Manufacturer = entityData.Manufacturer;
-                entityData.TypeOfGoods = entityData.TypeOfGoods;
-
                 var persistResult = await _commerceCommander.Pipeline<IPersistEntityPipeline>().Run(new PersistEntityArgument(sellableItem), context);
             }
 
             return await _commerceCommander.Command<FindEntityCommand>().Process(context.CommerceContext, typeof(SellableItem), commerceEntityId) as SellableItem;
-        } 
+        }
         #endregion
     }
 }

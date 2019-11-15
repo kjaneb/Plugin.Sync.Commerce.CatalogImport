@@ -8,21 +8,24 @@
     "$type": "System.Collections.Generic.List`1[[Sitecore.Commerce.Core.Policy, Sitecore.Commerce.Core]], mscorlib",
     "$values": [
       {
-        "$type": "Plugin.Sync.Commerce.CatalogImport.Policies.SellableItemMappingPolicy, Plugin.Sync.Commerce.CatalogImport",
+        "$type": "Plugin.Sync.Commerce.CatalogImport.Policies.CatalogEntityMappingPolicy, Plugin.Sync.Commerce.CatalogImport",
         "ClearFieldValues": true,
-        "IdPath": "Id",
-        "NamePath": "Name",
-        "DisplayNamePath": "DisplayName",
-        "DescriptionPath": "Description",
-        "BrandPath": "Brand",
-        "ManufacturerPath": "Manufacturer",
-        "TypeOfGoodsPath": "TypeOfGoods",
-        "ParentCategoryNamePath": "ParentCategory",
-        "CatalogNamePath": "CatalogName",
+        "EntityId": "Id",
+        "EntityName": "Name",
+        "ParentCategoryName": "ParentCategory",
+        "CatalogName": "CatalogName",
         "UpdatedItemsList": "ImportedItems",
         "DefaultCatalogName": "Habitat_Master",
         "DefaultCategoryName": "TestCategory",
-        "ListPricePath": "ListPrice",
+        "ListPrice": "ListPrice",
+        "EntityFieldsPaths": {
+          "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.String, mscorlib]], mscorlib",
+          "Brand": "Brand",
+          "Manufacturer": "Manufacturer",
+          "TypeOfGoods": "TypeOfGoods",
+          "DisplayName": "DisplayName",
+          "Description": "Description"
+        },
         "ComposerFieldsRootPaths": {
           "$type": "System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib",
           "$values": [

@@ -17,7 +17,7 @@ namespace Plugin.Sync.Commerce.CatalogImport.Commands
             this._pipeline = pipeline;
         }
 
-        public async Task<ImportCatalogEntityResponse> Process(CommerceContext commerceContext, ImportSellableItemArgument args)
+        public async Task<ImportCatalogEntityResponse> Process(CommerceContext commerceContext, ImportCatalogEntityArgument args)
         {
             using (var activity = CommandActivity.Start(commerceContext, this))
             {

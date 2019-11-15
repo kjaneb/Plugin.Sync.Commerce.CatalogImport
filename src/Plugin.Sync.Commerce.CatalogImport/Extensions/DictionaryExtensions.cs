@@ -24,13 +24,5 @@ namespace Plugin.Sync.Commerce.CatalogImport.Extensions
             }
         }
 
-        //public static IDictionary<string, object> ToDictionary(this object source)
-        //{
-        //    return source.ToDictionary<object>();
-        //}
-
-        
-
-       
     }
 }

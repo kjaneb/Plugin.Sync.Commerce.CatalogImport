@@ -8,17 +8,20 @@
     "$type": "System.Collections.Generic.List`1[[Sitecore.Commerce.Core.Policy, Sitecore.Commerce.Core]], mscorlib",
     "$values": [
       {
-        "$type": "Plugin.Sync.Commerce.CatalogImport.Policies.CategoryMappingPolicy, Plugin.Sync.Commerce.CatalogImport",
+        "$type": "Plugin.Sync.Commerce.CatalogImport.Policies.CatalogEntityMappingPolicy, Plugin.Sync.Commerce.CatalogImport",
         "ClearFieldValues": true,
-        "IdPath": "Id",
-        "NamePath": "Name",
-        "DisplayNamePath": "DisplayName",
-        "DescriptionPath": "Description",
-        "ParentCategoryNamePath": "FallbackRootCategory",
-        "CatalogNamePath": "TestCatalog",
+        "EntityId": "Id",
+        "EntityName": "Name",
+        "ParentCategoryName": "FallbackRootCategory",
+        "CatalogName": "TestCatalog",
         "UpdatedItemsList": "ImportedItems",
         "DefaultCatalogName": "TestCatalog",
         "DefaultCategoryName": "TestCategory",
+        "EntityFieldsPaths": {
+          "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.String, mscorlib]], mscorlib",
+          "DisplayName": "DisplayName",
+          "Description": "Description"
+        },
         "ComposerFieldsRootPaths": {
           "$type": "System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib",
           "$values": [

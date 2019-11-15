@@ -1,16 +1,15 @@
+using Microsoft.Extensions.DependencyInjection;
 using Plugin.Sync.Commerce.CatalogImport.Pipelines;
 using Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks;
+using Sitecore.Commerce.Core;
+using Sitecore.Commerce.Plugin.SQL;
+using Sitecore.Framework.Configuration;
+using Sitecore.Framework.Pipelines.Definitions.Extensions;
+using System.Reflection;
 
 namespace Plugin.Sync.Commerce.CatalogImport
 {
-    using Microsoft.Extensions.DependencyInjection;
-    using Sitecore.Commerce.Core;
-    using Sitecore.Commerce.EntityViews;
-    using Sitecore.Commerce.Plugin.Catalog;
-    using Sitecore.Commerce.Plugin.SQL;
-    using Sitecore.Framework.Configuration;
-    using Sitecore.Framework.Pipelines.Definitions.Extensions;
-    using System.Reflection;
+
 
     public class ConfigureSitecore : IConfigureSitecore
     {
@@ -24,15 +23,18 @@ namespace Plugin.Sync.Commerce.CatalogImport
                 .AddPipeline<IImportCategoryPipeline, ImportCategoryPipeline>(
                     configure =>
                     {
-                        configure.Add<ImportCategoryBlock>();
+                        configure.Add<ExtractCatalogEntityFieldsFromJsonDataBlock>()
+                                .Add<CreateOrUpdateCategoryBlock>()
+                                .Add<UpdateComposerFieldsBlock>()
+                                .Add<UpdateCustomComponentsBlock>();
                     })
                 .AddPipeline<IImportSellableItemPipeline, ImportSellableItemPipeline>(
                     configure =>
                     {
-                        configure.Add<ImportSellableItemExtractJsonDataBlock>()
-                                .Add<ImportSellableItemCreateOrUpdateEntityBlock>()
-                                .Add<ImportSellableItemUpdateComposerFieldsBlock>()
-                                .Add<ImportSellableItemUpdateCustomComponentsBlock>();
+                        configure.Add<ExtractCatalogEntityFieldsFromJsonDataBlock>()
+                                .Add<CreateOrUpdateSellableItemBlock>()
+                                .Add<UpdateComposerFieldsBlock>()
+                                .Add<UpdateCustomComponentsBlock>();
                     })
                  .ConfigurePipeline<IPersistEntityPipeline>(
                     configure =>

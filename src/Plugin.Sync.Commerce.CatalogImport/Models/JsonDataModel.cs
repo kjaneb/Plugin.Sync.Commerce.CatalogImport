@@ -1,13 +1,12 @@
 ﻿using Newtonsoft.Json.Linq;
-using Plugin.Sync.Commerce.CatalogImport.Models;
 using Sitecore.Commerce.Core;
 using Sitecore.Framework.Conditions;
 
-namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Arguments
+namespace Plugin.Sync.Commerce.CatalogImport.Models
 {
-    public class ImportCatalogEntityArgumentBase : PipelineArgument
+    public class JsonDataModel : Model
     {
-        public ImportCatalogEntityArgumentBase(JObject jsonData)
+        public JsonDataModel(JObject jsonData)
         {
             Condition.Requires<JObject>(jsonData).IsNotNull("jsonData can not be null");
             this.JsonData = jsonData;

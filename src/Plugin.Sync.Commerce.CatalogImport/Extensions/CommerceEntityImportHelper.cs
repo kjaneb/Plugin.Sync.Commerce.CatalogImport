@@ -54,27 +54,14 @@ namespace Plugin.Sync.Commerce.CatalogImport.Extensions
         }
 
         /// <summary>
-        /// Assert if all main fields are present in input Json Object, throw exception if one or more are missing
-        /// </summary>
-        /// <param name="arg"></param>
-        /// <param name="mappingPolicy"></param>
-        public void AssertRootFields(ImportSellableItemArgument arg, MappingPolicyBase mappingPolicy)
-        {
-            Condition.Requires(mappingPolicy, nameof(mappingPolicy)).IsNotNull();
-            Condition.Requires(arg.JsonData, nameof(arg.JsonData)).IsNotNull();
-            Condition.Requires(mappingPolicy.IdPath, nameof(mappingPolicy.IdPath)).IsNotNullOrEmpty();
-            Condition.Requires(mappingPolicy.NamePath, nameof(mappingPolicy.NamePath)).IsNotNullOrEmpty();
-        }
-
-        /// <summary>
         /// Get Catalog name from input Json or fallback to default Catalog name in Mapping Policy configuration
         /// </summary>
         /// <param name="jsonData"></param>
         /// <param name="mappingPolicy"></param>
         /// <returns></returns>
-        public string GetCatalogName(JObject jsonData, MappingPolicyBase mappingPolicy)
+        public string GetCatalogName(JObject jsonData, CatalogEntityMappingPolicy mappingPolicy)
         {
-            var catalogName = jsonData.SelectValue<string>(mappingPolicy.CatalogNamePath);
+            var catalogName = jsonData.SelectValue<string>(mappingPolicy.ParentCatalogName);
             if (string.IsNullOrEmpty(catalogName) && !string.IsNullOrEmpty(mappingPolicy.DefaultCatalogName))
             {
                 catalogName = mappingPolicy.DefaultCatalogName;
@@ -88,9 +75,9 @@ namespace Plugin.Sync.Commerce.CatalogImport.Extensions
         /// <param name="jsonData"></param>
         /// <param name="mappingPolicy"></param>
         /// <returns></returns>
-        public string GetParentCategoryName(JObject jsonData, MappingPolicyBase mappingPolicy)
+        public string GetParentCategoryName(JObject jsonData, CatalogEntityMappingPolicy mappingPolicy)
         {
-            var categoryName = jsonData.SelectValue<string>(mappingPolicy.ParentCategoryNamePath);
+            var categoryName = jsonData.SelectValue<string>(mappingPolicy.ParentCategoryName);
             if (string.IsNullOrEmpty(categoryName) && !string.IsNullOrEmpty(mappingPolicy.DefaultCategoryName))
             {
                 categoryName = mappingPolicy.DefaultCategoryName;

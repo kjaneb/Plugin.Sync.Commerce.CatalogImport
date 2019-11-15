@@ -49,7 +49,7 @@ namespace Plugin.Sync.Commerce.CatalogImport.Extensions
                         //var dict = rootToken.ToDictionary<string>();
                         foreach (var prop in rootToken.Children<JProperty>())
                         {
-                            if (prop != null && !string.IsNullOrEmpty(prop.Name) && prop.Value != null && prop.Value.Type == JTokenType.String)
+                            if (prop != null && !string.IsNullOrEmpty(prop.Name) && prop.Value != null && prop.Value.Type != JTokenType.Object)
                             {
                                 results.Add(prop.Name, (string)prop);
                             }

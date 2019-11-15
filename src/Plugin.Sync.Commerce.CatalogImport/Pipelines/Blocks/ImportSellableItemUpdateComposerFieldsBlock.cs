@@ -55,53 +55,6 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
             return arg;
         }
         #endregion
-
-        #region Private methods
-        /// <summary>
-        /// Associate SellableItem with parent Catalog and Category(if exists)
-        /// </summary>
-        /// <param name="catalogName"></param>
-        /// <param name="parentCategoryName"></param>
-        /// <param name="sellableItem"></param>
-        /// <param name="context"></param>
-        /// <returns></returns>
-        private async Task AssociateSellableItemWithParentEntities(string catalogName, string parentCategoryName, SellableItem sellableItem, CommerceContext context)
-        {
-            string parentCategoryCommerceId = null;
-            if (!string.IsNullOrEmpty(parentCategoryName))
-            {
-                var categoryCommerceId = $"{CommerceEntity.IdPrefix<Category>()}{catalogName}-{parentCategoryName}";
-                var parentCategory = await _commerceCommander.Command<FindEntityCommand>().Process(context, typeof(Category), categoryCommerceId) as Category;
-                parentCategoryCommerceId = parentCategory?.Id;
-            }
-
-            var catalogCommerceId = $"{CommerceEntity.IdPrefix<Catalog>()}{catalogName}";
-            var sellableItemAssociation = await _commerceCommander.Command<AssociateSellableItemToParentCommand>().Process(context,
-                catalogCommerceId,
-                parentCategoryCommerceId ?? catalogCommerceId,
-                sellableItem.Id);
-        }
-
-        /// <summary>
-        /// Find and return an existing SellableItem or create a new one
-        /// </summary>
-        /// <param name="arg"></param>
-        /// <param name="context"></param>
-        /// <param name="mappingPolicy"></param>
-        /// <param name="itemId"></param>
-        /// <returns></returns>
-        private async Task<SellableItem> GetOrCreateSellableItem(CatalogEntityData entityData, CommercePipelineExecutionContext context)
-        {
-            var commerceEntityId = $"{CommerceEntity.IdPrefix<SellableItem>()}{entityData.Id}";
-            var sellableItem = await _commerceCommander.Command<FindEntityCommand>().Process(context.CommerceContext, typeof(SellableItem), commerceEntityId) as SellableItem;
-            if (sellableItem == null)
-            {
-                await _commerceCommander.Command<CreateSellableItemCommand>().Process(context.CommerceContext, entityData.Id, entityData.Name, entityData.DisplayName, entityData.Description);
-                sellableItem = await _commerceCommander.Command<FindEntityCommand>().Process(context.CommerceContext, typeof(SellableItem), commerceEntityId) as SellableItem;
-            }
-
-            return sellableItem;
-        } 
-        #endregion
+       
     }
 }

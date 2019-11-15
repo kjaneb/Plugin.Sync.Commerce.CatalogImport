@@ -107,7 +107,7 @@ namespace Plugin.Sync.Commerce.CatalogImport.Extensions
         /// <param name="mappingPolicy"></param>
         /// <param name="context"></param>
         /// <returns></returns>
-        public async Task<CommerceEntity> ImportComposerViewsFields(CommerceEntity commerceEntity, Dictionary<string, string> composerFields, CommerceContext context)
+        public async Task<SellableItem> ImportComposerViewsFields(SellableItem commerceEntity, Dictionary<string, string> composerFields, CommerceContext context)
         {
             var masterView = await _commerceCommander.Command<GetEntityViewCommand>().Process(
                 context, commerceEntity.Id,
@@ -128,19 +128,9 @@ namespace Plugin.Sync.Commerce.CatalogImport.Extensions
                 throw new ApplicationException($"No composer-generated views found on Sellable Item entity, Entity ID={commerceEntity.Id}");
             }
 
-            //masterView.
-            //_commerceCommander.Command<EditSellableItemCommand>().Process()
             var isUpdated = false;
             foreach (EntityView view in masterView.ChildViews)
             {
-                var viewToEdit = await _commerceCommander.Command<GetEntityViewCommand>().Process(
-                        context, 
-                        commerceEntity.Id,
-                        commerceEntity.EntityVersion,
-                        view.Name,
-                        string.Empty,
-                        string.Empty);
-                //}
                 EntityView composerViewForEdit = null;
                 foreach (var viewField in view.Properties)
                 {
@@ -161,47 +151,17 @@ namespace Plugin.Sync.Commerce.CatalogImport.Extensions
                         }
                     }
                 }
-
-                //masterView.ChildViews.FirstOrDefault(e => e.Name.Equals(view.Name, StringComparison.OrdinalIgnoreCase)) as EntityView;
-
-
-                //var viewToUpdate = masterView.ChildViews.FirstOrDefault(e => e.Name.Equals(view.Name, StringComparison.OrdinalIgnoreCase)) as EntityView;
-                //if (viewToUpdate != null)
-                //{
-                //    var composerViewForEdit = Task.Run<EntityView>(async () => await commerceEntity.GetComposerView(viewToUpdate.ItemId, _commerceCommander, context)).Result;
-                //    if (composerViewForEdit != null)
-                //    {
-                //        foreach (var fieldProperty in composerViewForEdit.Properties)
-                //        {
-                //            //var propertyPath = mappingPolicy.FieldPaths.ContainsKey(fieldProperty.Name) ? mappingPolicy.FieldPaths[fieldProperty.Name] : null;
-                //            //var fieldValue = jsonData.QueryMappedValue<string>(fieldProperty.Name, propertyPath, mappingPolicy.RootPaths);
-                //            //if (!string.IsNullOrEmpty(fieldValue))
-                //            //{
-                //            //    fieldProperty.ParseValueAndSetEntityView(fieldValue);
-                //            //    isUpdated = true;
-                //            //}
-                //            //else if (mappingPolicy.ClearFieldValues)
-                //            //{
-                //            //    fieldProperty.RawValue = string.Empty;
-                //            //    fieldProperty.Value = string.Empty;
-                //            //    isUpdated = true;
-                //            //}
-                //        }
-                //    }
-                //}
             }
 
             if (isUpdated)
             {
-                //var result = await _commerceCommander.Pipeline<IPersistEntityPipeline>().Run(new PersistEntityArgument(commerceEntity), context);
                 await _composerCommander.PersistEntity(context, commerceEntity);
-                //await _commerceCommander.PersistEntity(context, commerceEntity);
-                return await _commerceCommander.Command<FindEntityCommand>().Process(context, typeof(CommerceEntity), commerceEntity.Id);
+                //var persistResult = await _commerceCommander.Pipeline<IPersistEntityPipeline>().Run(new PersistEntityArgument(commerceEntity), context.PipelineContextOptions);
+                return await _commerceCommander.Command<FindEntityCommand>().Process(context, typeof(SellableItem), commerceEntity.Id) as SellableItem;
 
             }
 
             return commerceEntity;
-            //return await _commerceCommander.Command<FindEntityCommand>().Process(context, typeof(CommerceEntity), commerceEntity.Id);
         }
 
         #endregion

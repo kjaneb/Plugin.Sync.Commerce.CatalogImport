@@ -36,7 +36,7 @@ namespace Plugin.Sync.Commerce.CatalogImport.Extensions
             return listPricingPolicy.Prices.ToList()[0].Amount;
         }
 
-        public static void AddVariantListPrice(this ImportSellableItemResponse sellableItem, decimal sellableItemListPrice, ItemVariationComponent variant)
+        public static void AddVariantListPrice(this ImportCatalogEntityResponse sellableItem, decimal sellableItemListPrice, ItemVariationComponent variant)
         {
             if (sellableItemListPrice == 0)
             {

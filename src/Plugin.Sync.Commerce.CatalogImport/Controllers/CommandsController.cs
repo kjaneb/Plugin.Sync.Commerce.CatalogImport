@@ -40,7 +40,7 @@ namespace Plugin.Sync.Commerce.CatalogImport.Controllers
             try
             {
                 var command = Command<ImportCategoryCommand>();
-                var argument = new ImportSellableItemArgument(request);
+                var argument = new ImportCategoryArgument(request);
                 var result = await command.Process(CurrentContext, argument);
 
                 return result != null ? new ObjectResult(result) : new NotFoundObjectResult("Error importing Category data");

@@ -18,7 +18,7 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
     /// Import data into an existing SellableItem or new SellableItem entity
     /// </summary>
     [PipelineDisplayName("ImportCategoryBlock")]
-    public class ImportCategoryBlock : PipelineBlock<ImportSellableItemArgument, ImportSellableItemResponse, CommercePipelineExecutionContext>
+    public class ImportCategoryBlock : PipelineBlock<ImportSellableItemArgument, ImportCatalogEntityResponse, CommercePipelineExecutionContext>
     {
         #region Private fields
         private readonly CommerceCommander _commerceCommander;
@@ -46,7 +46,7 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
         /// <param name="arg"></param>
         /// <param name="context"></param>
         /// <returns></returns>
-        public override async Task<ImportSellableItemResponse> Run(ImportSellableItemArgument arg, CommercePipelineExecutionContext context)
+        public override async Task<ImportCatalogEntityResponse> Run(ImportSellableItemArgument arg, CommercePipelineExecutionContext context)
         {
             await Task.CompletedTask;
             throw new NotImplementedException();

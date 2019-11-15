@@ -6,9 +6,8 @@ using Sitecore.Framework.Pipelines;
 
 namespace Plugin.Sync.Commerce.CatalogImport.Pipelines
 {
-    public class ImportCategoryPipeline : CommercePipeline<ImportSellableItemArgument, ImportSellableItemResponse>, IImportCategoryPipeline
+    public class ImportCategoryPipeline : CommercePipeline<ImportCategoryArgument, ImportCatalogEntityResponse>, IImportCategoryPipeline
     {
-        //https://sitecore.stackexchange.com/questions/11035/unable-to-resolve-service-for-type-ipipelineconfiguration-while-attempting-to
         public ImportCategoryPipeline(IPipelineConfiguration<IImportCategoryPipeline> configuration, ILoggerFactory loggerFactory) : base(configuration, loggerFactory)
         {
         }

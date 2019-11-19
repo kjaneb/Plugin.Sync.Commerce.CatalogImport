@@ -10,11 +10,13 @@
 		"EncryptionKeyStorageLocation": "c:\\Encryption-Keys\\",
 		"SitecoreIdentityServerUrl": "https://dev.IdentityServer",
 		"AllowedOrigins": [
+			"https://dev.sc",
+			"http://dev.sc",
+			"https://local.willscot.com",
+			"https://local.willscot.ca",
 			"https://localhost:4200",
 			"https://bizfx.sc9.com",
-			"https://sxa.storefront.com",
-			"http://dev.sc",
-			"https://dev.sc"
+			"https://sxa.storefront.com"
 		],
 		"AntiForgeryEnabled": false,
 		"CommerceServicesHostPostfix": "sc9.com",
@@ -60,7 +62,7 @@
 	"Certificates": {
 		"Certificates": [
 			{
-				"Thumbprint": "4C4206BE719650C24F0054A442E27B15BAA86137",
+				"Thumbprint": "73EE01534FCCFADAA9BA3B8DBDC642B0BE7AFD2E",
 				"DefaultRoles": [
 					"sitecore\\QA",
 					"sitecore\\Commerce Business User"

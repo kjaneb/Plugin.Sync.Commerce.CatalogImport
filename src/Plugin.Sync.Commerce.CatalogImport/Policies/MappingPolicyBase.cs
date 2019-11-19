@@ -5,7 +5,7 @@ using Sitecore.Commerce.Core;
 
 namespace Plugin.Sync.Commerce.CatalogImport.Policies
 {
-    public class CatalogEntityMappingPolicy: Policy
+    public class MappingPolicyBase: Policy
     {
         public bool ClearFieldValues { get; set; }
         public string EntityId { get; set; }

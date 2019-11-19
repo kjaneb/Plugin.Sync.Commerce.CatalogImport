@@ -1,24 +1,28 @@
 {
   "$type": "Sitecore.Commerce.Core.PolicySet, Sitecore.Commerce.Core",
-  "Id": "Entity-PolicySet-CategoryMappingPolicySet",
+  "Id": "Entity-PolicySet-SellableItemMappingPolicySet",
   "Version": 1,
   "IsPersisted": false,
-  "Name": "CategoryMappingPolicySet",
+  "Name": "SellableItemMappingPolicySet",
   "Policies": {
     "$type": "System.Collections.Generic.List`1[[Sitecore.Commerce.Core.Policy, Sitecore.Commerce.Core]], mscorlib",
     "$values": [
       {
-        "$type": "Plugin.Sync.Commerce.CatalogImport.Policies.CatalogEntityMappingPolicy, Plugin.Sync.Commerce.CatalogImport",
+        "$type": "Plugin.Sync.Commerce.CatalogImport.Policies.SellableItemMappingPolicy, Plugin.Sync.Commerce.CatalogImport",
         "ClearFieldValues": true,
         "EntityId": "Id",
         "EntityName": "Name",
-        "ParentCategoryName": "FallbackRootCategory",
-        "CatalogName": "TestCatalog",
+        "ParentCategoryName": "ParentCategoryName",
+        "ParentCatalogName": "ParentCatalogName",
         "UpdatedItemsList": "ImportedItems",
-        "DefaultCatalogName": "TestCatalog",
+        "DefaultCatalogName": "Habitat_Master",
         "DefaultCategoryName": "TestCategory",
+        "ListPrice": "ListPrice",
         "EntityFieldsPaths": {
           "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.String, mscorlib]], mscorlib",
+          "Brand": "Brand",
+          "Manufacturer": "Manufacturer",
+          "TypeOfGoods": "TypeOfGoods",
           "DisplayName": "DisplayName",
           "Description": "Description"
         },
@@ -31,8 +35,8 @@
         },
         "ComposerFieldsPaths": {
           "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.String, mscorlib]], mscorlib",
-          "one": "One",
-          "two": "twoVal",
+          "ComposerFieldA": "ComposerFieldA",
+          "ComposerFieldB": "ComposerFieldB",
           "three": "threeVal"
         },
         "CustomFieldsRootPaths": {
@@ -44,8 +48,8 @@
         },
         "CustomFieldsPaths": {
           "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.String, mscorlib]], mscorlib",
-          "one": "One",
-          "two": "twoVal",
+          "CustomFieldA": "CustomFieldA",
+          "CustomFieldB": "CustomFieldB",
           "three": "threeVal"
         }
       }

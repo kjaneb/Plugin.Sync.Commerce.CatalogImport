@@ -38,9 +38,9 @@
         "EffectiveDate": "0001-01-01T00:00:00",
         "IsVisible": false,
         "Password": "sqlsa",
-        "Server": "SERGEYYATSENKO-",
+        "Server": "LAPTOP-4P4QBB00",
         "TrustedConnection": true,
-        "UserName": "SERGEYYATSENKO-\\CSFndRuntimeUser",
+        "UserName": "LAPTOP-4P4QBB00\\CSFndRuntimeUser",
         "View": "EntityStoreSqlPolicy",
         "Version": "9.2.0"
       },

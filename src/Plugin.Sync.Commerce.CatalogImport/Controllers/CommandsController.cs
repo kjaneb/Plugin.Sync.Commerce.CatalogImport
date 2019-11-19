@@ -40,7 +40,8 @@ namespace Plugin.Sync.Commerce.CatalogImport.Controllers
             try
             {
                 var command = Command<ImportCategoryCommand>();
-                var argument = new ImportCatalogEntityArgument(request);
+                var mappingPolicy = CurrentContext.GetPolicy<CategoryMappingPolicy>();
+                var argument = new ImportCatalogEntityArgument(request, mappingPolicy);
                 var result = await command.Process(CurrentContext, argument);
 
                 return result != null ? new ObjectResult(result) : new NotFoundObjectResult("Error importing Category data");
@@ -67,8 +68,8 @@ namespace Plugin.Sync.Commerce.CatalogImport.Controllers
             try
             {
                 var command = Command<ImportSellableItemCommand>();
-                var argument = new ImportCatalogEntityArgument(request);
-
+                var mappingPolicy = CurrentContext.GetPolicy<SellableItemMappingPolicy>();
+                var argument = new ImportCatalogEntityArgument(request, mappingPolicy);
                 var result = await command.Process(CurrentContext, argument);
 
                 return result != null ? new ObjectResult(result) : new NotFoundObjectResult("Error importing SellableItem data");

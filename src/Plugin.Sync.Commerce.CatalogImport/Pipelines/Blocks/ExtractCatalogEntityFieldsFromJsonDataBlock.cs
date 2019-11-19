@@ -4,6 +4,7 @@ using Plugin.Sync.Commerce.CatalogImport.Models;
 using Plugin.Sync.Commerce.CatalogImport.Pipelines.Arguments;
 using Plugin.Sync.Commerce.CatalogImport.Policies;
 using Sitecore.Commerce.Core;
+using Sitecore.Framework.Conditions;
 using Sitecore.Framework.Pipelines;
 using System.Threading.Tasks;
 
@@ -27,10 +28,16 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
         /// <returns></returns>
         public override async Task<ImportCatalogEntityArgument> Run(ImportCatalogEntityArgument arg, CommercePipelineExecutionContext context)
         {
+            var mappingPolicy = arg.MappingPolicy;
 
-            var mappingPolicy = context.CommerceContext.GetPolicy<CatalogEntityMappingPolicy>();
-            var jsonDataModel = context.GetModel<JsonDataModel>();
-            var jsonData = jsonDataModel.JsonData as JObject;
+            var sellableItemMappingPolicy = context.CommerceContext.GetPolicy<SellableItemMappingPolicy>();
+            var categoryMappingPolicy = context.CommerceContext.GetPolicy<CategoryMappingPolicy>();
+
+
+            var jsonData = arg.Request as JObject;
+            Condition.Requires(jsonData, "Commerce Entity JSON parameter is required").IsNotNull();
+            context.AddModel(new JsonDataModel(jsonData));
+
             var entityDataModel = context.GetModel<CatalogEntityDataModel>();
             var entityData = new CatalogEntityDataModel
             {

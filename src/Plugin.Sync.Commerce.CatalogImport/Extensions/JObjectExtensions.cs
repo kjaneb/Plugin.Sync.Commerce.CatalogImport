@@ -20,7 +20,7 @@ namespace Plugin.Sync.Commerce.CatalogImport.Extensions
         /// <param name="jsonData"></param>
         /// <param name="mappingPolicy"></param>
         /// <returns></returns>
-        public static string GetCatalogName(this JObject jsonData, CatalogEntityMappingPolicy mappingPolicy)
+        public static string GetCatalogName(this JObject jsonData, MappingPolicyBase mappingPolicy)
         {
             var catalogName = jsonData.SelectValue<string>(mappingPolicy.ParentCatalogName);
             if (string.IsNullOrEmpty(catalogName) && !string.IsNullOrEmpty(mappingPolicy.DefaultCatalogName))
@@ -36,7 +36,7 @@ namespace Plugin.Sync.Commerce.CatalogImport.Extensions
         /// <param name="jsonData"></param>
         /// <param name="mappingPolicy"></param>
         /// <returns></returns>
-        public static string GetParentCategoryName(this JObject jsonData, CatalogEntityMappingPolicy mappingPolicy)
+        public static string GetParentCategoryName(this JObject jsonData, MappingPolicyBase mappingPolicy)
         {
             var categoryName = jsonData.SelectValue<string>(mappingPolicy.ParentCategoryName);
             if (string.IsNullOrEmpty(categoryName) && !string.IsNullOrEmpty(mappingPolicy.DefaultCategoryName))

@@ -15,7 +15,7 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
         }
         public override async Task<PersistEntityArgument> Run(PersistEntityArgument arg, CommercePipelineExecutionContext context)
         {
-            var policy = context.CommerceContext.GetPolicy<CatalogEntityMappingPolicy>();
+            var policy = context.CommerceContext.GetPolicy<MappingPolicyBase>();
             ListEntitiesArgument listArgument = new ListEntitiesArgument(new string[1] { arg.Entity.Id }, policy.UpdatedItemsList);
             ListEntitiesArgument addToListResult = await this._addListEntitiesPipeline.Run(listArgument, context);
             return arg;

@@ -12,13 +12,13 @@
 		"AllowedOrigins": [
 			"https://localhost:4200",
 			"https://bizfx.sc9.com",
-			"https://sxa.storefront.com"
+			"https://sxa.storefront.com",
+			"http://dev.sc",
+			"https://dev.sc"
 		],
 		"AntiForgeryEnabled": false,
 		"CommerceServicesHostPostfix": "sc9.com",
-		"UseHttpsInKestrel": false,
-		"SslPfxPath": "wwwroot/localhost.pfx",
-		"SslPfxPassword": "sitecore"
+		"UseHttpsInKestrel": false
 	},
 	"ApplicationInsights": {
 		"InstrumentationKey": ""
@@ -60,7 +60,7 @@
 	"Certificates": {
 		"Certificates": [
 			{
-				"Thumbprint": "A3BEA9630F9647045ABFC0FA7F9086D15630C11C",
+				"Thumbprint": "4C4206BE719650C24F0054A442E27B15BAA86137",
 				"DefaultRoles": [
 					"sitecore\\QA",
 					"sitecore\\Commerce Business User"

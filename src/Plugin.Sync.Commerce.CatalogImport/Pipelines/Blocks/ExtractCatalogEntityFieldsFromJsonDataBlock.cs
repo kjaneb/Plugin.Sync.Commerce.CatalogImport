@@ -1,4 +1,5 @@
-﻿using Plugin.Sync.Commerce.CatalogImport.Extensions;
+﻿using Newtonsoft.Json.Linq;
+using Plugin.Sync.Commerce.CatalogImport.Extensions;
 using Plugin.Sync.Commerce.CatalogImport.Models;
 using Plugin.Sync.Commerce.CatalogImport.Pipelines.Arguments;
 using Plugin.Sync.Commerce.CatalogImport.Policies;
@@ -29,21 +30,22 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
 
             var mappingPolicy = context.CommerceContext.GetPolicy<CatalogEntityMappingPolicy>();
             var jsonDataModel = context.GetModel<JsonDataModel>();
+            var jsonData = jsonDataModel.JsonData as JObject;
             var entityDataModel = context.GetModel<CatalogEntityDataModel>();
             var entityData = new CatalogEntityDataModel
             {
-                EntityId = jsonDataModel.JsonData.SelectValue<string>(mappingPolicy.EntityId),
-                EntityName = jsonDataModel.JsonData.SelectValue<string>(mappingPolicy.EntityName),
-                ParentCatalogName = jsonDataModel.JsonData.SelectValue<string>(mappingPolicy.ParentCatalogName),
-                ParentCategoryName = jsonDataModel.JsonData.SelectValue<string>(mappingPolicy.ParentCategoryName),
-                EntityFields = jsonDataModel.JsonData.SelectMappedValues(mappingPolicy.EntityFieldsPaths),
-                ComposerFields = jsonDataModel.JsonData.SelectMappedValues(mappingPolicy.ComposerFieldsPaths),
-                CustomFields = jsonDataModel.JsonData.SelectMappedValues(mappingPolicy.CustomFieldsPaths),
+                EntityId = jsonData.SelectValue<string>(mappingPolicy.EntityId),
+                EntityName = jsonData.SelectValue<string>(mappingPolicy.EntityName),
+                ParentCatalogName = jsonData.SelectValue<string>(mappingPolicy.ParentCatalogName),
+                ParentCategoryName = jsonData.SelectValue<string>(mappingPolicy.ParentCategoryName),
+                EntityFields = jsonData.SelectMappedValues(mappingPolicy.EntityFieldsPaths),
+                ComposerFields = jsonData.SelectMappedValues(mappingPolicy.ComposerFieldsPaths),
+                CustomFields = jsonData.SelectMappedValues(mappingPolicy.CustomFieldsPaths),
             };
 
-            entityData.EntityFields.AddRange(jsonDataModel.JsonData.QueryMappedValuesFromRoot(mappingPolicy.EntityFieldsRootPaths));
-            entityData.ComposerFields.AddRange(jsonDataModel.JsonData.QueryMappedValuesFromRoot(mappingPolicy.ComposerFieldsRootPaths));
-            entityData.CustomFields.AddRange(jsonDataModel.JsonData.QueryMappedValuesFromRoot(mappingPolicy.CustomFieldsRootPaths));
+            entityData.EntityFields.AddRange(jsonData.QueryMappedValuesFromRoot(mappingPolicy.EntityFieldsRootPaths));
+            entityData.ComposerFields.AddRange(jsonData.QueryMappedValuesFromRoot(mappingPolicy.ComposerFieldsRootPaths));
+            entityData.CustomFields.AddRange(jsonData.QueryMappedValuesFromRoot(mappingPolicy.CustomFieldsRootPaths));
 
             if (string.IsNullOrEmpty(entityData.ParentCatalogName))
             {

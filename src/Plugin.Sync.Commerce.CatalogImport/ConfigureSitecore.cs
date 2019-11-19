@@ -24,17 +24,17 @@ namespace Plugin.Sync.Commerce.CatalogImport
                     configure =>
                     {
                         configure.Add<ExtractCatalogEntityFieldsFromJsonDataBlock>()
-                                .Add<CreateOrUpdateCategoryBlock>()
-                                .Add<UpdateComposerFieldsBlock>()
-                                .Add<UpdateCustomComponentsBlock>();
+                        .Add<CreateOrUpdateCategoryBlock>()
+                        .Add<UpdateComposerFieldsBlock>()
+                        .Add<UpdateCustomComponentsBlock>();
                     })
                 .AddPipeline<IImportSellableItemPipeline, ImportSellableItemPipeline>(
                     configure =>
                     {
                         configure.Add<ExtractCatalogEntityFieldsFromJsonDataBlock>()
-                                .Add<CreateOrUpdateSellableItemBlock>()
-                                .Add<UpdateComposerFieldsBlock>()
-                                .Add<UpdateCustomComponentsBlock>();
+                        .Add<CreateOrUpdateSellableItemBlock>()
+                        .Add<UpdateComposerFieldsBlock>()
+                        .Add<UpdateCustomComponentsBlock>();
                     })
                  .ConfigurePipeline<IPersistEntityPipeline>(
                     configure =>

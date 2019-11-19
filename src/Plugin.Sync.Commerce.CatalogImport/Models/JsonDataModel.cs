@@ -11,6 +11,6 @@ namespace Plugin.Sync.Commerce.CatalogImport.Models
             Condition.Requires<JObject>(jsonData).IsNotNull("jsonData can not be null");
             this.JsonData = jsonData;
         }
-        public JObject JsonData { get; set; }
+        public object JsonData { get; set; }
     }
 }

@@ -60,11 +60,11 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
                 //Get or create sellable item
                 var sellableItem = await GetOrCreateSellableItem(entityData, context);
                 //Associate catalog and category
-                await AssociateSellableItemWithParentEntities(entityData.ParentCatalogName, entityData.ParentCategoryName, sellableItem, context.CommerceContext);
+                sellableItem = await AssociateSellableItemWithParentEntities(entityData.ParentCatalogName, entityData.ParentCategoryName, sellableItem, context.CommerceContext);
 
                 //Check code running before this - this persist might be redindant
-                var persistResult = await _commerceCommander.Pipeline<IPersistEntityPipeline>().Run(new PersistEntityArgument(sellableItem), context);
-                if (persistResult == null || !persistResult.Success)
+                //var persistResult = await _commerceCommander.Pipeline<IPersistEntityPipeline>().Run(new PersistEntityArgument(sellableItem), context);
+                if (sellableItem == null)
                 {
                     var errorMessage = $"Error persisting changes to SellableItem Entity withID == {entityData.EntityId}.";
                     Log.Error(errorMessage);
@@ -94,21 +94,26 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
         /// <param name="sellableItem"></param>
         /// <param name="context"></param>
         /// <returns></returns>
-        private async Task AssociateSellableItemWithParentEntities(string catalogName, string parentCategoryName, SellableItem sellableItem, CommerceContext context)
+        private async Task<SellableItem> AssociateSellableItemWithParentEntities(string catalogName, string parentCategoryName, SellableItem sellableItem, CommerceContext context)
         {
             string parentCategoryCommerceId = null;
             if (!string.IsNullOrEmpty(parentCategoryName))
             {
-                var categoryCommerceId = $"{CommerceEntity.IdPrefix<SellableItem>()}{catalogName}-{parentCategoryName}";
-                var parentCategory = await _commerceCommander.Command<FindEntityCommand>().Process(context, typeof(SellableItem), categoryCommerceId) as SellableItem;
+                var categoryCommerceId = $"{CommerceEntity.IdPrefix<Category>()}{catalogName}-{parentCategoryName}";
+                var parentCategory = await _commerceCommander.Command<FindEntityCommand>().Process(context, typeof(Category), categoryCommerceId) as Category;
                 parentCategoryCommerceId = parentCategory?.Id;
             }
+
+            //TODO: Delete old relationships
+            //var deassociateResult = await _commerceCommander.Command<DeleteRelationshipCommand>().Process(context, oldParentCategory.Id, sellableItem.Id, "CategoryToSellableItem");
 
             var catalogCommerceId = $"{CommerceEntity.IdPrefix<Catalog>()}{catalogName}";
             var sellableItemAssociation = await _commerceCommander.Command<AssociateSellableItemToParentCommand>().Process(context,
                 catalogCommerceId,
                 parentCategoryCommerceId ?? catalogCommerceId,
                 sellableItem.Id);
+
+            return await _commerceCommander.Command<FindEntityCommand>().Process(context, typeof(SellableItem), sellableItem.Id) as SellableItem;
         }
 
         /// <summary>
@@ -135,6 +140,12 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
             }
             else
             {
+                sellableItem.DisplayName = entityData.EntityFields.ContainsKey("DisplayName") ? entityData.EntityFields["DisplayName"] : string.Empty;
+                sellableItem.Description = entityData.EntityFields.ContainsKey("Description") ? entityData.EntityFields["Description"] : string.Empty;
+                sellableItem.Brand = entityData.EntityFields.ContainsKey("Brand") ? entityData.EntityFields["Brand"] : string.Empty;
+                sellableItem.Manufacturer = entityData.EntityFields.ContainsKey("Manufacturer") ? entityData.EntityFields["Manufacturer"] : string.Empty;
+                sellableItem.TypeOfGood = entityData.EntityFields.ContainsKey("TypeOfGoods") ? entityData.EntityFields["TypeOfGoods"] : string.Empty;
+
                 var persistResult = await _commerceCommander.Pipeline<IPersistEntityPipeline>().Run(new PersistEntityArgument(sellableItem), context);
             }
 

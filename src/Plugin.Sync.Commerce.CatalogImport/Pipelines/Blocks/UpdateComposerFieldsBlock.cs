@@ -8,6 +8,7 @@ using Sitecore.Commerce.EntityViews;
 using Sitecore.Commerce.EntityViews.Commands;
 using Sitecore.Commerce.Plugin.Catalog;
 using Sitecore.Commerce.Plugin.Composer;
+using Sitecore.Framework.Conditions;
 using Sitecore.Framework.Pipelines;
 using System;
 using System.Collections.Generic;
@@ -50,11 +51,17 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
         /// <returns></returns>
         public override async Task<ImportCatalogEntityArgument> Run(ImportCatalogEntityArgument arg, CommercePipelineExecutionContext context)
         {
+           
+                
             CommerceEntity entity = null;
             var entityDataModel = context.GetModel<CatalogEntityDataModel>();
-            if (entityDataModel == null)
+            Condition.Requires(entityDataModel, "CatalogEntityDataModel is required to exist in order for CommercePipelineExecutionContext to run").IsNotNull();
+            Condition.Requires(entityDataModel.EntityId, "EntityId is reguired in input JSON data").IsNotNullOrEmpty();
+
+            if (entityDataModel != null)
             {
-                entity = await _commerceCommander.Command<FindEntityCommand>().Process(context.CommerceContext, typeof(CommerceEntity), entityDataModel.EntityId);
+                var commerceEntityId = $"{CommerceEntity.IdPrefix<SellableItem>()}{entityDataModel.EntityId}";
+                entity = await _commerceCommander.Command<FindEntityCommand>().Process(context.CommerceContext, typeof(CommerceEntity), commerceEntityId);
                 if (entity == null)
                 {
                     var errorMessage = $"Error: Commerce Entity with ID={entityDataModel.EntityId} not found, UpdateComposerFieldsBlock cannot be executed.";

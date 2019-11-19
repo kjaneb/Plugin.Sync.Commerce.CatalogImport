@@ -36,11 +36,11 @@ namespace Plugin.Sync.Commerce.CatalogImport
                         .Add<UpdateComposerFieldsBlock>()
                         .Add<UpdateCustomComponentsBlock>();
                     })
-                 .ConfigurePipeline<IPersistEntityPipeline>(
-                    configure =>
-                    {
-                        configure.Add<AddSellableItemToUpdatedSellableItemsListBlock>().Before<PersistEntityBlock>();
-                    })
+                 //.ConfigurePipeline<IPersistEntityPipeline>(
+                 //   configure =>
+                 //   {
+                 //       configure.Add<AddSellableItemToUpdatedSellableItemsListBlock>().Before<PersistEntityBlock>();
+                 //   })
                 );
 
             services.RegisterAllCommands(assembly);

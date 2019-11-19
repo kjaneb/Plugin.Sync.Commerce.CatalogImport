@@ -39,25 +39,27 @@ namespace Plugin.Sync.Commerce.CatalogImport.Extensions
         public static Dictionary<string, string> QueryMappedValuesFromRoot(this JToken jData, List<string> rootPaths)
         {
             var results = new Dictionary<string, string>();
-            foreach (var rootPath in rootPaths)
+            if (rootPaths != null)
             {
-                if (!string.IsNullOrEmpty(rootPath))
+                foreach (var rootPath in rootPaths)
                 {
-                    var rootToken = jData.SelectToken(rootPath);
-                    if (rootToken != null)
+                    if (!string.IsNullOrEmpty(rootPath))
                     {
-                        //var dict = rootToken.ToDictionary<string>();
-                        foreach (var prop in rootToken.Children<JProperty>())
+                        var rootToken = jData.SelectToken(rootPath);
+                        if (rootToken != null)
                         {
-                            if (prop != null && !string.IsNullOrEmpty(prop.Name) && prop.Value != null && prop.Value.Type != JTokenType.Object)
+                            //var dict = rootToken.ToDictionary<string>();
+                            foreach (var prop in rootToken.Children<JProperty>())
                             {
-                                results.Add(prop.Name, (string)prop);
+                                if (prop != null && !string.IsNullOrEmpty(prop.Name) && prop.Value != null && prop.Value.Type != JTokenType.Object)
+                                {
+                                    results.Add(prop.Name, (string)prop);
+                                }
                             }
                         }
                     }
                 }
             }
-
             return results;
         }
 

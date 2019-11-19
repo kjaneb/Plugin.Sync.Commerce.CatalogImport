@@ -30,9 +30,8 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
         {
             var mappingPolicy = arg.MappingPolicy;
 
-            var sellableItemMappingPolicy = context.CommerceContext.GetPolicy<SellableItemMappingPolicy>();
-            var categoryMappingPolicy = context.CommerceContext.GetPolicy<CategoryMappingPolicy>();
-
+            //var sellableItemMappingPolicy = context.CommerceContext.GetPolicy<SellableItemMappingPolicy>();
+            //var categoryMappingPolicy = context.CommerceContext.GetPolicy<CategoryMappingPolicy>();
 
             var jsonData = arg.Request as JObject;
             Condition.Requires(jsonData, "Commerce Entity JSON parameter is required").IsNotNull();

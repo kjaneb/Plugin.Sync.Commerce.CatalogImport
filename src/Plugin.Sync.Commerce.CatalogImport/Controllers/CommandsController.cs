@@ -36,12 +36,12 @@ namespace Plugin.Sync.Commerce.CatalogImport.Controllers
         [Route("ImportCategory()")]
         public async Task<IActionResult> ImportCategory([FromBody] JObject request)
         {
-            await InitializeEnvironment();
+            InitializeEnvironment();
             try
             {
                 var command = Command<ImportCategoryCommand>();
                 var mappingPolicy = CurrentContext.GetPolicy<CategoryMappingPolicy>();
-                var argument = new ImportCatalogEntityArgument(request, mappingPolicy);
+                var argument = new ImportCatalogEntityArgument(request, mappingPolicy, typeof(Category));
                 var result = await command.Process(CurrentContext, argument);
 
                 return result != null ? new ObjectResult(result) : new NotFoundObjectResult("Error importing Category data");
@@ -64,12 +64,12 @@ namespace Plugin.Sync.Commerce.CatalogImport.Controllers
         [Route("ImportSellableItem()")]
         public async Task<IActionResult> ImportSellableItem([FromBody] JObject request)
         {
-            await InitializeEnvironment();
+            InitializeEnvironment();
             try
             {
                 var command = Command<ImportSellableItemCommand>();
                 var mappingPolicy = CurrentContext.GetPolicy<SellableItemMappingPolicy>();
-                var argument = new ImportCatalogEntityArgument(request, mappingPolicy);
+                var argument = new ImportCatalogEntityArgument(request, mappingPolicy, typeof(SellableItem));
                 var result = await command.Process(CurrentContext, argument);
 
                 return result != null ? new ObjectResult(result) : new NotFoundObjectResult("Error importing SellableItem data");
@@ -86,15 +86,13 @@ namespace Plugin.Sync.Commerce.CatalogImport.Controllers
         /// Set default environment
         /// </summary>
         /// <returns></returns>
-        private async Task<bool> InitializeEnvironment()
+        private void InitializeEnvironment()
         {
-            var commerceEnvironment = await _getEnvironmentCommand.Process(this.CurrentContext, ENV_NAME) ??
-                                      this.CurrentContext.Environment;
-            var pipelineContextOptions = this.CurrentContext.PipelineContextOptions;// GetPipelineContextOptions();
+            var commerceEnvironment = this.CurrentContext.Environment;
+                //await _getEnvironmentCommand.Process(this.CurrentContext, ENV_NAME) ??
+            var pipelineContextOptions = this.CurrentContext.PipelineContextOptions;
             pipelineContextOptions.CommerceContext.Environment = commerceEnvironment;
             this.CurrentContext.PipelineContextOptions.CommerceContext.Environment = commerceEnvironment;
-
-            return true;
         }
     }
 }

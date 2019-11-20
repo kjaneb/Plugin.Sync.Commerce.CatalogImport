@@ -4,6 +4,7 @@ using Plugin.Sync.Commerce.CatalogImport.Models;
 using Plugin.Sync.Commerce.CatalogImport.Pipelines.Arguments;
 using Plugin.Sync.Commerce.CatalogImport.Policies;
 using Sitecore.Commerce.Core;
+using Sitecore.Commerce.Plugin.Catalog;
 using Sitecore.Framework.Conditions;
 using Sitecore.Framework.Pipelines;
 using System.Threading.Tasks;
@@ -61,6 +62,18 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
             if (string.IsNullOrEmpty(entityData.ParentCategoryName))
             {
                 entityData.ParentCatalogName = mappingPolicy.DefaultCategoryName;
+            }
+
+            if (arg.CommerceEntityType != null && !string.IsNullOrEmpty(entityData.EntityName))
+            {
+                if (arg.CommerceEntityType == typeof(Category) && !string.IsNullOrEmpty(entityData.ParentCatalogName))
+                {
+                    entityData.CommerceEntityId = $"{CommerceEntity.IdPrefix<Category>()}{entityData.ParentCatalogName}-{entityData.EntityName}";
+                }
+                else if (arg.CommerceEntityType == typeof(SellableItem))
+                {
+                    entityData.CommerceEntityId = $"{CommerceEntity.IdPrefix<SellableItem>()}{entityData.EntityId}";
+                }
             }
 
             context.AddModel(entityData);

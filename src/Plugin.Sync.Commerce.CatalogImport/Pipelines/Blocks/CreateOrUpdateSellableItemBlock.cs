@@ -124,15 +124,13 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
         /// <returns></returns>
         private async Task<SellableItem> GetOrCreateSellableItem(CatalogEntityDataModel entityData, CommercePipelineExecutionContext context)
         {
-            var commerceEntityId = $"{CommerceEntity.IdPrefix<SellableItem>()}{entityData.EntityId}";
-
-            SellableItem sellableItem = await _commerceCommander.Command<FindEntityCommand>().Process(context.CommerceContext, typeof(SellableItem), commerceEntityId) as SellableItem;
+            SellableItem sellableItem = await _commerceCommander.Command<FindEntityCommand>().Process(context.CommerceContext, typeof(SellableItem), entityData.CommerceEntityId) as SellableItem;
             if (sellableItem == null)
             {
-                await _commerceCommander.Command<CreateSellableItemCommand>().Process(context.CommerceContext,
+                sellableItem = await _commerceCommander.Command<CreateSellableItemCommand>().Process(context.CommerceContext,
                     entityData.EntityId,
                     entityData.EntityName,
-                    entityData.EntityFields.ContainsKey("DisplayName") ? entityData.EntityFields["DisplayName"] : string.Empty,
+                    entityData.EntityFields.ContainsKey("DisplayName") ? entityData.EntityFields["DisplayName"] : entityData.EntityName,
                     entityData.EntityFields.ContainsKey("Description") ? entityData.EntityFields["Description"] : string.Empty,
                     entityData.EntityFields.ContainsKey("Brand") ? entityData.EntityFields["Brand"] : string.Empty,
                     entityData.EntityFields.ContainsKey("Manufacturer") ? entityData.EntityFields["Manufacturer"] : string.Empty,
@@ -140,7 +138,7 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
             }
             else
             {
-                sellableItem.DisplayName = entityData.EntityFields.ContainsKey("DisplayName") ? entityData.EntityFields["DisplayName"] : string.Empty;
+                sellableItem.DisplayName = entityData.EntityFields.ContainsKey("DisplayName") ? entityData.EntityFields["DisplayName"] : entityData.EntityName;
                 sellableItem.Description = entityData.EntityFields.ContainsKey("Description") ? entityData.EntityFields["Description"] : string.Empty;
                 sellableItem.Brand = entityData.EntityFields.ContainsKey("Brand") ? entityData.EntityFields["Brand"] : string.Empty;
                 sellableItem.Manufacturer = entityData.EntityFields.ContainsKey("Manufacturer") ? entityData.EntityFields["Manufacturer"] : string.Empty;
@@ -149,7 +147,7 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
                 var persistResult = await _commerceCommander.Pipeline<IPersistEntityPipeline>().Run(new PersistEntityArgument(sellableItem), context);
             }
 
-            return await _commerceCommander.Command<FindEntityCommand>().Process(context.CommerceContext, typeof(SellableItem), commerceEntityId) as SellableItem;
+            return await _commerceCommander.Command<FindEntityCommand>().Process(context.CommerceContext, typeof(SellableItem), sellableItem.Id) as SellableItem;
         }
         #endregion
     }

@@ -18,7 +18,7 @@ using System.Threading.Tasks;
 namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
 {
     /// <summary>
-    /// Import data into an existing SellableItem or new SellableItem entity
+    /// Update Composer Template fields on Commerce Entity
     /// </summary>
     [PipelineDisplayName("UpdateComposerFieldsBlock")]
     public class UpdateComposerFieldsBlock : PipelineBlock<ImportCatalogEntityArgument, ImportCatalogEntityArgument, CommercePipelineExecutionContext>
@@ -57,11 +57,11 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
             var entityDataModel = context.GetModel<CatalogEntityDataModel>();
             Condition.Requires(entityDataModel, "CatalogEntityDataModel is required to exist in order for CommercePipelineExecutionContext to run").IsNotNull();
             Condition.Requires(entityDataModel.EntityId, "EntityId is reguired in input JSON data").IsNotNullOrEmpty();
+            Condition.Requires(entityDataModel.CommerceEntityId, "Commerce Entity ID cannot be identified based on input JSON data").IsNotNullOrEmpty();
 
             if (entityDataModel != null)
             {
-                var commerceEntityId = $"{CommerceEntity.IdPrefix<SellableItem>()}{entityDataModel.EntityId}";
-                entity = await _commerceCommander.Command<FindEntityCommand>().Process(context.CommerceContext, typeof(CommerceEntity), commerceEntityId);
+                entity = await _commerceCommander.Command<FindEntityCommand>().Process(context.CommerceContext, typeof(CommerceEntity), entityDataModel.CommerceEntityId);
                 if (entity == null)
                 {
                     var errorMessage = $"Error: Commerce Entity with ID={entityDataModel.EntityId} not found, UpdateComposerFieldsBlock cannot be executed.";

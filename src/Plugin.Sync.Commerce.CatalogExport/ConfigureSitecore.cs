@@ -1,5 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Plugin.Sync.Commerce.CatalogExport.Pipelines;
+using Plugin.Sync.Commerce.CatalogExport.Services;
 using PPlugin.Sync.Commerce.CatalogExport.Pipelines.Blocks;
 //using Plugin.Sync.Commerce.CatalogExport.Pipelines.Blocks;
 using Sitecore.Commerce.Core;
@@ -26,6 +27,8 @@ namespace Plugin.Sync.Commerce.CatalogExport
                     }));
 
             services.RegisterAllCommands(assembly);
+            //services.AddSingleton<IViewRenderService, ViewRenderService>();
+            services.AddScoped<IViewRenderService, ViewRenderService>();
         }
     }
 }

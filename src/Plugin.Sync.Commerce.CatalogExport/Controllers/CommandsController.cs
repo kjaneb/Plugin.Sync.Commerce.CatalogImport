@@ -42,7 +42,7 @@ namespace Plugin.Sync.Commerce.CatalogExport.Controllers
             {
                 var command = Command<ExportCommerceEntityCommand>();
                 //var mappingPolicy = CurrentContext.GetPolicy<CategoryMappingPolicy>();
-                var argument = new ExportCommerceEntityArgument("123");
+                var argument = new ExportCommerceEntityArgument("123", "testView.txt");
                 var result = await command.Process(CurrentContext, argument);
 
                 return result != null ? new ObjectResult(result) : new NotFoundObjectResult("Error importing Category data");

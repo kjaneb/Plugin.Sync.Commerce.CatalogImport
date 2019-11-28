@@ -9,10 +9,13 @@ namespace Plugin.Sync.Commerce.CatalogExport.Pipelines.Arguments
 {
     public class ExportCommerceEntityArgument : PipelineArgument
     {
-        public ExportCommerceEntityArgument(string entitId)
+        public ExportCommerceEntityArgument(string entitId, string viewName)
         {
             this.EntityId = entitId;
+            this.ViewName = viewName;
         }
         public string EntityId { get; set; }
+        public string ViewName { get; set; }
+
     }
 }

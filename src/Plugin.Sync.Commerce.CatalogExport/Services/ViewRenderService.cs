@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewEngines;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Routing;
 
@@ -33,15 +34,18 @@ namespace Plugin.Sync.Commerce.CatalogExport.Services
             return await RenderAsync<object>(name, null);
         }
 
-        public async Task<string> RenderAsync<TModel>(string name, TModel model)
+        public async Task<string> RenderAsync<TModel>(string viewName, TModel model)
         {
             var actionContext = GetActionContext();
 
-            var viewEngineResult = _viewEngine.FindView(actionContext, name, false);
+            //IView _stringView = new RazorView()
+
+            //var viewEngineResult = _viewEngine.GetView("~/", name, false);
+            var viewEngineResult = _viewEngine.FindView(actionContext, viewName, false);
 
             if (!viewEngineResult.Success)
             {
-                throw new InvalidOperationException(string.Format("Couldn't find view '{0}'", name));
+                throw new InvalidOperationException(string.Format("Couldn't find view '{0}'", viewName));
             }
 
             var view = viewEngineResult.View;

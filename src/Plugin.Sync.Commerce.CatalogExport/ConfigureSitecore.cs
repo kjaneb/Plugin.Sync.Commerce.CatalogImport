@@ -23,7 +23,10 @@ namespace Plugin.Sync.Commerce.CatalogExport
                  .AddPipeline<IExportCommerceEntityPipeline, ExportCommerceEntityPipeline>(
                     configure =>
                     {
-                        configure.Add<RenderEntityViewBlock>();
+                        configure
+                            .Add<GetEntityBlock>()
+                            .Add<RenderEntityViewBlock>();
+                            //.Add<GetResponseBlock>();
                     }));
 
             services.RegisterAllCommands(assembly);

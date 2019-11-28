@@ -42,10 +42,21 @@ namespace Plugin.Sync.Commerce.CatalogExport.Controllers
             {
                 var command = Command<ExportCommerceEntityCommand>();
                 //var mappingPolicy = CurrentContext.GetPolicy<CategoryMappingPolicy>();
-                var argument = new ExportCommerceEntityArgument("123", "testView.txt");
+                var entityId = request.GetValue("entityId").Value<string>();
+                var view = request.GetValue("view").Value<string>();
+                var argument = new ExportCommerceEntityArgument(entityId, view);
                 var result = await command.Process(CurrentContext, argument);
 
-                return result != null ? new ObjectResult(result) : new NotFoundObjectResult("Error importing Category data");
+                if (result == null || !result.Success)
+                {
+                    if (result != null && result.EntityNotFound)
+                        return new NotFoundObjectResult(result.ErrorMessage);
+
+                    else
+                        return new UnprocessableEntityObjectResult($"Error rendering view for Entity ID={entityId}. {CurrentContext.PipelineContext.AbortReason}");
+                }
+
+                return new ObjectResult(result.Response);
             }
             catch (Exception ex)
             {

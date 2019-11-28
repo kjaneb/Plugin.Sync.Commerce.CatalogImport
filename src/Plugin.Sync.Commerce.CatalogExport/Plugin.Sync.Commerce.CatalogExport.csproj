@@ -9,8 +9,8 @@
     <PackageProjectUrl>http://www.sitecore.net/</PackageProjectUrl>
     <PackageLicenseUrl>http://www.sitecore.net/platform/pricing.aspx</PackageLicenseUrl>
     <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
-    <AssemblyName>Plugin.Ryder.Commerce.ChannelAdvisorSync</AssemblyName>
-    <RootNamespace>Plugin.Ryder.Commerce.ChannelAdvisorSync</RootNamespace>
+    <AssemblyName>Plugin.Ryder.Commerce.CatalogExport</AssemblyName>
+    <RootNamespace>Plugin.Ryder.Commerce.CatalogExport</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -35,15 +35,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Commands\" />
     <Folder Include="Components\" />
-    <Folder Include="Controllers\" />
     <Folder Include="Entities\" />
+    <Folder Include="Minion\" />
+    <Folder Include="Models\" />
     <Folder Include="Policies\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Plugin.Ryder.Commerce.CatalogSync\Plugin.Sync.Commerce.CatalogImport.csproj" />
   </ItemGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

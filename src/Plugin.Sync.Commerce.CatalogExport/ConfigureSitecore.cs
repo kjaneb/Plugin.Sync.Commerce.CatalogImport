@@ -1,6 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Plugin.Sync.Commerce.CatalogExport.Pipelines;
-using Plugin.Sync.Commerce.CatalogExport.Pipelines.Blocks;
+using PPlugin.Sync.Commerce.CatalogExport.Pipelines.Blocks;
+//using Plugin.Sync.Commerce.CatalogExport.Pipelines.Blocks;
 using Sitecore.Commerce.Core;
 using Sitecore.Framework.Configuration;
 using Sitecore.Framework.Pipelines.Definitions.Extensions;
@@ -18,10 +19,10 @@ namespace Plugin.Sync.Commerce.CatalogExport
             services.Sitecore().Pipelines(config => config
                 .ConfigurePipeline<IConfigureServiceApiPipeline>(configure => configure.Add<ConfigureServiceApiBlock>())
 
-                 .AddPipeline<IExportProductMinionPipeline, ExportProductMinionPipline>(
+                 .AddPipeline<IExportCommerceEntityPipeline, ExportCommerceEntityPipeline>(
                     configure =>
                     {
-                        configure.Add<CatalogExportMinionBlock>();
+                        configure.Add<RenderEntityViewBlock>();
                     }));
 
             services.RegisterAllCommands(assembly);

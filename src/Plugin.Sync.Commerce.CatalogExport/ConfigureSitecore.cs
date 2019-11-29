@@ -25,6 +25,7 @@ namespace Plugin.Sync.Commerce.CatalogExport
                         configure
                             .Add<GetEntityBlock>()
                             .Add<GetTemplateFromSitecoreBlock>()
+                            .Add<GetTemplateFromFilesystemBlock>()
                             .Add<RenderEntityViewBlock>();
                             //.Add<GetResponseBlock>();
                     }));

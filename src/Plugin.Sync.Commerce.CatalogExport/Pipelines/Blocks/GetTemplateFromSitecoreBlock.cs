@@ -4,6 +4,7 @@ using Sitecore.Commerce.Core;
 using Sitecore.Commerce.Plugin.Management;
 using Sitecore.Framework.Pipelines;
 using Sitecore.Services.Core.Model;
+using System;
 using System.Threading.Tasks;
 
 namespace Plugin.Sync.Commerce.CatalogExport.Pipelines.Blocks
@@ -24,6 +25,9 @@ namespace Plugin.Sync.Commerce.CatalogExport.Pipelines.Blocks
 #pragma warning disable 1998
         public override async Task<ExportCommerceEntityArgument> Run(ExportCommerceEntityArgument arg, CommercePipelineExecutionContext context)
         {
+            if (!arg.TemplateLocation.Equals("sitecore", StringComparison.OrdinalIgnoreCase))
+                return arg;
+
             var language = context.CommerceContext.CurrentLanguage();
             if (language == null)
             {
@@ -31,7 +35,7 @@ namespace Plugin.Sync.Commerce.CatalogExport.Pipelines.Blocks
                 return context.AbortPipeline(arg, $"Current Language canot be idetified - check language configuration in Commerce Control Panel. {this.GetType().Name}. Request EntityId={arg.EntityId}.");
             }
 
-            var itemInfo = arg.ViewName.Split('|');
+            var itemInfo = arg.TemplatePath.Split('|');
             if (itemInfo.Length < 2)
             {
                 return context.AbortPipeline(arg, $"Sitecore field name portion of the View path is missing in 'view' parameter. For views residing in Sitecore content tree the 'view' parameter must have Sitecore item path followed by | followed by field name, e.g. 'sitecore item path'|'field name' : view path. Block name: {this.GetType().Name}. Request EntityId={arg.EntityId}.");

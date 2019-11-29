@@ -69,7 +69,7 @@ namespace Plugin.Sync.Commerce.CatalogExport.Pipelines.Blocks
                 context.AbortPipeline(arg, $"ViewTemplate must be initialied {this.GetType().Name}. Entity ID={arg.EntityId}.");
             }
 
-            arg.Response = await engine.CompileRenderStringAsync(arg.ViewTemplate, "Hello World @Model.Name", model.Entity);
+            arg.Response = await engine.CompileRenderStringAsync($"{arg.TemplateLocation}:{arg.TemplatePath}", arg.ViewTemplate, model.Entity);
             return arg;
         }
         #endregion

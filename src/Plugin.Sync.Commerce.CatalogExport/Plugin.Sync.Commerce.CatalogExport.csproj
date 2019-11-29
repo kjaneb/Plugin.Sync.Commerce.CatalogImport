@@ -12,6 +12,14 @@
     <AssemblyName>Plugin.Ryder.Commerce.CatalogExport</AssemblyName>
     <RootNamespace>Plugin.Ryder.Commerce.CatalogExport</RootNamespace>
   </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="Components\**" />
+    <Compile Remove="Entities\**" />
+    <EmbeddedResource Remove="Components\**" />
+    <EmbeddedResource Remove="Entities\**" />
+    <None Remove="Components\**" />
+    <None Remove="Entities\**" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="RazorLight" Version="2.0.0-beta2" />
@@ -37,8 +45,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Components\" />
-    <Folder Include="Entities\" />
     <Folder Include="Minion\" />
     <Folder Include="Policies\" />
   </ItemGroup>

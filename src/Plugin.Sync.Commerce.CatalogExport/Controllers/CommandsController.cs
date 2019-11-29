@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
+using Plugin.Ryder.Commerce.CatalogExport.Util;
 using Plugin.Sync.Commerce.CatalogExport.Pipelines.Arguments;
 using Plugin.Sync.Commerce.CatalogImport.Commands;
 //using Plugin.Sync.Commerce.CatalogExport.Commands;
@@ -9,6 +10,7 @@ using Plugin.Sync.Commerce.CatalogImport.Commands;
 using Sitecore.Commerce.Core;
 using Sitecore.Commerce.Core.Commands;
 using Sitecore.Commerce.Plugin.Catalog;
+using Sitecore.Framework.Conditions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -41,10 +43,16 @@ namespace Plugin.Sync.Commerce.CatalogExport.Controllers
             try
             {
                 var command = Command<ExportCommerceEntityCommand>();
-                //var mappingPolicy = CurrentContext.GetPolicy<CategoryMappingPolicy>();
-                var entityId = request.GetValue("entityId").Value<string>();
-                var view = request.GetValue("view").Value<string>();
-                var argument = new ExportCommerceEntityArgument(entityId, view);
+
+                var entityId = request.SelectValue<string>("entityId");
+                var templatePath = request.SelectValue<string>("templatePath");
+                var templateLocation = request.SelectValue<string>("templateLocation");
+
+                Condition.Requires(entityId, "entityId parameter is required").IsNotNullOrEmpty();
+                Condition.Requires(templatePath, "templatePath parameter is required").IsNotNullOrEmpty();
+                Condition.Requires(templateLocation, "templateLocation parameter is required").IsNotNullOrEmpty();
+
+                var argument = new ExportCommerceEntityArgument(entityId, templatePath, templateLocation);
                 var result = await command.Process(CurrentContext, argument);
 
                 if (result == null || !result.Success)

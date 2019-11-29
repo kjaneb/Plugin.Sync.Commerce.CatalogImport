@@ -1,11 +1,14 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.DependencyInjection;
 using Plugin.Sync.Commerce.CatalogExport.Models;
 using Plugin.Sync.Commerce.CatalogExport.Pipelines.Arguments;
-using Plugin.Sync.Commerce.CatalogExport.Services;
+using RazorLight;
+using RazorLight.Razor;
 using Sitecore.Commerce.Core;
 using Sitecore.Commerce.Plugin.Composer;
 using Sitecore.Framework.Pipelines;
 using System;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace PPlugin.Sync.Commerce.CatalogExport.Pipelines.Blocks
@@ -20,7 +23,9 @@ namespace PPlugin.Sync.Commerce.CatalogExport.Pipelines.Blocks
         //private readonly CommerceCommander _commerceCommander;
         //private readonly ComposerCommander _composerCommander;
         //private readonly IViewRenderService _viewRenderService;
-        IServiceProvider _serviceProvider;
+        //IServiceProvider _serviceProvider;
+        //RazorLightEngine _razorEngine;
+        IHostingEnvironment _hostingEnvironment;
         #endregion
 
         #region Public methods
@@ -31,9 +36,10 @@ namespace PPlugin.Sync.Commerce.CatalogExport.Pipelines.Blocks
         /// <param name="composerCommander"></param>
         /// <param name="importHelper"></param>
         //public RenderEntityViewBlock(CommerceCommander commerceCommander, ComposerCommander composerCommander)
-        public RenderEntityViewBlock(IServiceProvider serviceProvider/*IViewRenderService viewRenderService*/)
+        public RenderEntityViewBlock(IHostingEnvironment hostingEnvironment /*IServiceProvider serviceProvider/*IViewRenderService viewRenderService*/)
         {
-            _serviceProvider = serviceProvider;
+            _hostingEnvironment = hostingEnvironment;
+            //_serviceProvider = serviceProvider;
             //_viewRenderService = viewRenderService;
             //_commerceCommander = commerceCommander;
             //_composerCommander = composerCommander;
@@ -47,21 +53,24 @@ namespace PPlugin.Sync.Commerce.CatalogExport.Pipelines.Blocks
         /// <returns></returns>
         public override async Task<ExportCommerceEntityArgument> Run(ExportCommerceEntityArgument arg, CommercePipelineExecutionContext context)
         {
-            using (var scope = _serviceProvider.CreateScope())
+            var rootFolder = _hostingEnvironment.ContentRootPath;
+
+            var engine = new RazorLightEngineBuilder()
+              .UseFileSystemProject(_hostingEnvironment.WebRootPath)
+              .UseMemoryCachingProvider()
+              .Build();
+
+            var model = context.GetModel<EntityDataModel>();
+            if (model == null)
             {
-                IViewRenderService viewRenderService = scope.ServiceProvider.GetRequiredService<IViewRenderService>();
-                var model = context.GetModel<EntityDataModel>();
-                if (model == null)
-                {
-                    var errorMessage = $"EntityDataModel must be initialied and added to CommercePipelineExecutionContext prior to calling {this.GetType().Name}. Entity ID={arg.EntityId} not found.";
-                    arg.Success = false;
-                    arg.ErrorMessage = errorMessage;
-                    context.Abort(errorMessage, arg);
-                }
-                arg.Response = await viewRenderService.RenderAsync(arg.View, model.Entity);
-                await Task.CompletedTask;
-                return arg;
+                var errorMessage = $"EntityDataModel must be initialied and added to CommercePipelineExecutionContext prior to calling {this.GetType().Name}. Entity ID={arg.EntityId} not found.";
+                arg.Success = false;
+                arg.ErrorMessage = errorMessage;
+                context.Abort(errorMessage, arg);
             }
+
+            arg.Response = await engine.CompileRenderStringAsync(arg.View, "Hello World @Model.Name", model.Entity);
+            return arg;
         }
         #endregion
 

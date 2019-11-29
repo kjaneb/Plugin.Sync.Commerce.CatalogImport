@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Plugin.Sync.Commerce.CatalogExport.Models;
 using Plugin.Sync.Commerce.CatalogExport.Pipelines.Arguments;
-using Plugin.Sync.Commerce.CatalogExport.Services;
 using Sitecore.Commerce.Core;
 using Sitecore.Commerce.Core.Commands;
 using Sitecore.Commerce.Plugin.Composer;

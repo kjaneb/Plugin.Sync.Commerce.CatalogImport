@@ -1,6 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Plugin.Sync.Commerce.CatalogExport.Pipelines;
-using PPlugin.Sync.Commerce.CatalogExport.Pipelines.Blocks;
+using Plugin.Sync.Commerce.CatalogExport.Pipelines.Blocks;
 //using Plugin.Sync.Commerce.CatalogExport.Pipelines.Blocks;
 using Sitecore.Commerce.Core;
 using Sitecore.Framework.Configuration;
@@ -24,6 +24,7 @@ namespace Plugin.Sync.Commerce.CatalogExport
                     {
                         configure
                             .Add<GetEntityBlock>()
+                            .Add<GetTemplateFromSitecoreBlock>()
                             .Add<RenderEntityViewBlock>();
                             //.Add<GetResponseBlock>();
                     }));

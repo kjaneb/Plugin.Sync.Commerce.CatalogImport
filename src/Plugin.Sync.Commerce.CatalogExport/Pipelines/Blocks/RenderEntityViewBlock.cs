@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
+using Plugin.Ryder.Commerce.CatalogExport.Util;
 using Plugin.Sync.Commerce.CatalogExport.Models;
 using Plugin.Sync.Commerce.CatalogExport.Pipelines.Arguments;
 using RazorLight;
@@ -11,7 +12,7 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 
-namespace PPlugin.Sync.Commerce.CatalogExport.Pipelines.Blocks
+namespace Plugin.Sync.Commerce.CatalogExport.Pipelines.Blocks
 {
     /// <summary>
     /// Import data into an existing SellableItem or new SellableItem entity
@@ -53,8 +54,6 @@ namespace PPlugin.Sync.Commerce.CatalogExport.Pipelines.Blocks
         /// <returns></returns>
         public override async Task<ExportCommerceEntityArgument> Run(ExportCommerceEntityArgument arg, CommercePipelineExecutionContext context)
         {
-            var rootFolder = _hostingEnvironment.ContentRootPath;
-
             var engine = new RazorLightEngineBuilder()
               .UseFileSystemProject(_hostingEnvironment.WebRootPath)
               .UseMemoryCachingProvider()
@@ -63,13 +62,14 @@ namespace PPlugin.Sync.Commerce.CatalogExport.Pipelines.Blocks
             var model = context.GetModel<EntityDataModel>();
             if (model == null)
             {
-                var errorMessage = $"EntityDataModel must be initialied and added to CommercePipelineExecutionContext prior to calling {this.GetType().Name}. Entity ID={arg.EntityId} not found.";
-                arg.Success = false;
-                arg.ErrorMessage = errorMessage;
-                context.Abort(errorMessage, arg);
+                context.AbortPipeline(arg, $"EntityDataModel must be initialied and added to CommercePipelineExecutionContext prior to calling {this.GetType().Name}. Entity ID={arg.EntityId} not found.");
+            }
+            if (arg.ViewTemplate == null)
+            {
+                context.AbortPipeline(arg, $"ViewTemplate must be initialied {this.GetType().Name}. Entity ID={arg.EntityId}.");
             }
 
-            arg.Response = await engine.CompileRenderStringAsync(arg.View, "Hello World @Model.Name", model.Entity);
+            arg.Response = await engine.CompileRenderStringAsync(arg.ViewTemplate, "Hello World @Model.Name", model.Entity);
             return arg;
         }
         #endregion

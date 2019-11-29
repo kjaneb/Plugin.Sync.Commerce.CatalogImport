@@ -8,7 +8,7 @@ using Sitecore.Framework.Pipelines;
 using System;
 using System.Threading.Tasks;
 
-namespace PPlugin.Sync.Commerce.CatalogExport.Pipelines.Blocks
+namespace Plugin.Sync.Commerce.CatalogExport.Pipelines.Blocks
 {
     /// <summary>
     /// Import data into an existing SellableItem or new SellableItem entity

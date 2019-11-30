@@ -1,17 +1,14 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Plugin.Sync.Commerce.CatalogExport.Models;
+﻿using Plugin.Sync.Commerce.CatalogExport.Models;
 using Plugin.Sync.Commerce.CatalogExport.Pipelines.Arguments;
 using Sitecore.Commerce.Core;
 using Sitecore.Commerce.Core.Commands;
-using Sitecore.Commerce.Plugin.Composer;
 using Sitecore.Framework.Pipelines;
-using System;
 using System.Threading.Tasks;
 
 namespace Plugin.Sync.Commerce.CatalogExport.Pipelines.Blocks
 {
     /// <summary>
-    /// Import data into an existing SellableItem or new SellableItem entity
+    /// Get entity object from Commerce
     /// </summary>
     [PipelineDisplayName("GetEntityBlock")]
     public class GetEntityBlock : PipelineBlock<ExportCommerceEntityArgument, ExportCommerceEntityArgument, CommercePipelineExecutionContext>
@@ -21,7 +18,10 @@ namespace Plugin.Sync.Commerce.CatalogExport.Pipelines.Blocks
         #endregion
 
         #region Public methods
-        
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="commerceCommander"></param>
         public GetEntityBlock(CommerceCommander commerceCommander)
         {
             _commerceCommander = commerceCommander;
@@ -49,6 +49,5 @@ namespace Plugin.Sync.Commerce.CatalogExport.Pipelines.Blocks
             return arg;
         }
         #endregion
-
     }
 }

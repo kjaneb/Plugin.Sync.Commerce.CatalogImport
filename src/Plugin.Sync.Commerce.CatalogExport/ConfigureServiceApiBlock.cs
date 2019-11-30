@@ -7,16 +7,6 @@ using System.Threading.Tasks;
 
 namespace Plugin.Sync.Commerce.CatalogExport
 {
-    /// <summary>
-    /// Defines a block which configures the OData model
-    /// </summary>
-    /// <seealso>
-    ///     <cref>
-    ///         Sitecore.Framework.Pipelines.PipelineBlock{Microsoft.AspNetCore.OData.Builder.ODataConventionModelBuilder,
-    ///         Microsoft.AspNetCore.OData.Builder.ODataConventionModelBuilder,
-    ///         Sitecore.Commerce.Core.CommercePipelineExecutionContext}
-    ///     </cref>
-    /// </seealso>
     [PipelineDisplayName("CatalogExportConfigureServiceApiBlock")]
     public class ConfigureServiceApiBlock : PipelineBlock<ODataConventionModelBuilder, ODataConventionModelBuilder, CommercePipelineExecutionContext>
     {
@@ -24,8 +14,11 @@ namespace Plugin.Sync.Commerce.CatalogExport
         {
             Condition.Requires(modelBuilder).IsNotNull($"{this.Name}: The argument cannot be null.");
 
-            var importCategory = modelBuilder.Action("ExportCommerceEntity");
-            importCategory.ReturnsFromEntitySet<CommerceCommand>("Commands");
+            var RenderEntityView = modelBuilder.Action("RenderEntityView");
+            RenderEntityView.ReturnsFromEntitySet<CommerceCommand>("Commands");
+
+            var RenderEntityViews = modelBuilder.Action("RenderEntityViews");
+            RenderEntityViews.ReturnsFromEntitySet<CommerceCommand>("Commands");
 
             return Task.FromResult(modelBuilder);
         }

@@ -14,7 +14,7 @@ namespace Plugin.Sync.Commerce.CatalogExport.Pipelines.Blocks
 {
 
     /// <summary>
-    /// Gets "Message template" content item from Sitcore and saves it in current pipeline as  PropertiesModel name-value collection
+    /// Gets Sitecore content item by path and extracts field value (by name)
     /// </summary>
     public class GetTemplateFromFilesystemBlock : PipelineBlock<ExportCommerceEntityArgument, ExportCommerceEntityArgument, CommercePipelineExecutionContext>
     {
@@ -58,12 +58,12 @@ namespace Plugin.Sync.Commerce.CatalogExport.Pipelines.Blocks
                     return arg;
                 }
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
                 arg.EntityNotFound = true;
                 return context.AbortPipeline(arg, $"Eror reading template contents. File path: '{filePath}'. Error: {ex.Message}");
+                throw ex;
             }
-
         }
 #pragma warning restore 1998
     }

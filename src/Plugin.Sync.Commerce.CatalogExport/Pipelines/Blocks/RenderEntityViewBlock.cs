@@ -15,35 +15,23 @@ using System.Threading.Tasks;
 namespace Plugin.Sync.Commerce.CatalogExport.Pipelines.Blocks
 {
     /// <summary>
-    /// Import data into an existing SellableItem or new SellableItem entity
+    /// Render Razor view using provided Razor tempalte and entity object as a model
     /// </summary>
     [PipelineDisplayName("RenderEntityViewBlock")]
     public class RenderEntityViewBlock : PipelineBlock<ExportCommerceEntityArgument, ExportCommerceEntityArgument, CommercePipelineExecutionContext>
     {
         #region Private fields
-        //private readonly CommerceCommander _commerceCommander;
-        //private readonly ComposerCommander _composerCommander;
-        //private readonly IViewRenderService _viewRenderService;
-        //IServiceProvider _serviceProvider;
-        //RazorLightEngine _razorEngine;
         IHostingEnvironment _hostingEnvironment;
         #endregion
 
         #region Public methods
         /// <summary>
-        /// Public contructor
+        /// Constructor
         /// </summary>
-        /// <param name="commerceCommander"></param>
-        /// <param name="composerCommander"></param>
-        /// <param name="importHelper"></param>
-        //public RenderEntityViewBlock(CommerceCommander commerceCommander, ComposerCommander composerCommander)
+        /// <param name="hostingEnvironment"></param>
         public RenderEntityViewBlock(IHostingEnvironment hostingEnvironment /*IServiceProvider serviceProvider/*IViewRenderService viewRenderService*/)
         {
             _hostingEnvironment = hostingEnvironment;
-            //_serviceProvider = serviceProvider;
-            //_viewRenderService = viewRenderService;
-            //_commerceCommander = commerceCommander;
-            //_composerCommander = composerCommander;
         }
 
         /// <summary>

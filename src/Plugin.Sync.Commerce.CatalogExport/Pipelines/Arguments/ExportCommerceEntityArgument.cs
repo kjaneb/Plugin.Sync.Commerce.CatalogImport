@@ -1,12 +1,10 @@
 ﻿using Sitecore.Commerce.Core;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Plugin.Sync.Commerce.CatalogExport.Pipelines.Arguments
 {
+    /// <summary>
+    /// Argument for ExportCommerceEntityPipeline and pipeline blocks in it 
+    /// </summary>
     public class ExportCommerceEntityArgument : PipelineArgument
     {
         public ExportCommerceEntityArgument(string entitId, string templatePath, string templateLocation)

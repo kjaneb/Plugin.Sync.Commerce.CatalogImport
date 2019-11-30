@@ -3,7 +3,6 @@ using Plugin.Sync.Commerce.CatalogExport.Pipelines.Arguments;
 using Sitecore.Commerce.Core;
 using Sitecore.Commerce.Plugin.Management;
 using Sitecore.Framework.Pipelines;
-using Sitecore.Services.Core.Model;
 using System;
 using System.Threading.Tasks;
 
@@ -19,7 +18,6 @@ namespace Plugin.Sync.Commerce.CatalogExport.Pipelines.Blocks
         public GetTemplateFromSitecoreBlock(IGetItemByPathPipeline getItemByPathPipeline/*, IGetItemByIdPipeline getItemByIdPipeline*/)
         {
             _getItemByPathPipeline = getItemByPathPipeline;
-            //_getItemByIdPipeline = getItemByIdPipeline;
         }
 
 #pragma warning disable 1998
@@ -46,10 +44,6 @@ namespace Plugin.Sync.Commerce.CatalogExport.Pipelines.Blocks
                 Language = language,
             };
 
-            //ItemModel itemModel = null;
-            //if (Sitecore.Data.ID.TryParse(itemModelArgument, out var itemId))
-            //    itemModel = await _getItemByIdPipeline.Run(itemModelArgument, context);
-            //else
             var itemModel = await _getItemByPathPipeline.Run(itemModelArgument, context);
 
             if (itemModel == null)

@@ -4,6 +4,9 @@ using Sitecore.Framework.Conditions;
 
 namespace Plugin.Sync.Commerce.CatalogExport.Models
 {
+    /// <summary>
+    /// Container class to hold Commerce entity in Commerce pipeline context
+    /// </summary>
     public class EntityDataModel : Model
     {
         public EntityDataModel(object entity)

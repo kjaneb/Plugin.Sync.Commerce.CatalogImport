@@ -16,6 +16,7 @@ namespace Plugin.Sync.Commerce.EntitiesMigration.Commands
         /// Import Composer Template Pipeline
         /// </summary>
         private readonly IImportEntitiesPipeline _pipeline;
+        public int MyProperty { get; set; }
 
         /// <summary>
         /// c'tor

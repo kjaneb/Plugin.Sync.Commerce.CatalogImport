@@ -10,7 +10,7 @@ namespace Plugin.Sync.Commerce.EntitiesMigration.Commands
     /// <summary>
     /// ImportComposerTemplatesCommand
     /// </summary>
-    public class ImportComposerTemplatesCommand : CommerceCommand
+    public class ImportCommerceEntitiesArgument : CommerceCommand
     {
         /// <summary>
         /// Import Composer Template Pipeline
@@ -22,7 +22,7 @@ namespace Plugin.Sync.Commerce.EntitiesMigration.Commands
         /// </summary>
         /// <param name="pipeline">Import Composer Template Pipeline</param>
         /// <param name="serviceProvider">Service Provider</param>
-        public ImportComposerTemplatesCommand(IImportEntitiesPipeline pipeline, IServiceProvider serviceProvider) : base(serviceProvider)
+        public ImportCommerceEntitiesArgument(IImportEntitiesPipeline pipeline, IServiceProvider serviceProvider) : base(serviceProvider)
         {
             this._pipeline = pipeline;
         }

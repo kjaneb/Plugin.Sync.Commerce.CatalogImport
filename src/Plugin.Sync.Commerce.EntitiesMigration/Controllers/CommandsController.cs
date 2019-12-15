@@ -37,36 +37,36 @@ namespace Plugin.Sync.Commerce.EntitiesMigration.Controllers
         /// </summary>
         /// <param name="value">parameter</param>
         /// <returns>Action Result</returns>
-        [HttpPut]
-        [Route("ImportComposerTemplates()")]
-        public async Task<IActionResult> ImportComposerTemplates([FromBody] JArray request) //[FromBody] ODataActionParameters value)
-        {
-            try
-            {
-                Condition.Requires(request).IsNotNull("ImportComposerTemplates: The argument can not be null");
-                await InitializeEnvironment();
-                //string importType = value["ImportType"].ToString();
-                var command = this.Command<ImportComposerTemplatesCommand>();
-                var result = await command.Process(this.CurrentContext, new ImportEntitiesArgument()
-                {
-                    InputJson = request.ToString(Formatting.None),
-                    ImportType = ImportType.Override //(ImportType)Enum.Parse(typeof(ImportType), importType)
-                });
+        //[HttpPut]
+        //[Route("ImportComposerTemplates()")]
+        //public async Task<IActionResult> ImportComposerTemplates([FromBody] JArray request) //[FromBody] ODataActionParameters value)
+        //{
+        //    try
+        //    {
+        //        Condition.Requires(request).IsNotNull("ImportComposerTemplates: The argument can not be null");
+        //        await InitializeEnvironment();
+        //        string entityType = request.GetVa["entityType"].ToString();
+        //        var command = this.Command<ImportCommerceEntitiesArgument>();
+        //        var result = await command.Process(this.CurrentContext, new ImportEntitiesArgument()
+        //        {
+        //            InputJson = request.ToString(Formatting.None),
+        //            //ImportType = ImportType.Override //(ImportType)Enum.Parse(typeof(ImportType), importType)
+        //        });
 
-                if (result)
-                {
-                    return new ObjectResult("SUCCESS");
-                }
-                else
-                {
-                    return new NotFoundObjectResult("Error updating entity or entity not found.");
-                }
-            }
-            catch (Exception ex)
-            {
-                return new ObjectResult(ex);
-            }
-        }
+        //        if (result)
+        //        {
+        //            return new ObjectResult("SUCCESS");
+        //        }
+        //        else
+        //        {
+        //            return new NotFoundObjectResult("Error updating entity or entity not found.");
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return new ObjectResult(ex);
+        //    }
+        //}
 
         /// <summary>
         /// Interface function ImportComposerTemplate
@@ -89,7 +89,7 @@ namespace Plugin.Sync.Commerce.EntitiesMigration.Controllers
         //    catch (Exception ex)
         //    {
         //        return new ObjectResult(ex);
-        //    }
+        //    } 
         //}
 
         [HttpPut]
@@ -115,6 +115,30 @@ namespace Plugin.Sync.Commerce.EntitiesMigration.Controllers
             }
         }
 
+
+        [HttpPut]
+        [Route("ImportEntities()")]
+        public async Task<IActionResult> ImportEntities([FromBody] JObject request)
+        {
+            try
+            {
+                await InitializeEnvironment();
+
+                var entityType = request.SelectValue<string>("entityType");
+                var inputJson = request.ToString(Formatting.None);
+                var exportEntitiesArgument = new ExportEntitiesArgument
+                {
+                    EntityType = entityType
+                };
+                var command = this.Command<ExportCommerceEntitiesCommand>();
+                var result = await command.Process(this.CurrentContext, exportEntitiesArgument);
+                return new JsonResult(result);
+            }
+            catch (Exception ex)
+            {
+                return new ObjectResult(ex);
+            }
+        }
 
         private async Task<bool> InitializeEnvironment()
         {

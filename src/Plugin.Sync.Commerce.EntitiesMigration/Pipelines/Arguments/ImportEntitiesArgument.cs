@@ -7,18 +7,18 @@ namespace Plugin.Sync.Commerce.EntitiesMigration.Pipelines.Arguments
     /// </summary>
     public class ImportEntitiesArgument : PipelineArgument
     {
-        /// <summary>
+        /// <summary>s
         /// Import Type
         /// </summary>
-        public ImportType ImportType { get; set; }
+        public string EntityType { get; set; }
         public string InputJson { get; set; }
 
         /// <summary>
         /// c'tor
-        /// </summary>
+        /// </summary>s
         public ImportEntitiesArgument()
         {
-            ImportType = ImportType.Skip;
+            //ImportType = ImportType.Skip;
         }
     }
 }

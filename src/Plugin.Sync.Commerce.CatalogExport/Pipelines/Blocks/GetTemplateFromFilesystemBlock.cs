@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Hosting;
-using Plugin.Ryder.Commerce.CatalogExport.Util;
+using Plugin.Sync.Commerce.CatalogExport.Util;
 using Plugin.Sync.Commerce.CatalogExport.Pipelines.Arguments;
 using Sitecore.Commerce.Core;
 using Sitecore.Commerce.Plugin.Management;

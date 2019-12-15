@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Plugin.Ryder.Commerce.CatalogExport.Util
+namespace Plugin.Sync.Commerce.CatalogExport.Util
 {
     public static class JsonExtensions
     {

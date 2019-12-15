@@ -22,6 +22,7 @@
     <ProjectReference Include="..\Plugin.Sample.Habitat\Plugin.Sample.Habitat.csproj" />
     <ProjectReference Include="..\Plugin.Sync.Commerce.CatalogExport\Plugin.Sync.Commerce.CatalogExport.csproj" />
     <ProjectReference Include="..\Plugin.Sync.Commerce.CatalogImport\Plugin.Sync.Commerce.CatalogImport.csproj" />
+    <ProjectReference Include="..\Plugin.Sync.Commerce.EntitiesMigration\Plugin.Sync.Commerce.EntitiesMigration.csproj" />
   </ItemGroup>
 
   <ItemGroup>

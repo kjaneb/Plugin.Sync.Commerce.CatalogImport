@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
-using Plugin.Ryder.Commerce.CatalogExport.Util;
+using Plugin.Sync.Commerce.CatalogExport.Util;
 using Plugin.Sync.Commerce.CatalogExport.Models;
 using Plugin.Sync.Commerce.CatalogExport.Pipelines.Arguments;
 using RazorLight;

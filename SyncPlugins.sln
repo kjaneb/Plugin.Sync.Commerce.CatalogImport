@@ -30,6 +30,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Plugin.Sync.Commerce.Catalo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Plugin.Sync.Commerce.CatalogExport", "src\Plugin.Sync.Commerce.CatalogExport\Plugin.Sync.Commerce.CatalogExport.csproj", "{690D4983-FABF-4067-91C3-B0AEF4D97E44}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Plugin.Sync.Commerce.EntitiesMigration", "src\Plugin.Sync.Commerce.EntitiesMigration\Plugin.Sync.Commerce.EntitiesMigration.csproj", "{1C305C16-A02A-46FC-B68C-1F55855676B5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{690D4983-FABF-4067-91C3-B0AEF4D97E44}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{690D4983-FABF-4067-91C3-B0AEF4D97E44}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{690D4983-FABF-4067-91C3-B0AEF4D97E44}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1C305C16-A02A-46FC-B68C-1F55855676B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C305C16-A02A-46FC-B68C-1F55855676B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C305C16-A02A-46FC-B68C-1F55855676B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C305C16-A02A-46FC-B68C-1F55855676B5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -62,6 +68,7 @@ Global
 		{541693FF-FDF0-4257-8EF4-814D8B2C3E21} = {0946C395-5DF9-48DA-BB53-DC5CA2A4BEFE}
 		{CCFC6B8C-79C3-4EB0-8C49-6CA08DC46BD4} = {389FC06B-F543-41B8-9874-726DA9878DDC}
 		{690D4983-FABF-4067-91C3-B0AEF4D97E44} = {389FC06B-F543-41B8-9874-726DA9878DDC}
+		{1C305C16-A02A-46FC-B68C-1F55855676B5} = {389FC06B-F543-41B8-9874-726DA9878DDC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {32813392-1C11-4D75-BF11-1ECBEF674669}

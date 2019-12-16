@@ -10,7 +10,7 @@
     <PackageLicenseUrl>http://www.sitecore.net/platform/pricing.aspx</PackageLicenseUrl>
     <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
     <AssemblyName>Plugin.Sync.Commerce.EntitiesMigration</AssemblyName>
-    <RootNamespace>Plugin.Ryder.Commerce.Composer.Templates.Sync</RootNamespace>
+    <RootNamespace>Plugin.Sync.Commerce.EntitiesMigration</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

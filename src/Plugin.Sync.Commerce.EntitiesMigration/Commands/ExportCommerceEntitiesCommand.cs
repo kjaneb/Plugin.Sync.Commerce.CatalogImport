@@ -35,7 +35,7 @@ namespace Plugin.Sync.Commerce.EntitiesMigration.Commands
         /// </summary>
         /// <param name="commerceContext">commerceContext</param>
         /// <returns>true if the process was successful</returns>
-        public async Task<IList<CommerceEntity>> Process(CommerceContext commerceContext, ExportEntitiesArgument arg)
+        public async Task<EntityCollectionModel> Process(CommerceContext commerceContext, ExportEntitiesArgument arg)
         {
             using (var activity = CommandActivity.Start(commerceContext, this))
             {

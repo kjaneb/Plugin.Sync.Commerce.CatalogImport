@@ -1,4 +1,5 @@
-﻿using Sitecore.Commerce.Core;
+﻿using Plugin.Sync.Commerce.EntitiesMigration.Models;
+using Sitecore.Commerce.Core;
 
 namespace Plugin.Sync.Commerce.EntitiesMigration.Pipelines.Arguments
 {
@@ -10,15 +11,14 @@ namespace Plugin.Sync.Commerce.EntitiesMigration.Pipelines.Arguments
         /// <summary>s
         /// Import Type
         /// </summary>
-        public string EntityType { get; set; }
-        public string InputJson { get; set; }
+        public EntityCollectionModel EntityModel { get; set; }
 
         /// <summary>
         /// c'tor
         /// </summary>s
-        public ImportEntitiesArgument()
+        public ImportEntitiesArgument(EntityCollectionModel entities)
         {
-            //ImportType = ImportType.Skip;
+            this.EntityModel = entities;
         }
     }
 }

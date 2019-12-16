@@ -10,7 +10,7 @@ namespace Plugin.Sync.Commerce.EntitiesMigration.Pipelines
     /// Export Commerce Entities Pipeline
     /// </summary>
     [PipelineDisplayName("ExportEntitiesPipeline")]
-    public interface IExportEntitiesPipeline : IPipeline<ExportEntitiesArgument, IList<CommerceEntity>, CommercePipelineExecutionContext>
+    public interface IExportEntitiesPipeline : IPipeline<ExportEntitiesArgument, EntityCollectionModel, CommercePipelineExecutionContext>
     {
     }
 }

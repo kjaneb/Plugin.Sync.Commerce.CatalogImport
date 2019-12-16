@@ -10,7 +10,7 @@ namespace Plugin.Sync.Commerce.EntitiesMigration.Pipelines
     /// <summary>
     /// Import Commerce Entities Pipeline
     /// </summary>
-    public class ExportEntitiesPipeline : CommercePipeline<ExportEntitiesArgument, IList<CommerceEntity>>, IExportEntitiesPipeline
+    public class ExportEntitiesPipeline : CommercePipeline<ExportEntitiesArgument, EntityCollectionModel>, IExportEntitiesPipeline
     {
         /// <summary>
         /// c'tor

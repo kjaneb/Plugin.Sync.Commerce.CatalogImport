@@ -10,7 +10,7 @@ namespace Plugin.Sync.Commerce.EntitiesMigration.Commands
     /// <summary>
     /// ImportComposerTemplatesCommand
     /// </summary>
-    public class ImportCommerceEntitiesArgument : CommerceCommand
+    public class ImportCommerceEntitiesCommand : CommerceCommand
     {
         /// <summary>
         /// Import Composer Template Pipeline
@@ -23,7 +23,7 @@ namespace Plugin.Sync.Commerce.EntitiesMigration.Commands
         /// </summary>
         /// <param name="pipeline">Import Composer Template Pipeline</param>
         /// <param name="serviceProvider">Service Provider</param>
-        public ImportCommerceEntitiesArgument(IImportEntitiesPipeline pipeline, IServiceProvider serviceProvider) : base(serviceProvider)
+        public ImportCommerceEntitiesCommand(IImportEntitiesPipeline pipeline, IServiceProvider serviceProvider) : base(serviceProvider)
         {
             this._pipeline = pipeline;
         }
@@ -33,12 +33,12 @@ namespace Plugin.Sync.Commerce.EntitiesMigration.Commands
         /// </summary>
         /// <param name="commerceContext">commerceContext</param>
         /// <returns>true if the process was successful</returns>
-        public async Task<bool> Process(CommerceContext commerceContext, ImportEntitiesArgument args)
+        public async Task<CommerceCommand> Process(CommerceContext commerceContext, ImportEntitiesArgument args)
         {
             using (var activity = CommandActivity.Start(commerceContext, this))
             {                
                 var result = await this._pipeline.Run(args, new CommercePipelineExecutionContextOptions(commerceContext));
-                return result;
+                return this;
             }
         }
     }

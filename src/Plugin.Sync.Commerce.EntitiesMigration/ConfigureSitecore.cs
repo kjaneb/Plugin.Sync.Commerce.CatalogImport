@@ -9,6 +9,7 @@ namespace Plugin.Sync.Commerce.EntitiesMigration
     using Sitecore.Commerce.Core;
     using Sitecore.Framework.Configuration;
     using Sitecore.Framework.Pipelines.Definitions.Extensions;
+    using Plugin.Sync.Commerce.EntitiesMigration.Pipelines.Blocks;
 
     /// <summary>
     /// The configure sitecore class.
@@ -39,7 +40,7 @@ namespace Plugin.Sync.Commerce.EntitiesMigration
                 configure =>
                 {
                     configure
-                    .Add<ReadComposerTemplates>();
+                    .Add<ImportCommerceEntitiesBlock>();
                     //.Add<SkipComposerTemplatesBlock>();
                     //.Add<OverrideComposerTemplatesBlock>()
                     //.Add<MergeComposerTemplatesBlock>();

@@ -1,20 +1,20 @@
 ﻿using Plugin.Sync.Commerce.EntitiesMigration.Models;
 using Sitecore.Commerce.Core;
-using Sitecore.Commerce.Plugin.Catalog;
-using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Plugin.Sync.Commerce.EntitiesMigration.Services
 {
     /// <summary>
     /// Composer Template Service
     /// </summary>
-    public interface IEntityService
+    public interface ICommerceEntityService
     {
         /// <summary>
         /// Gets all Composer Templates
         /// </summary>
         /// <param name="context">context</param>
         /// <returns>List of all composer templates</returns>
-        EntityCollectionModel GetAllEntities<T>(CommerceContext context) where T: CommerceEntity;
+        EntityCollectionModel ExportCommerceEntities<T>(CommerceContext context) where T: CommerceEntity;
+        Task ImportCommerceEntities(EntityCollectionModel entityModel, CommercePipelineExecutionContext context);
     }
 }

@@ -3,7 +3,6 @@ namespace Plugin.Sync.Commerce.EntitiesMigration
 {
     using System.Reflection;
     using global::Plugin.Sync.Commerce.EntitiesMigration.Pipelines;
-    using global::Plugin.Sample.GenericTaxes.Pipelines.Blocks;
     using Microsoft.Extensions.DependencyInjection;
     using Plugin.Sync.Commerce.EntitiesMigration.Services;
     using Sitecore.Commerce.Core;
@@ -33,21 +32,17 @@ namespace Plugin.Sync.Commerce.EntitiesMigration
                 configure =>
                 {
                     configure
-                    .Add<GetEntitiesBlock>();
-                    //.Add<MapComposerTemplateToCustomComposerModel>();
+                    .Add<ExportCommerceEntitiesBlock>();
                 })
              .AddPipeline<IImportEntitiesPipeline, ImportEntitiesPipeline>(
                 configure =>
                 {
                     configure
                     .Add<ImportCommerceEntitiesBlock>();
-                    //.Add<SkipComposerTemplatesBlock>();
-                    //.Add<OverrideComposerTemplatesBlock>()
-                    //.Add<MergeComposerTemplatesBlock>();
                 }));
 
             services.RegisterAllCommands(assembly);
-            services.AddTransient<IEntityService, EntityService>();
+            services.AddTransient<ICommerceEntityService, CommerceEntityService>();
         }
     }
 }

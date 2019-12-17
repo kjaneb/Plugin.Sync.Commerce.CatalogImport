@@ -1,26 +1,22 @@
-﻿using Plugin.Sync.Commerce.EntitiesMigration.Pipelines.Arguments;
+﻿using Plugin.Sync.Commerce.EntitiesMigration.Models;
+using Plugin.Sync.Commerce.EntitiesMigration.Pipelines.Arguments;
 using Plugin.Sync.Commerce.EntitiesMigration.Services;
 using Sitecore.Commerce.Core;
-using Sitecore.Commerce.Core.Commands;
-using Sitecore.Commerce.Plugin.Composer;
-using Sitecore.Framework.Conditions;
-using Sitecore.Framework.Pipelines;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Sitecore.Commerce.Plugin.Catalog;
-using Plugin.Sync.Commerce.EntitiesMigration.Models;
+using Sitecore.Commerce.Plugin.Composer;
 using Sitecore.Commerce.Plugin.Pricing;
 using Sitecore.Commerce.Plugin.Promotions;
+using Sitecore.Framework.Conditions;
+using Sitecore.Framework.Pipelines;
+using System.Threading.Tasks;
 
 namespace Plugin.Sync.Commerce.EntitiesMigration.Pipelines.Blocks
 {
     /// <summary>
     /// Import Composer Templates Block
     /// </summary>
-    [PipelineDisplayName("GetEntitiesBlock")]
-    public class GetEntitiesBlock : PipelineBlock<ExportEntitiesArgument, EntityCollectionModel, CommercePipelineExecutionContext>
+    [PipelineDisplayName("ExportCommerceEntitiesBlock")]
+    public class ExportCommerceEntitiesBlock : PipelineBlock<ExportEntitiesArgument, EntityCollectionModel, CommercePipelineExecutionContext>
     {
         /// <summary>
         /// Commerce Commander
@@ -28,18 +24,18 @@ namespace Plugin.Sync.Commerce.EntitiesMigration.Pipelines.Blocks
         private readonly CommerceCommander _commerceCommander;
 
         /// <summary>
-        /// Composer Template Service
+        /// Commerce Entity service
         /// </summary>
-        private readonly IEntityService _entityService;
+        private readonly ICommerceEntityService _entityService;
 
         /// <summary>
         /// c'tor
         /// </summary>
         /// <param name="commerceCommander">commerceCommander</param>
         /// <param name="findEntitiesInListCommand">findEntitiesInListCommand</param>
-        public GetEntitiesBlock(
+        public ExportCommerceEntitiesBlock(
             CommerceCommander commerceCommander,
-            IEntityService entityService)
+            ICommerceEntityService entityService)
         {
             _commerceCommander = commerceCommander;
             _entityService = entityService;
@@ -57,21 +53,21 @@ namespace Plugin.Sync.Commerce.EntitiesMigration.Pipelines.Blocks
             switch (arg.EntityType.ToLower())
             {
                 case "catalog":
-                    return await Task.FromResult(_entityService.GetAllEntities<Catalog>(context.CommerceContext));
+                    return await Task.FromResult(_entityService.ExportCommerceEntities<Catalog>(context.CommerceContext));
                 case "category":
-                    return await Task.FromResult(_entityService.GetAllEntities<Category>(context.CommerceContext));
+                    return await Task.FromResult(_entityService.ExportCommerceEntities<Category>(context.CommerceContext));
                 case "sellableitem":
-                    return await Task.FromResult(_entityService.GetAllEntities<SellableItem>(context.CommerceContext));
+                    return await Task.FromResult(_entityService.ExportCommerceEntities<SellableItem>(context.CommerceContext));
                 case "pricebook":
-                    return await Task.FromResult(_entityService.GetAllEntities<PriceBook>(context.CommerceContext));
+                    return await Task.FromResult(_entityService.ExportCommerceEntities<PriceBook>(context.CommerceContext));
                 case "pricecard":
-                    return await Task.FromResult(_entityService.GetAllEntities<PriceCard>(context.CommerceContext));
+                    return await Task.FromResult(_entityService.ExportCommerceEntities<PriceCard>(context.CommerceContext));
                 case "promotionbook":
-                    return await Task.FromResult(_entityService.GetAllEntities<PromotionBook>(context.CommerceContext));
+                    return await Task.FromResult(_entityService.ExportCommerceEntities<PromotionBook>(context.CommerceContext));
                 case "promotion":
-                    return await Task.FromResult(_entityService.GetAllEntities<Promotion>(context.CommerceContext));
+                    return await Task.FromResult(_entityService.ExportCommerceEntities<Promotion>(context.CommerceContext));
                 case "composertemplate":
-                    return await Task.FromResult(_entityService.GetAllEntities<ComposerTemplate>(context.CommerceContext));
+                    return await Task.FromResult(_entityService.ExportCommerceEntities<ComposerTemplate>(context.CommerceContext));
                 default:
                     return null;
             }

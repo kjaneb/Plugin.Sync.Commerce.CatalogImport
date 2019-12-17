@@ -1,22 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Plugin.Sync.Commerce.EntitiesMigration.Models;
+﻿using Plugin.Sync.Commerce.EntitiesMigration.Models;
 using Plugin.Sync.Commerce.EntitiesMigration.Pipelines;
 using Plugin.Sync.Commerce.EntitiesMigration.Pipelines.Arguments;
 using Sitecore.Commerce.Core;
 using Sitecore.Commerce.Core.Commands;
-using Sitecore.Commerce.Plugin.Composer;
+using System;
+using System.Threading.Tasks;
 
 namespace Plugin.Sync.Commerce.EntitiesMigration.Commands
 {
     /// <summary>
-    /// ImportComposerTemplatesCommand
+    /// Export Commerce Entities into a collection
     /// </summary>
     public class ExportCommerceEntitiesCommand : CommerceCommand
     {
         /// <summary>
-        /// Import Composer Template Pipeline
+        /// Import Commerce Entities Pipeline
         /// </summary>
         private readonly IExportEntitiesPipeline _pipeline;
 
@@ -40,7 +38,6 @@ namespace Plugin.Sync.Commerce.EntitiesMigration.Commands
             using (var activity = CommandActivity.Start(commerceContext, this))
             {
                 return await this._pipeline.Run(arg, new CommercePipelineExecutionContextOptions(commerceContext));
-                //return result;
             }
         }
     }

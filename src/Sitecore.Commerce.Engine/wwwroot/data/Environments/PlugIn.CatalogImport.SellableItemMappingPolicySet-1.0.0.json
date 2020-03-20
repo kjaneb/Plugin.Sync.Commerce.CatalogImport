@@ -10,34 +10,32 @@
       {
         "$type": "Plugin.Sync.Commerce.CatalogImport.Policies.SellableItemMappingPolicy, Plugin.Sync.Commerce.CatalogImport",
         "ClearFieldValues": true,
-        "EntityId": "Id",
-        "EntityName": "Name",
+        "EntityId": "id",
+        "EntityName": "id",
         "ParentCategoryName": "ParentCategoryName",
         "ParentCatalogName": "ParentCatalogName",
         "UpdatedItemsList": "ImportedItems",
-        "DefaultCatalogName": "Habitat_Master",
-        "DefaultCategoryName": "TestCategory",
+        "DefaultCatalogName": "Test_Catalog",
+        "DefaultCategoryName": "Test_Category",
         "ListPrice": "ListPrice",
         "EntityFieldsPaths": {
           "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.String, mscorlib]], mscorlib",
-          "Brand": "Brand",
+          "Brand": "properties.SAPBrand",
           "Manufacturer": "Manufacturer",
           "TypeOfGoods": "TypeOfGoods",
-          "DisplayName": "DisplayName",
-          "Description": "Description"
+          "DisplayName": "properties.ProductName",
+          "Description": "properties.ShortDescription.en-US"
         },
         "ComposerFieldsRootPaths": {
           "$type": "System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib",
           "$values": [
-            "ComposerFieldsRootOne",
-            "ComposerFieldsRootTwo"
+            "properties"
           ]
         },
         "ComposerFieldsPaths": {
           "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.String, mscorlib]], mscorlib",
-          "ComposerFieldA": "ComposerFieldA",
-          "ComposerFieldB": "ComposerFieldB",
-          "three": "threeVal"
+          "VolumeLabel": "properties.VolumeLabel.en-US",
+          "PackagingLabel": "properties.PackagingLabel.en-US"
         },
         "CustomFieldsRootPaths": {
           "$type": "System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib",

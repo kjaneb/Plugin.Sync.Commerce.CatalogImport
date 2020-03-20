@@ -69,7 +69,6 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
                     context.Abort(errorMessage, this);
                     return arg;
                 }
-
                 await ImportComposerViewsFields(entity, entityDataModel.ComposerFields, context.CommerceContext);
             }
             else

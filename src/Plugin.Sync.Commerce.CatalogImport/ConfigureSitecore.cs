@@ -36,11 +36,21 @@ namespace Plugin.Sync.Commerce.CatalogImport
                         .Add<UpdateComposerFieldsBlock>()
                         .Add<UpdateCustomComponentsBlock>();
                     })
-                 //.ConfigurePipeline<IPersistEntityPipeline>(
-                 //   configure =>
-                 //   {
-                 //       configure.Add<AddSellableItemToUpdatedSellableItemsListBlock>().Before<PersistEntityBlock>();
-                 //   })
+                .AddPipeline<IImportSellableItemFromContentHubPipeline, ImportSellableItemFromContentHubPipeline>(
+                    configure =>
+                    {
+                        configure //.Add<GetAzureQueueMessageBlock>()
+                        .Add<GetContentHubEntityBlock>()
+                        .Add<ExtractCatalogEntityFieldsFromJsonDataBlock>()
+                        .Add<CreateOrUpdateSellableItemBlock>()
+                        .Add<UpdateComposerFieldsBlock>()
+                        .Add<UpdateCustomComponentsBlock>();
+                    })
+                //.ConfigurePipeline<IPersistEntityPipeline>(
+                //   configure =>
+                //   {
+                //       configure.Add<AddSellableItemToUpdatedSellableItemsListBlock>().Before<PersistEntityBlock>();
+                //   })
                 );
 
             services.RegisterAllCommands(assembly);

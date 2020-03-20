@@ -10,8 +10,11 @@
 		"EncryptionKeyStorageLocation": "c:\\Encryption-Keys\\",
 		"SitecoreIdentityServerUrl": "https://dev.IdentityServer",
 		"AllowedOrigins": [
-			"http://dev.sc",
 			"https://dev.sc",
+			"http://dev.sc",
+			"https://local.willscot.com",
+			"https://local.willscot.ca",
+			"https://localhost:4200",
 			"https://bizfx.sc9.com",
 			"https://sxa.storefront.com"
 		],
@@ -25,9 +28,9 @@
 	"Logging": {
 		"IncludeScopes": false,
 		"LogLevel": {
-			"Default": "Warning",
-			"System": "Warning",
-			"Microsoft": "Warning"
+			"Default": "Information",
+			"System": "Information",
+			"Microsoft": "Information"
 		},
 		"PipelineTraceLoggingEnabled": false,
 		"SerilogLoggingEnabled": true
@@ -39,10 +42,10 @@
 			"Serilog.Sinks.ApplicationInsights"
 		],
 		"MinimumLevel": {
-			"Default": "Warning",
+			"Default": "Information",
 			"Override": {
-				"Microsoft": "Warning",
-				"System": "Warning"
+				"Microsoft": "Information",
+				"System": "Information"
 			}
 		},
 		"WriteTo": [
@@ -59,7 +62,7 @@
 	"Certificates": {
 		"Certificates": [
 			{
-				"Thumbprint": "ED5D778F224D6A1EE2D042DC01BDFEAFCB79AB97",
+				"Thumbprint": "73EE01534FCCFADAA9BA3B8DBDC642B0BE7AFD2E",
 				"DefaultRoles": [
 					"sitecore\\QA",
 					"sitecore\\Commerce Business User"

@@ -13,6 +13,14 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Arguments
             MappingPolicy = mappingPolicy;
             CommerceEntityType = commerceEntityType;
         }
+
+        public ImportCatalogEntityArgument(MappingPolicyBase mappingPolicy, Type commerceEntityType)
+        {
+            MappingPolicy = mappingPolicy;
+            CommerceEntityType = commerceEntityType;
+        }
+
+        public string ContentHubEntityId { get; set; }
         public JObject Request { get; set; }
         public MappingPolicyBase MappingPolicy { get; set; }
         public Type CommerceEntityType { get; set; }

@@ -58,7 +58,7 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
 
             if (string.IsNullOrEmpty(entityData.ParentCategoryName))
             {
-                entityData.ParentCatalogName = mappingPolicy.DefaultCategoryName;
+                entityData.ParentCategoryName = mappingPolicy.DefaultCategoryName;
             }
 
             if (arg.CommerceEntityType != null && !string.IsNullOrEmpty(entityData.EntityName))

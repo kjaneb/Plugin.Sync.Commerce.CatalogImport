@@ -2,7 +2,6 @@
 using Microsoft.ServiceBus.Messaging;
 using Newtonsoft.Json.Linq;
 using Plugin.Sync.Commerce.CatalogImport.Commands;
-using Plugin.Sync.Commerce.CatalogImport.Extensions;
 using Plugin.Sync.Commerce.CatalogImport.Pipelines.Arguments;
 using Plugin.Sync.Commerce.CatalogImport.Policies;
 using Serilog;
@@ -10,24 +9,30 @@ using Sitecore.Commerce.Core;
 using Sitecore.Commerce.Core.Commands;
 using Sitecore.Commerce.Plugin.Catalog;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web.Http.OData;
 
 namespace Plugin.Sync.Commerce.CatalogImport.Controllers
 {
+    /// <summary>
+    /// Catalog Entities Import Controller
+    /// </summary>
     public class CommandsController : CommerceController
     {
         private readonly GetEnvironmentCommand _getEnvironmentCommand;
-        //TODO: don't hard-code env name
-        private const string ENV_NAME = "HabitatAuthoring";
 
+        //TODO: move below consts into CH connection policy
         static string _connectionString = "Endpoint=sb://xccontenthubdemo.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=HxyFUilEe7vGB0gXAYPnBUVQA8YaG63ElEJPkaJ5Pe4=";
         static string _subscriptionName = "sitecore";
         static string _topicName = "products_content";
         static int _maxMessagesCount = 100;
 
+        /// <summary>
+        /// Public constructor with DI
+        /// </summary>
+        /// <param name="serviceProvider"></param>
+        /// <param name="globalEnvironment"></param>
+        /// <param name="getEnvironmentCommand"></param>
         public CommandsController(IServiceProvider serviceProvider, CommerceEnvironment globalEnvironment, GetEnvironmentCommand getEnvironmentCommand) : base(serviceProvider, globalEnvironment)
         {
             _getEnvironmentCommand = getEnvironmentCommand;
@@ -58,7 +63,6 @@ namespace Plugin.Sync.Commerce.CatalogImport.Controllers
                 return new ObjectResult(ex);
             }
         }
-
         
         /// <summary>
         /// Sync incoming data into Commerce SellableItem
@@ -86,6 +90,11 @@ namespace Plugin.Sync.Commerce.CatalogImport.Controllers
             }
         }
 
+        /// <summary>
+        /// Import Content Hub entity into Commerce Sellable Item
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("ImportSellableItemFromContentHub()")]
         public async Task<IActionResult> ImportSellableItemFromContentHub([FromBody] JObject request)
@@ -113,6 +122,11 @@ namespace Plugin.Sync.Commerce.CatalogImport.Controllers
             }
         }
 
+        /// <summary>
+        /// Process messages (import CH entities in CE) 
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("ProcessAzureQueue()")]
         public async Task<IActionResult> ProcessAzureQueue([FromBody] JObject request)
@@ -120,12 +134,10 @@ namespace Plugin.Sync.Commerce.CatalogImport.Controllers
             InitializeEnvironment();
             try
             {
-                
-
                 var subClient = SubscriptionClient.CreateFromConnectionString(_connectionString, _topicName, _subscriptionName);
                 subClient.OnMessage(m =>
                 {
-                    Log.Information("Processing Azure Queue message: {m.GetBody<string>()}");
+                    Log.Information($"Processing Azure Queue message: {m.GetBody<string>()}");
                 });
                 var messages = subClient.ReceiveBatch(_maxMessagesCount);
                 if (messages != null && messages.Count() > 0)
@@ -134,6 +146,7 @@ namespace Plugin.Sync.Commerce.CatalogImport.Controllers
                     var mappingPolicy = CurrentContext.GetPolicy<SellableItemMappingPolicy>();
                     foreach (var message in messages)
                     {
+                        //Check entity type and match it to policy settings
                         if (message != null && message.Properties.ContainsKey("target_id"))
                         {
                             var argument = new ImportCatalogEntityArgument(mappingPolicy, typeof(SellableItem))
@@ -142,18 +155,19 @@ namespace Plugin.Sync.Commerce.CatalogImport.Controllers
                             };
                             var result = await command.Process(CurrentContext, argument).ConfigureAwait(false);
 
-                            //TODO: if success
+                            //TODO: complete on success, define failure(s) handling
                             message.Complete();
                         }
                     } 
                 }
                 
-
+                //TODO: return meaningful message(s)
                 return new ObjectResult(true);
                 //return result != null ? new ObjectResult(result) : new NotFoundObjectResult("Error importing SellableItem data");
             }
             catch (Exception ex)
             {
+                Log.Error(ex, "Error processing Azure queue message(s)");
                 return new ObjectResult(ex);
             }
         }

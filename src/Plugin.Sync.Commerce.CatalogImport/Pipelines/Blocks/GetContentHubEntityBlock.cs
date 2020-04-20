@@ -1,16 +1,10 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Plugin.Sync.Commerce.CatalogImport.Extensions;
-using Plugin.Sync.Commerce.CatalogImport.Models;
 using Plugin.Sync.Commerce.CatalogImport.Pipelines.Arguments;
 using Plugin.Sync.Commerce.CatalogImport.Policies;
 using Serilog;
 using Sitecore.Commerce.Core;
-using Sitecore.Commerce.Core.Commands;
-using Sitecore.Commerce.Plugin.Catalog;
-using Sitecore.Commerce.Plugin.Composer;
 using Sitecore.Framework.Caching;
-using Sitecore.Framework.Conditions;
 using Sitecore.Framework.Pipelines;
 using System;
 using System.IO;
@@ -20,7 +14,8 @@ using System.Threading.Tasks;
 namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
 {
     /// <summary>
-    /// Import data into an existing Category or new SellableItem entity
+    /// Retrieve Content Hub entity via its API
+    /// TODO: refactor this to use CH nuget instead of direct HTTP REST calls
     /// </summary>
     [PipelineDisplayName("GetContentHubEntityBlock")]
     public class GetContentHubEntityBlock : PipelineBlock<ImportCatalogEntityArgument, ImportCatalogEntityArgument, CommercePipelineExecutionContext>
@@ -62,13 +57,12 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
             }
             catch (Exception ex)
             {
-                var errorMessage = $"Error creating or updating Category Entity {arg.ContentHubEntityId}. {ex.Message}";
+                var errorMessage = $"Error retrieving Content Hub Entity {arg.ContentHubEntityId}.";
                 Log.Error(ex, errorMessage);
                 context.Abort(errorMessage, ex);
                 return arg;
             }
         }
-
 
         #endregion
 
@@ -98,6 +92,12 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
 
             return null;
         }
+
+        /// <summary>
+        /// Get security token to use for Content Hub API calls
+        /// </summary>
+        /// <param name="contentHubPolicy"></param>
+        /// <returns></returns>
         private async Task<string> GetToken(ContentHubConnectionPolicy contentHubPolicy)
         {
             var cache = _cacheManager.GetCache(contentHubPolicy.TokenCacheName);

@@ -1,4 +1,4 @@
-﻿// © 2016 Sitecore Corporation A/S. All rights reserved. Sitecore® is a registered trademark of Sitecore Corporation A/S.
+﻿// © 2015 Sitecore Corporation A/S. All rights reserved. Sitecore® is a registered trademark of Sitecore Corporation A/S.
 
 using System;
 using System.Collections.Generic;
@@ -7,7 +7,6 @@ using System.IO;
 using System.IO.Compression;
 using System.Threading.Tasks;
 using Microsoft.ApplicationInsights;
-using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
@@ -66,7 +65,12 @@ namespace Sitecore.Commerce.Engine
             Configuration = configuration;
 
             var appInsightsInstrumentationKey = Configuration.GetSection("ApplicationInsights:InstrumentationKey").Value;
-            _telemetryClient = !string.IsNullOrWhiteSpace(appInsightsInstrumentationKey) ? new TelemetryClient {InstrumentationKey = appInsightsInstrumentationKey} : new TelemetryClient();
+            _telemetryClient = !string.IsNullOrWhiteSpace(appInsightsInstrumentationKey)
+                ? new TelemetryClient
+                {
+                    InstrumentationKey = appInsightsInstrumentationKey
+                }
+                : new TelemetryClient();
 
             if (bool.TryParse(Configuration.GetSection("Logging:SerilogLoggingEnabled")?.Value, out var serilogEnabled))
             {
@@ -101,7 +105,10 @@ namespace Sitecore.Commerce.Engine
         /// </value>
         public CommerceEnvironment StartupEnvironment
         {
-            get => _environment ?? (_environment = new CommerceEnvironment {Name = "Bootstrap"});
+            get => _environment ?? (_environment = new CommerceEnvironment
+            {
+                Name = "Bootstrap"
+            });
             set => _environment = value;
         }
 
@@ -143,8 +150,8 @@ namespace Sitecore.Commerce.Engine
             services.Configure<LoggingSettings>(options => Configuration.GetSection("Logging").Bind(options));
             services.AddApplicationInsightsTelemetry(Configuration);
             services.Configure<ApplicationInsightsSettings>(options => Configuration.GetSection("ApplicationInsights").Bind(options));
-            services.Configure<CertificatesSettings>(Configuration.GetSection("Certificates"));
             services.Configure<List<string>>(Configuration.GetSection("AppSettings:AllowedOrigins"));
+            services.Configure<CommerceConnectorSettings>(Configuration.GetSection(CommerceConnectorSettings.Section));
 
             services.AddSingleton(_telemetryClient);
 
@@ -171,9 +178,9 @@ namespace Sitecore.Commerce.Engine
                         options.ApiSecret = "secret";
                     });
             services.AddAuthorization(
-                options => { options.AddPolicy("RoleRequirement", policy => policy.Requirements.Add(new RoleAuthorizationRequirement(_nodeContext.CertificateHeaderName))); });
+                options => { options.AddPolicy("RoleRequirement", policy => policy.Requirements.Add(new RoleAuthorizationRequirement())); });
 
-            _nodeContext.CertificateHeaderName = Configuration.GetSection("Certificates:CertificateHeaderName").Value;
+            _nodeContext.CommerceEngineConnectClientId = Configuration.GetSection("CommerceConnector:ClientId").Value;
 
             var antiForgeryEnabledSetting = Configuration.GetSection("AppSettings:AntiForgeryEnabled").Value;
             _nodeContext.AntiForgeryEnabled = !string.IsNullOrWhiteSpace(antiForgeryEnabledSetting) && System.Convert.ToBoolean(antiForgeryEnabledSetting, CultureInfo.InvariantCulture);
@@ -277,8 +284,8 @@ namespace Sitecore.Commerce.Engine
         /// <param name="configureOpsServiceApiPipeline">The context ops service API pipeline.</param>
         /// <param name="startEnvironmentPipeline">The start environment pipeline.</param>
         /// <param name="loggingSettings">The logging settings.</param>
-        /// <param name="certificatesSettings">The certificates settings.</param>
-        /// <param name="allowedOriginsOptions"></param>
+        /// <param name="allowedOriginsOptions">The allowed origins</param>
+        /// <param name="commerceConnectorSettings">The commerce connector settings</param>
         /// <param name="getDatabaseVersionCommand">Command to get DB version</param>
         public void Configure(
             IApplicationBuilder app,
@@ -287,8 +294,8 @@ namespace Sitecore.Commerce.Engine
             IConfigureOpsServiceApiPipeline configureOpsServiceApiPipeline,
             IStartEnvironmentPipeline startEnvironmentPipeline,
             IOptions<LoggingSettings> loggingSettings,
-            IOptions<CertificatesSettings> certificatesSettings,
             IOptions<List<string>> allowedOriginsOptions,
+            IOptions<CommerceConnectorSettings> commerceConnectorSettings,
             GetDatabaseVersionCommand getDatabaseVersionCommand)
         {
             // TODO: Check if we can move this code to a better place, this code checks Database version against Core required version
@@ -327,7 +334,8 @@ namespace Sitecore.Commerce.Engine
                 app.UseStatusCodePages();
             }
 
-            app.UseClientCertificateValidationMiddleware(certificatesSettings);
+            app.UseAuthentication();
+            app.UseCommerceRoleValidationMiddleware(commerceConnectorSettings);
 
             app.UseCors(builder =>
 #pragma warning disable CA1308 // Normalize strings to uppercase
@@ -336,8 +344,6 @@ namespace Sitecore.Commerce.Engine
                     .AllowCredentials()
                     .AllowAnyHeader()
                     .AllowAnyMethod());
-
-            app.UseAuthentication();
 
             Task.Run(() => startNodePipeline.Run(_nodeContext, _nodeContext.PipelineContextOptions)).Wait();
 

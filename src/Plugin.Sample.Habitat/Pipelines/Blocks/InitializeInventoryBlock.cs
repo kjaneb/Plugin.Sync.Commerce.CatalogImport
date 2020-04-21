@@ -1,19 +1,17 @@
 ﻿// © 2017 Sitecore Corporation A/S. All rights reserved. Sitecore® is a registered trademark of Sitecore Corporation A/S.
 
+using System.IO;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http.Internal;
+using Sitecore.Commerce.Core;
+using Sitecore.Commerce.Core.Commands;
+using Sitecore.Commerce.Plugin.Catalog;
+using Sitecore.Commerce.Plugin.Inventory;
+using Sitecore.Framework.Pipelines;
+
 namespace Plugin.Sample.Habitat
 {
-    using System.Threading.Tasks;
-
-    using Sitecore.Commerce.Core;
-    using Sitecore.Commerce.Plugin.Catalog;
-    using Sitecore.Framework.Pipelines;
-    using Sitecore.Commerce.Plugin.Inventory;
-
-    using System.IO;
-
-    using Microsoft.AspNetCore.Http.Internal;
-    using Microsoft.AspNetCore.Hosting;
-
     /// <summary>
     /// Ensure Habitat inventory has been loaded.
     /// </summary>
@@ -26,28 +24,25 @@ namespace Plugin.Sample.Habitat
     [PipelineDisplayName(HabitatConstants.InitializeCatalogBlock)]
     public class InitializeInventoryBlock : PipelineBlock<string, string, CommercePipelineExecutionContext>
     {
+        private readonly CommerceCommander _commander;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="InitializeCatalogBlock"/> class.
         /// </summary>
         /// <param name="hostingEnvironment">The hosting environment.</param>
-        /// <param name="importInventorySetsCommand">The import catalog command.</param>
+        /// <param name="commander">The CommerceCommander.</param>
         public InitializeInventoryBlock(
             IHostingEnvironment hostingEnvironment,
-            ImportInventorySetsCommand importInventorySetsCommand)
+            CommerceCommander commander)
         {
-            this.HostingEnvironment = hostingEnvironment;
-            this.ImportInventorySetsCommand = importInventorySetsCommand;
+            HostingEnvironment = hostingEnvironment;
+            _commander = commander;
         }
 
         /// <summary>
         /// Gets the <see cref="IHostingEnvironment"/> implementation.
         /// </summary>
         protected IHostingEnvironment HostingEnvironment { get; }
-
-        /// <summary>
-        /// Gets the <see cref="ImportInventorySetsCommand"/> implementation.
-        /// </summary>
-        protected ImportInventorySetsCommand ImportInventorySetsCommand { get; }
 
         /// <summary>
         /// Executes the block.
@@ -65,10 +60,18 @@ namespace Plugin.Sample.Habitat
                 return arg;
             }
 
-            using (var stream = new FileStream(this.GetPath("Habitat_Inventory.zip"), FileMode.Open, FileAccess.Read))
+            using (var stream = new FileStream(GetPath("Habitat_Inventory.zip"), FileMode.Open, FileAccess.Read))
             {
                 var file = new FormFile(stream, 0, stream.Length, stream.Name, stream.Name);
-                await this.ImportInventorySetsCommand.Process(context.CommerceContext, file, CatalogConstants.Replace, -1, 10).ConfigureAwait(false);
+
+                var argument = new ImportInventorySetsArgument(file, CatalogConstants.Replace)
+                {
+                    BatchSize = -1,
+                    ErrorThreshold = 10
+                };
+                await _commander.Pipeline<IImportInventorySetsPipeline>()
+                    .Run(argument, context.CommerceContext.PipelineContextOptions)
+                    .ConfigureAwait(false);
             }
 
             return arg;
@@ -76,7 +79,7 @@ namespace Plugin.Sample.Habitat
 
         private string GetPath(string fileName)
         {
-            return Path.Combine(this.HostingEnvironment.WebRootPath, "data", "Catalogs", fileName);
+            return Path.Combine(HostingEnvironment.WebRootPath, "data", "Catalogs", fileName);
         }
     }
 }

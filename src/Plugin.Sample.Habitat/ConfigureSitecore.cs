@@ -1,15 +1,13 @@
-﻿// © 2016 Sitecore Corporation A/S. All rights reserved. Sitecore® is a registered trademark of Sitecore Corporation A/S.
+﻿// © 2015 Sitecore Corporation A/S. All rights reserved. Sitecore® is a registered trademark of Sitecore Corporation A/S.
+
+using System.Reflection;
+using Microsoft.Extensions.DependencyInjection;
+using Sitecore.Commerce.Core;
+using Sitecore.Framework.Configuration;
+using Sitecore.Framework.Pipelines.Definitions.Extensions;
 
 namespace Plugin.Sample.Habitat
 {
-    using System.Reflection;
-
-    using Microsoft.Extensions.DependencyInjection;
-
-    using Sitecore.Commerce.Core;
-    using Sitecore.Framework.Configuration;
-    using Sitecore.Framework.Pipelines.Definitions.Extensions;
-
     /// <summary>
     /// The Habitat configure class.
     /// </summary>
@@ -40,10 +38,7 @@ namespace Plugin.Sample.Habitat
                                     .Add<InitializeEnvironmentPricingBlock>()
                                     .Add<InitializeEnvironmentPromotionsBlock>();
                             })
-                        .ConfigurePipeline<IRunningPluginsPipeline>(c =>
-                        {
-                            c.Add<RegisteredPluginBlock>().After<RunningPluginsBlock>();
-                        }));
+                        .ConfigurePipeline<IRunningPluginsPipeline>(c => { c.Add<RegisteredPluginBlock>().After<RunningPluginsBlock>(); }));
         }
     }
 }

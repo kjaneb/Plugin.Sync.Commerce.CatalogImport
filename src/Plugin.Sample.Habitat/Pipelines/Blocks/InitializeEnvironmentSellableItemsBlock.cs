@@ -1,21 +1,17 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="InitializeEnvironmentSellableItemsBlock.cs" company="Sitecore Corporation">
-//   Copyright (c) Sitecore Corporation 1999-2018
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
+﻿// © 2017 Sitecore Corporation A/S. All rights reserved. Sitecore® is a registered trademark of Sitecore Corporation A/S.
+
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using Sitecore.Commerce.Core;
+using Sitecore.Commerce.Plugin.Availability;
+using Sitecore.Commerce.Plugin.Catalog;
+using Sitecore.Commerce.Plugin.Pricing;
+using Sitecore.Framework.Pipelines;
 
 namespace Plugin.Sample.Habitat
 {
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
-    using Microsoft.Extensions.Logging;
-    using Sitecore.Commerce.Core;
-    using Sitecore.Commerce.Plugin.Availability;
-    using Sitecore.Commerce.Plugin.Catalog;
-    using Sitecore.Commerce.Plugin.Pricing;
-    using Sitecore.Framework.Pipelines;
-
     /// <summary>
     /// Defines a block which bootstraps sellable items the Habitat sample environment.
     /// </summary>
@@ -42,8 +38,8 @@ namespace Plugin.Sample.Habitat
         /// </param>
         public InitializeEnvironmentSellableItemsBlock(IPersistEntityPipeline persistEntityPipeline, IFindEntityPipeline findEntityPipeline)
         {
-            this._persistEntityPipeline = persistEntityPipeline;
-            this._findEntityPipeline = findEntityPipeline;
+            _persistEntityPipeline = persistEntityPipeline;
+            _findEntityPipeline = findEntityPipeline;
         }
 
         /// <summary>
@@ -68,13 +64,13 @@ namespace Plugin.Sample.Habitat
                 return arg;
             }
 
-            context.Logger.LogInformation($"{this.Name}.InitializingArtifactSet: ArtifactSet={artifactSet}");
+            context.Logger.LogInformation($"{Name}.InitializingArtifactSet: ArtifactSet={artifactSet}");
 
-            await this.BootstrapAppliances(context).ConfigureAwait(false);
-            await this.BootstrapAudio(context).ConfigureAwait(false);
-            await this.BootstrapCameras(context).ConfigureAwait(false);
-            await this.BootstrapComputers(context).ConfigureAwait(false);
-            await this.BootstrapGiftCards(context).ConfigureAwait(false);
+            await BootstrapAppliances(context).ConfigureAwait(false);
+            await BootstrapAudio(context).ConfigureAwait(false);
+            await BootstrapCameras(context).ConfigureAwait(false);
+            await BootstrapComputers(context).ConfigureAwait(false);
+            await BootstrapGiftCards(context).ConfigureAwait(false);
 
             return arg;
         }
@@ -146,7 +142,11 @@ namespace Plugin.Sample.Habitat
                 },
                 new List<Policy>
                 {
-                    new ListPricingPolicy(new List<Money> {new Money("USD", 2302.79M), new Money("CAD", 2303.79M)})
+                    new ListPricingPolicy(new List<Money>
+                    {
+                        new Money("USD", 2302.79M),
+                        new Money("CAD", 2303.79M)
+                    })
                 })
             {
                 Id = $"{CommerceEntity.IdPrefix<SellableItem>()}6042591",
@@ -164,7 +164,6 @@ namespace Plugin.Sample.Habitat
         {
             var item = new SellableItem(new List<Component>
                 {
-
                     new ItemVariationsComponent
                     {
                         ChildComponents = new List<Component>
@@ -172,7 +171,11 @@ namespace Plugin.Sample.Habitat
                             new ItemVariationComponent(new List<Policy>
                             {
                                 new ListPricingPolicy(
-                                    new List<Money> {new Money("USD", 423.99M), new Money("CAD", 424.99M)})
+                                    new List<Money>
+                                    {
+                                        new Money("USD", 423.99M),
+                                        new Money("CAD", 424.99M)
+                                    })
                             })
                             {
                                 Id = "56042122",
@@ -188,10 +191,13 @@ namespace Plugin.Sample.Habitat
                 },
                 new List<Policy>
                 {
-                    new ListPricingPolicy(new List<Money> {new Money("USD", 423.99M), new Money("CAD", 424.99M)})
+                    new ListPricingPolicy(new List<Money>
+                    {
+                        new Money("USD", 423.99M),
+                        new Money("CAD", 424.99M)
+                    })
                 })
             {
-
                 Id = $"{CommerceEntity.IdPrefix<SellableItem>()}6042122",
                 Name = "XSound 7” CD DVD, In-Dash Receiver, 3-Way Speakers, and HabitatPro Installation"
             };
@@ -214,7 +220,11 @@ namespace Plugin.Sample.Habitat
                             new ItemVariationComponent(new List<Policy>
                             {
                                 new ListPricingPolicy(
-                                    new List<Money> {new Money("USD", 189.99M), new Money("CAD", 190.99M)})
+                                    new List<Money>
+                                    {
+                                        new Money("USD", 189.99M),
+                                        new Money("CAD", 190.99M)
+                                    })
                             })
                             {
                                 Id = "57042124",
@@ -227,7 +237,11 @@ namespace Plugin.Sample.Habitat
                             new ItemVariationComponent(new List<Policy>
                             {
                                 new ListPricingPolicy(
-                                    new List<Money> {new Money("USD", 189.99M), new Money("CAD", 190.99M)})
+                                    new List<Money>
+                                    {
+                                        new Money("USD", 189.99M),
+                                        new Money("CAD", 190.99M)
+                                    })
                             })
                             {
                                 Id = "57042125",
@@ -242,7 +256,11 @@ namespace Plugin.Sample.Habitat
                 },
                 new List<Policy>
                 {
-                    new ListPricingPolicy(new List<Money> {new Money("USD", 117.79M), new Money("CAD", 118.79M)})
+                    new ListPricingPolicy(new List<Money>
+                    {
+                        new Money("USD", 117.79M),
+                        new Money("CAD", 118.79M)
+                    })
                 })
             {
                 Id = $"{CommerceEntity.IdPrefix<SellableItem>()}7042124",
@@ -267,7 +285,11 @@ namespace Plugin.Sample.Habitat
                             new ItemVariationComponent(new List<Policy>
                             {
                                 new ListPricingPolicy(
-                                    new List<Money> {new Money("USD", 429.00M), new Money("CAD", 430.00M)})
+                                    new List<Money>
+                                    {
+                                        new Money("USD", 429.00M),
+                                        new Money("CAD", 430.00M)
+                                    })
                             })
                             {
                                 Id = "56042179",
@@ -282,7 +304,11 @@ namespace Plugin.Sample.Habitat
                 },
                 new List<Policy>
                 {
-                    new ListPricingPolicy(new List<Money> {new Money("USD", 429.00M), new Money("CAD", 430.00M)})
+                    new ListPricingPolicy(new List<Money>
+                    {
+                        new Money("USD", 429.00M),
+                        new Money("CAD", 430.00M)
+                    })
                 })
             {
                 Id = $"{CommerceEntity.IdPrefix<SellableItem>()}6042179",
@@ -316,7 +342,11 @@ namespace Plugin.Sample.Habitat
                 }
             }, new List<Policy>
             {
-                new ListPricingPolicy(new List<Money> {new Money("USD", 989.00M), new Money("CAD", 990.00M)})
+                new ListPricingPolicy(new List<Money>
+                {
+                    new Money("USD", 989.00M),
+                    new Money("CAD", 990.00M)
+                })
             })
             {
                 Id = $"{CommerceEntity.IdPrefix<SellableItem>()}6042190",
@@ -351,7 +381,11 @@ namespace Plugin.Sample.Habitat
                 },
                 new List<Policy>
                 {
-                    new ListPricingPolicy(new List<Money> {new Money("USD", 289.00M), new Money("CAD", 290.00M)})
+                    new ListPricingPolicy(new List<Money>
+                    {
+                        new Money("USD", 289.00M),
+                        new Money("CAD", 290.00M)
+                    })
                 })
             {
                 Id = $"{CommerceEntity.IdPrefix<SellableItem>()}6042178",
@@ -375,6 +409,7 @@ namespace Plugin.Sample.Habitat
                 Id = $"{CommerceEntity.IdPrefix<SellableItem>()}GiftCardV2",
                 ProductId = "DefaultGiftCardV2",
                 Name = "Default GiftCard V2"
+
                 //Components = new List<Component>
                 //{
                 //    new ListMembershipsComponent { Memberships = new List<string> { CommerceEntity.ListName<SellableItem>() } }
@@ -393,7 +428,11 @@ namespace Plugin.Sample.Habitat
                         {
                             new AvailabilityAlwaysPolicy(),
                             new ListPricingPolicy(
-                                new List<Money> {new Money("USD", 25M), new Money("CAD", 26M)})
+                                new List<Money>
+                                {
+                                    new Money("USD", 25M),
+                                    new Money("CAD", 26M)
+                                })
                         })
                         {
                             Id = "56042986",
@@ -403,7 +442,11 @@ namespace Plugin.Sample.Habitat
                         {
                             new AvailabilityAlwaysPolicy(),
                             new ListPricingPolicy(
-                                new List<Money> {new Money("USD", 50M), new Money("CAD", 51M)})
+                                new List<Money>
+                                {
+                                    new Money("USD", 50M),
+                                    new Money("CAD", 51M)
+                                })
                         })
                         {
                             Id = "56042987",
@@ -413,7 +456,11 @@ namespace Plugin.Sample.Habitat
                         {
                             new AvailabilityAlwaysPolicy(),
                             new ListPricingPolicy(
-                                new List<Money> {new Money("USD", 100M), new Money("CAD", 101M)})
+                                new List<Money>
+                                {
+                                    new Money("USD", 100M),
+                                    new Money("CAD", 101M)
+                                })
                         })
                         {
                             Id = "56042988",

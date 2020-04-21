@@ -14,7 +14,9 @@ if($issueNew)
 	Write-Host "Deleting $certificateFriendlyName" -ForegroundColor Yellow
 	Get-ChildItem -Path "Cert:\CurrentUser\My" | Where-Object{$_.FriendlyName -eq $certificateFriendlyName} | Remove-Item
 	Get-ChildItem -Path "Cert:\CurrentUser\Root" | Where-Object{$_.FriendlyName -eq $certificateFriendlyName} | Remove-Item
-	Get-ChildItem -Path "Cert:\CurrentUser\CA" | Where-Object{$_.FriendlyName -eq $certificateFriendlyName} | Remove-Item
+    Get-ChildItem -Path "Cert:\CurrentUser\CA" | Where-Object{$_.FriendlyName -eq $certificateFriendlyName} | Remove-Item
+
+    Get-ChildItem -Path "Cert:\LocalMachine\Root" | Where-Object{$_.FriendlyName -eq $certificateFriendlyName} | Remove-Item
 }
 
 $certificates = Get-ChildItem `
@@ -52,4 +54,6 @@ Export-PfxCertificate -Cert $certificatePath -FilePath $pfxPath -Password $pfxPa
 Export-Certificate -Cert $certificatePath -FilePath $cerPath
 
 Import-PfxCertificate -FilePath $pfxPath -CertStoreLocation $certificateStore -Password $pfxPassword -Exportable
-Import-Certificate -FilePath $cerPath -CertStoreLocation Cert:\CurrentUser\Root
+
+$rootCerticatePath = Import-Certificate -FilePath $cerPath -CertStoreLocation Cert:\LocalMachine\Root
+$rootCerticatePath.FriendlyName = $certificateFriendlyName

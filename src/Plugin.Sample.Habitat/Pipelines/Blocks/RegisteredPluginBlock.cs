@@ -1,18 +1,13 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="RegisteredPluginBlock.cs" company="Sitecore Corporation">
-//   Copyright (c) Sitecore Corporation 1999-2018
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
+﻿// © 2016 Sitecore Corporation A/S. All rights reserved. Sitecore® is a registered trademark of Sitecore Corporation A/S.
+
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Sitecore.Commerce.Core;
+using Sitecore.Framework.Pipelines;
 
 namespace Plugin.Sample.Habitat
 {
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
-
-    using Sitecore.Commerce.Core;
-    using Sitecore.Framework.Pipelines;
-
     /// <summary>
     /// Defines the registered plugin block.
     /// </summary>
@@ -42,7 +37,7 @@ namespace Plugin.Sample.Habitat
         {
             if (arg == null)
             {
-                return Task.FromResult((IEnumerable<RegisteredPluginModel>)null);
+                return Task.FromResult((IEnumerable<RegisteredPluginModel>) null);
             }
 
             var plugins = arg.ToList();

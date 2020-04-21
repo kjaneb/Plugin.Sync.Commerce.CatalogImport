@@ -161,7 +161,7 @@
       },
       {
         "$type": "Sitecore.Commerce.Plugin.BusinessUsers.EnvironmentBusinessToolsPolicy,Sitecore.Commerce.Plugin.BusinessUsers",
-        "ServiceUrl": ""
+        "ServiceUrl": "https://localhost:5000"
       },
       {
         "$type": "Sitecore.Commerce.Core.EnvironmentInitializationPolicy, Sitecore.Commerce.Core",
@@ -194,8 +194,9 @@
           "$type": "System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib",
           "$values": [
             "en",
-            "en-CA",
-            "fr-CA"
+            "de-DE",
+            "ja-JP",
+            "fr-FR"
           ]
         },
         "DefaultCurrency": "USD",
@@ -205,9 +206,7 @@
           "EntityTarget": "Entity-Country-USA",
           "Policies": {
             "$type": "System.Collections.Generic.List`1[[Sitecore.Commerce.Core.Policy, Sitecore.Commerce.Core]], mscorlib",
-            "$values": [
-
-            ]
+            "$values": []
           }
         },
         "Countries": {
@@ -219,9 +218,7 @@
               "EntityTarget": "Entity-Country-USA",
               "Policies": {
                 "$type": "System.Collections.Generic.List`1[[Sitecore.Commerce.Core.Policy, Sitecore.Commerce.Core]], mscorlib",
-                "$values": [
-
-                ]
+                "$values": []
               }
             },
             {
@@ -230,9 +227,7 @@
               "EntityTarget": "Entity-Country-CAN",
               "Policies": {
                 "$type": "System.Collections.Generic.List`1[[Sitecore.Commerce.Core.Policy, Sitecore.Commerce.Core]], mscorlib",
-                "$values": [
-
-                ]
+                "$values": []
               }
             }
           ]
@@ -241,9 +236,7 @@
         "FirstDayOfWeek": "Sunday",
         "PostalCodeOptionalCountries": {
           "$type": "System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib",
-          "$values": [
-
-          ]
+          "$values": []
         }
       },
       {
@@ -318,14 +311,6 @@
         "Journal": "OrdersJournal"
       },
       {
-        "$type": "Sitecore.Commerce.Core.PolicySetPolicy, Sitecore.Commerce.Core",
-        "PolicySetId": "Entity-PolicySet-SellableItemMappingPolicySet"
-      },
-      {
-        "$type": "Sitecore.Commerce.Core.PolicySetPolicy, Sitecore.Commerce.Core",
-        "PolicySetId": "Entity-PolicySet-CategoryMappingPolicySet"
-      },
-      {
         "$type": "Sitecore.Commerce.Plugin.Returns.RequestRmaReasonsPolicy, Sitecore.Commerce.Plugin.Returns",
         "List": {
           "$type": "System.Collections.Generic.List`1[[Sitecore.Commerce.Plugin.Returns.RmaReason, Sitecore.Commerce.Plugin.Returns]], mscorlib",
@@ -337,9 +322,7 @@
               "Name": "",
               "Policies": {
                 "$type": "System.Collections.Generic.List`1[[Sitecore.Commerce.Core.Policy, Sitecore.Commerce.Core]], mscorlib",
-                "$values": [
-
-                ]
+                "$values": []
               }
             },
             {
@@ -349,9 +332,7 @@
               "Name": "",
               "Policies": {
                 "$type": "System.Collections.Generic.List`1[[Sitecore.Commerce.Core.Policy, Sitecore.Commerce.Core]], mscorlib",
-                "$values": [
-
-                ]
+                "$values": []
               }
             }
           ]
@@ -462,9 +443,7 @@
               "Name": "Ground",
               "Policies": {
                 "$type": "System.Collections.Generic.List`1[[Sitecore.Commerce.Core.Policy, Sitecore.Commerce.Core]], mscorlib",
-                "$values": [
-
-                ]
+                "$values": []
               }
             },
             {
@@ -477,9 +456,7 @@
               "Name": "Standard",
               "Policies": {
                 "$type": "System.Collections.Generic.List`1[[Sitecore.Commerce.Core.Policy, Sitecore.Commerce.Core]], mscorlib",
-                "$values": [
-
-                ]
+                "$values": []
               }
             },
             {
@@ -492,9 +469,7 @@
               "Name": "Next Day Air",
               "Policies": {
                 "$type": "System.Collections.Generic.List`1[[Sitecore.Commerce.Core.Policy, Sitecore.Commerce.Core]], mscorlib",
-                "$values": [
-
-                ]
+                "$values": []
               }
             },
             {
@@ -507,9 +482,7 @@
               "Name": "Standard Overnight",
               "Policies": {
                 "$type": "System.Collections.Generic.List`1[[Sitecore.Commerce.Core.Policy, Sitecore.Commerce.Core]], mscorlib",
-                "$values": [
-
-                ]
+                "$values": []
               }
             },
             {
@@ -522,9 +495,7 @@
               "Name": "Ground",
               "Policies": {
                 "$type": "System.Collections.Generic.List`1[[Sitecore.Commerce.Core.Policy, Sitecore.Commerce.Core]], mscorlib",
-                "$values": [
-
-                ]
+                "$values": []
               }
             },
             {
@@ -537,9 +508,7 @@
               "Name": "Standard",
               "Policies": {
                 "$type": "System.Collections.Generic.List`1[[Sitecore.Commerce.Core.Policy, Sitecore.Commerce.Core]], mscorlib",
-                "$values": [
-
-                ]
+                "$values": []
               }
             },
             {
@@ -552,9 +521,7 @@
               "Name": "Next Day Air",
               "Policies": {
                 "$type": "System.Collections.Generic.List`1[[Sitecore.Commerce.Core.Policy, Sitecore.Commerce.Core]], mscorlib",
-                "$values": [
-
-                ]
+                "$values": []
               }
             },
             {
@@ -567,9 +534,7 @@
               "Name": "Standard Overnight",
               "Policies": {
                 "$type": "System.Collections.Generic.List`1[[Sitecore.Commerce.Core.Policy, Sitecore.Commerce.Core]], mscorlib",
-                "$values": [
-
-                ]
+                "$values": []
               }
             }
           ]

@@ -1,14 +1,15 @@
 ﻿// © 2018 Sitecore Corporation A/S. All rights reserved. Sitecore® is a registered trademark of Sitecore Corporation A/S.
 
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Sitecore.Commerce.Core;
+using Sitecore.Commerce.Plugin.Catalog;
+using Sitecore.Commerce.Plugin.Pricing;
+using Sitecore.Framework.Pipelines;
+
 namespace Plugin.Sample.Habitat
 {
-    using System.Collections.Generic;
-    using System.Threading.Tasks;
-    using Sitecore.Commerce.Core;
-    using Sitecore.Commerce.Plugin.Catalog;
-    using Sitecore.Commerce.Plugin.Pricing;
-    using Sitecore.Framework.Pipelines;
-
     /// <summary>
     /// Ensure that a bundle is created
     /// </summary>
@@ -22,13 +23,12 @@ namespace Plugin.Sample.Habitat
     public class InitializeEnvironmentBundlesBlock : PipelineBlock<string, string, CommercePipelineExecutionContext>
     {
         private readonly CommerceCommander _commerceCommander;
-        
         /// <summary>
         /// Initializes a new instance of the <see cref="InitializeEnvironmentBundlesBlock"/> class.
         /// </summary>
         public InitializeEnvironmentBundlesBlock(CommerceCommander commerceCommander)
         {
-            this._commerceCommander = commerceCommander;
+            _commerceCommander = commerceCommander;
         }
 
         /// <summary>
@@ -61,7 +61,7 @@ namespace Plugin.Sample.Habitat
         {
             // First bundle
             var bundle1 =
-                await this._commerceCommander.Command<CreateBundleCommand>().Process(
+                await CreateBundle(
                     context.CommerceContext,
                     "Static",
                     "6001001",
@@ -71,7 +71,12 @@ namespace Plugin.Sample.Habitat
                     string.Empty,
                     string.Empty,
                     string.Empty,
-                    new[] { "smart", "wifi", "bundle" },
+                    new[]
+                    {
+                        "smart",
+                        "wifi",
+                        "bundle"
+                    },
                     new List<BundleItem>
                     {
                         new BundleItem
@@ -97,19 +102,18 @@ namespace Plugin.Sample.Habitat
                         new Money("CAD", 250.00M)
                     }));
 
-            await this._commerceCommander.Pipeline<IPersistEntityPipeline>()
+            await _commerceCommander.Pipeline<IPersistEntityPipeline>()
                 .Run(new PersistEntityArgument(bundle1), context).ConfigureAwait(false);
 
             // Associate bundle to parent category
-            await this._commerceCommander.Command<AssociateSellableItemToParentCommand>().Process(
-                context.CommerceContext,
+            await AssociateEntity(context.CommerceContext, new CatalogReferenceArgument(
                 "Entity-Catalog-Habitat_Master",
                 "Entity-Category-Habitat_Master-Connected home",
-                bundle1.Id).ConfigureAwait(false);
+                bundle1.Id)).ConfigureAwait(false);
 
             // Second bundle
             var bundle2 =
-                await this._commerceCommander.Command<CreateBundleCommand>().Process(
+                await CreateBundle(
                     context.CommerceContext,
                     "Static",
                     "6001002",
@@ -119,7 +123,12 @@ namespace Plugin.Sample.Habitat
                     "Striva Wearables",
                     string.Empty,
                     string.Empty,
-                    new[] { "activitytracker", "camera", "bundle" },
+                    new[]
+                    {
+                        "activitytracker",
+                        "camera",
+                        "bundle"
+                    },
                     new List<BundleItem>
                     {
                         new BundleItem
@@ -145,19 +154,18 @@ namespace Plugin.Sample.Habitat
                         new Money("CAD", 280.00M)
                     }));
 
-            await this._commerceCommander.Pipeline<IPersistEntityPipeline>()
+            await _commerceCommander.Pipeline<IPersistEntityPipeline>()
                 .Run(new PersistEntityArgument(bundle2), context).ConfigureAwait(false);
 
             // Associate bundle to parent category
-            await this._commerceCommander.Command<AssociateSellableItemToParentCommand>().Process(
-                context.CommerceContext,
+            await AssociateEntity(context.CommerceContext, new CatalogReferenceArgument(
                 "Entity-Catalog-Habitat_Master",
                 "Entity-Category-Habitat_Master-Fitness Activity Trackers",
-                bundle2.Id).ConfigureAwait(false);
+                 bundle2.Id)).ConfigureAwait(false);
 
             // Third bundle
             var bundle3 =
-                await this._commerceCommander.Command<CreateBundleCommand>().Process(
+                await CreateBundle(
                     context.CommerceContext,
                     "Static",
                     "6001003",
@@ -167,7 +175,12 @@ namespace Plugin.Sample.Habitat
                     "Viva Refrigerators",
                     string.Empty,
                     string.Empty,
-                    new[] { "refrigerator", "flipphone", "bundle" },
+                    new[]
+                    {
+                        "refrigerator",
+                        "flipphone",
+                        "bundle"
+                    },
                     new List<BundleItem>
                     {
                         new BundleItem
@@ -203,19 +216,18 @@ namespace Plugin.Sample.Habitat
                         new Money("CAD", 20.00M)
                     }));
 
-            await this._commerceCommander.Pipeline<IPersistEntityPipeline>()
+            await _commerceCommander.Pipeline<IPersistEntityPipeline>()
                 .Run(new PersistEntityArgument(bundle3), context).ConfigureAwait(false);
 
             // Associate bundle to parent category
-            await this._commerceCommander.Command<AssociateSellableItemToParentCommand>().Process(
-                context.CommerceContext,
+            await AssociateEntity(context.CommerceContext, new CatalogReferenceArgument(
                 "Entity-Catalog-Habitat_Master",
                 "Entity-Category-Habitat_Master-Appliances",
-                bundle3.Id).ConfigureAwait(false);
+                bundle3.Id)).ConfigureAwait(false);
 
             // Fourth bundle with digital items
             var bundle4 =
-                await this._commerceCommander.Command<CreateBundleCommand>().Process(
+                await CreateBundle(
                     context.CommerceContext,
                     "Static",
                     "6001004",
@@ -225,7 +237,12 @@ namespace Plugin.Sample.Habitat
                     string.Empty,
                     string.Empty,
                     string.Empty,
-                    new[] { "bundle", "giftcard", "entitlement" },
+                    new[]
+                    {
+                        "bundle",
+                        "giftcard",
+                        "entitlement"
+                    },
                     new List<BundleItem>
                     {
                         new BundleItem
@@ -251,19 +268,18 @@ namespace Plugin.Sample.Habitat
                         new Money("CAD", 20.00M)
                     }));
 
-            await this._commerceCommander.Pipeline<IPersistEntityPipeline>()
+            await _commerceCommander.Pipeline<IPersistEntityPipeline>()
                 .Run(new PersistEntityArgument(bundle4), context).ConfigureAwait(false);
 
             // Associate bundle to parent category
-            await this._commerceCommander.Command<AssociateSellableItemToParentCommand>().Process(
-                context.CommerceContext,
+            await AssociateEntity(context.CommerceContext, new CatalogReferenceArgument(
                 "Entity-Catalog-Habitat_Master",
                 "Entity-Category-Habitat_Master-eGift Cards and Gift Wrapping",
-                bundle4.Id).ConfigureAwait(false);
+                bundle4.Id)).ConfigureAwait(false);
 
             // Preorderable bundle
             var bundle5 =
-                await this._commerceCommander.Command<CreateBundleCommand>().Process(
+                await CreateBundle(
                     context.CommerceContext,
                     "Static",
                     "6001005",
@@ -273,7 +289,10 @@ namespace Plugin.Sample.Habitat
                     string.Empty,
                     string.Empty,
                     string.Empty,
-                    new[] { "bundle" },
+                    new[]
+                    {
+                        "bundle"
+                    },
                     new List<BundleItem>
                     {
                         new BundleItem
@@ -299,19 +318,18 @@ namespace Plugin.Sample.Habitat
                         new Money("CAD", 59.99M)
                     }));
 
-            await this._commerceCommander.Pipeline<IPersistEntityPipeline>()
+            await _commerceCommander.Pipeline<IPersistEntityPipeline>()
                 .Run(new PersistEntityArgument(bundle5), context).ConfigureAwait(false);
 
             // Associate bundle to parent category
-            await this._commerceCommander.Command<AssociateSellableItemToParentCommand>().Process(
-                context.CommerceContext,
+            await AssociateEntity(context.CommerceContext, new CatalogReferenceArgument(
                 "Entity-Catalog-Habitat_Master",
                 "Entity-Category-Habitat_Master-Phones",
-                bundle5.Id).ConfigureAwait(false);
+                bundle5.Id)).ConfigureAwait(false);
 
             // Backorderable bundle
             var bundle6 =
-                await this._commerceCommander.Command<CreateBundleCommand>().Process(
+                await CreateBundle(
                     context.CommerceContext,
                     "Static",
                     "6001006",
@@ -321,7 +339,10 @@ namespace Plugin.Sample.Habitat
                     string.Empty,
                     string.Empty,
                     string.Empty,
-                    new[] { "bundle" },
+                    new[]
+                    {
+                        "bundle"
+                    },
                     new List<BundleItem>
                     {
                         new BundleItem
@@ -347,19 +368,18 @@ namespace Plugin.Sample.Habitat
                         new Money("CAD", 59.99M)
                     }));
 
-            await this._commerceCommander.Pipeline<IPersistEntityPipeline>()
+            await _commerceCommander.Pipeline<IPersistEntityPipeline>()
                 .Run(new PersistEntityArgument(bundle6), context).ConfigureAwait(false);
 
             // Associate bundle to parent category
-            await this._commerceCommander.Command<AssociateSellableItemToParentCommand>().Process(
-                context.CommerceContext,
+            await AssociateEntity(context.CommerceContext, new CatalogReferenceArgument(
                 "Entity-Catalog-Habitat_Master",
                 "Entity-Category-Habitat_Master-Phones",
-                bundle6.Id).ConfigureAwait(false);
+                bundle6.Id)).ConfigureAwait(false);
 
             // Backorderable bundle
             var bundle7 =
-                await this._commerceCommander.Command<CreateBundleCommand>().Process(
+                await CreateBundle(
                     context.CommerceContext,
                     "Static",
                     "6001007",
@@ -369,7 +389,10 @@ namespace Plugin.Sample.Habitat
                     string.Empty,
                     string.Empty,
                     string.Empty,
-                    new[] { "bundle" },
+                    new[]
+                    {
+                        "bundle"
+                    },
                     new List<BundleItem>
                     {
                         new BundleItem
@@ -395,19 +418,18 @@ namespace Plugin.Sample.Habitat
                         new Money("CAD", 59.99M)
                     }));
 
-            await this._commerceCommander.Pipeline<IPersistEntityPipeline>()
+            await _commerceCommander.Pipeline<IPersistEntityPipeline>()
                 .Run(new PersistEntityArgument(bundle7), context).ConfigureAwait(false);
 
             // Associate bundle to parent category
-            await this._commerceCommander.Command<AssociateSellableItemToParentCommand>().Process(
-                context.CommerceContext,
+            await AssociateEntity(context.CommerceContext, new CatalogReferenceArgument(
                 "Entity-Catalog-Habitat_Master",
                 "Entity-Category-Habitat_Master-Audio",
-                bundle7.Id).ConfigureAwait(false);
+                bundle7.Id)).ConfigureAwait(false);
 
             // Eigth bundle with a gift card only
             var bundle8 =
-                await this._commerceCommander.Command<CreateBundleCommand>().Process(
+                await CreateBundle(
                     context.CommerceContext,
                     "Static",
                     "6001008",
@@ -417,7 +439,12 @@ namespace Plugin.Sample.Habitat
                     string.Empty,
                     string.Empty,
                     string.Empty,
-                    new[] { "bundle", "entitlement", "giftcard" },
+                    new[]
+                    {
+                        "bundle",
+                        "entitlement",
+                        "giftcard"
+                    },
                     new List<BundleItem>
                     {
                         new BundleItem
@@ -438,19 +465,18 @@ namespace Plugin.Sample.Habitat
                         new Money("CAD", 50.00M)
                     }));
 
-            await this._commerceCommander.Pipeline<IPersistEntityPipeline>()
+            await _commerceCommander.Pipeline<IPersistEntityPipeline>()
                 .Run(new PersistEntityArgument(bundle8), context).ConfigureAwait(false);
 
             // Associate bundle to parent category
-            await this._commerceCommander.Command<AssociateSellableItemToParentCommand>().Process(
-                context.CommerceContext,
+            await AssociateEntity(context.CommerceContext, new CatalogReferenceArgument(
                 "Entity-Catalog-Habitat_Master",
                 "Entity-Category-Habitat_Master-eGift Cards and Gift Wrapping",
-                bundle8.Id).ConfigureAwait(false);
+                bundle8.Id)).ConfigureAwait(false);
 
             // Warranty bundle
             var bundle9 =
-                await this._commerceCommander.Command<CreateBundleCommand>().Process(
+                await CreateBundle(
                     context.CommerceContext,
                     "Static",
                     "6001009",
@@ -460,7 +486,11 @@ namespace Plugin.Sample.Habitat
                     string.Empty,
                     string.Empty,
                     string.Empty,
-                    new[] { "bundle", "warranty" },
+                    new[]
+                    {
+                        "bundle",
+                        "warranty"
+                    },
                     new List<BundleItem>
                     {
                         new BundleItem
@@ -481,19 +511,18 @@ namespace Plugin.Sample.Habitat
                         new Money("CAD", 200.00M)
                     }));
 
-            await this._commerceCommander.Pipeline<IPersistEntityPipeline>()
+            await _commerceCommander.Pipeline<IPersistEntityPipeline>()
                 .Run(new PersistEntityArgument(bundle9), context).ConfigureAwait(false);
 
             // Associate bundle to parent category
-            await this._commerceCommander.Command<AssociateSellableItemToParentCommand>().Process(
-                context.CommerceContext,
+            await AssociateEntity(context.CommerceContext, new CatalogReferenceArgument(
                 "Entity-Catalog-Habitat_Master",
                 "Entity-Category-Habitat_Master-eGift Cards and Gift Wrapping",
-                bundle9.Id).ConfigureAwait(false);
+                bundle9.Id)).ConfigureAwait(false);
 
             // Service bundle
             var bundle10 =
-                await this._commerceCommander.Command<CreateBundleCommand>().Process(
+                await CreateBundle(
                     context.CommerceContext,
                     "Static",
                     "6001010",
@@ -503,7 +532,11 @@ namespace Plugin.Sample.Habitat
                     string.Empty,
                     string.Empty,
                     string.Empty,
-                    new[] { "bundle", "service" },
+                    new[]
+                    {
+                        "bundle",
+                        "service"
+                    },
                     new List<BundleItem>
                     {
                         new BundleItem
@@ -524,19 +557,18 @@ namespace Plugin.Sample.Habitat
                         new Money("CAD", 200.00M)
                     }));
 
-            await this._commerceCommander.Pipeline<IPersistEntityPipeline>()
+            await _commerceCommander.Pipeline<IPersistEntityPipeline>()
                 .Run(new PersistEntityArgument(bundle10), context).ConfigureAwait(false);
 
             // Associate bundle to parent category
-            await this._commerceCommander.Command<AssociateSellableItemToParentCommand>().Process(
-                context.CommerceContext,
+            await AssociateEntity(context.CommerceContext, new CatalogReferenceArgument(
                 "Entity-Catalog-Habitat_Master",
                 "Entity-Category-Habitat_Master-eGift Cards and Gift Wrapping",
-                bundle10.Id).ConfigureAwait(false);
+                bundle10.Id)).ConfigureAwait(false);
 
             // Subscription bundle
             var bundle11 =
-                await this._commerceCommander.Command<CreateBundleCommand>().Process(
+                await CreateBundle(
                     context.CommerceContext,
                     "Static",
                     "6001011",
@@ -546,7 +578,11 @@ namespace Plugin.Sample.Habitat
                     string.Empty,
                     string.Empty,
                     string.Empty,
-                    new[] { "bundle", "subscription" },
+                    new[]
+                    {
+                        "bundle",
+                        "subscription"
+                    },
                     new List<BundleItem>
                     {
                         new BundleItem
@@ -567,15 +603,53 @@ namespace Plugin.Sample.Habitat
                         new Money("CAD", 15.00M)
                     }));
 
-            await this._commerceCommander.Pipeline<IPersistEntityPipeline>()
+            await _commerceCommander.Pipeline<IPersistEntityPipeline>()
                 .Run(new PersistEntityArgument(bundle11), context).ConfigureAwait(false);
 
             // Associate bundle to parent category
-            await this._commerceCommander.Command<AssociateSellableItemToParentCommand>().Process(
-                context.CommerceContext,
+            await AssociateEntity(context.CommerceContext, new CatalogReferenceArgument(
                 "Entity-Catalog-Habitat_Master",
                 "Entity-Category-Habitat_Master-eGift Cards and Gift Wrapping",
-                bundle11.Id).ConfigureAwait(false);
+                bundle11.Id)).ConfigureAwait(false);
+        }
+
+        private async Task AssociateEntity(CommerceContext commerceContext, CatalogReferenceArgument arg)
+        {
+            await _commerceCommander.ProcessWithTransaction(commerceContext,
+                  () => _commerceCommander.Pipeline<IAssociateSellableItemToParentPipeline>().Run(
+                  arg, commerceContext.PipelineContextOptions))
+              .ConfigureAwait(false);
+        }
+        private async Task<SellableItem> CreateBundle(
+         CommerceContext commerceContext,
+         string bundleType,
+         string bundleId,
+         string name,
+         string displayName,
+         string description,
+         string brand = "",
+         string manufacturer = "",
+         string typeOfGood = "",
+         string[] tags = null,
+         IList<BundleItem> bundleItems = null)
+        {
+            var argument =
+                new CreateBundleArgument(bundleType, bundleId, name, displayName, description)
+                {
+                    Brand = brand,
+                    Manufacturer = manufacturer,
+                    TypeOfGood = typeOfGood,
+                    BundleItems = bundleItems
+                };
+
+            argument.Tags.AddRange(tags?.ToList() ?? new List<string>());
+
+            var result = await _commerceCommander.ProcessWithTransaction(commerceContext,
+                  () => _commerceCommander.Pipeline<ICreateBundlePipeline>().Run(
+                  argument, commerceContext.PipelineContextOptions))
+              .ConfigureAwait(false);
+
+            return result?.SellableItems?.FirstOrDefault();
         }
     }
 }

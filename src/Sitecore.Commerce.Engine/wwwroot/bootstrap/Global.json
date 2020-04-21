@@ -1,4 +1,4 @@
-{
+﻿{
   "$type": "Sitecore.Commerce.Core.CommerceEnvironment, Sitecore.Commerce.Core",
   "Id": "GlobalEnvironment",
   "ArtifactStoreId": "{6be385f1-93dc-4299-9dd4-934f6ba42eaa}",
@@ -37,12 +37,12 @@
         "Database": "SitecoreCommerce9_Global",
         "EffectiveDate": "0001-01-01T00:00:00",
         "IsVisible": false,
-        "Password": "sqlsa",
-        "Server": "LAPTOP-4P4QBB00",
+        "Password": "",
+        "Server": ".",
         "TrustedConnection": true,
-        "UserName": "LAPTOP-4P4QBB00\\CSFndRuntimeUser",
+        "UserName": "",
         "View": "EntityStoreSqlPolicy",
-        "Version": "9.2.0"
+        "Version": "9.3.0"
       },
       {
         "$type": "Sitecore.Commerce.Core.DeploymentPolicy, Sitecore.Commerce.Core",
@@ -54,14 +54,16 @@
         "$type": "Sitecore.Commerce.Core.ControllerMethodRolesPolicy, Sitecore.Commerce.Core",
         "ControllerMethodRegularExpression": "/commerceops/",
         "AuthorizedRoles": [
-          "sitecore\\Commerce Business User"
+          "sitecore\\Commerce Business User",
+          "commerce\\runtime"
         ]
       },
       {
         "$type": "Sitecore.Commerce.Core.ControllerMethodRolesPolicy, Sitecore.Commerce.Core",
         "ControllerMethodRegularExpression": "/api/",
         "AuthorizedRoles": [
-          "sitecore\\Commerce Business User"
+          "sitecore\\Commerce Business User",
+          "commerce\\runtime"
         ]
       },
       {
@@ -72,7 +74,9 @@
         "Domain": "sitecore",
         "Password": "b",
         "ConnectionLeaseTimeout": 60000,
-        "AuthRequestUrl": "sitecore/api/ssc/auth/login"
+        "AuthRequestUrl": "sitecore/api/ssc/auth/login",
+        "Protocol": "https",
+        "AllowAnonymousUser": "false"
       }
     ]
   }

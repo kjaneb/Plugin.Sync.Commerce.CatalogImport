@@ -173,20 +173,8 @@
         "Journal": "OrdersJournal"
       },
       {
-        "$type": "Sitecore.Commerce.Core.PolicySetPolicy, Sitecore.Commerce.Core",
-        "PolicySetId": "Entity-PolicySet-SellableItemMappingPolicySet"
-      },
-      {
-        "$type": "Sitecore.Commerce.Core.PolicySetPolicy, Sitecore.Commerce.Core",
-        "PolicySetId": "Entity-PolicySet-CategoryMappingPolicySet"
-      },
-      {
-        "$type": "Sitecore.Commerce.Core.PolicySetPolicy, Sitecore.Commerce.Core",
-        "PolicySetId": "Entity-PolicySet-ContentHubConnectionPolicySet"
-      },
-      {
         "$type": "Sitecore.Commerce.Plugin.BusinessUsers.EnvironmentBusinessToolsPolicy,Sitecore.Commerce.Plugin.BusinessUsers",
-        "ServiceUrl": ""
+        "ServiceUrl": "https://localhost:5000"
       },
       {
         "$type": "Sitecore.Commerce.Core.EnvironmentInitializationPolicy, Sitecore.Commerce.Core",
@@ -217,8 +205,9 @@
           "$type": "System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib",
           "$values": [
             "en",
-            "en-CA",
-            "fr-CA"
+            "de-DE",
+            "ja-JP",
+            "fr-FR"
           ]
         },
         "DefaultCurrency": "USD",

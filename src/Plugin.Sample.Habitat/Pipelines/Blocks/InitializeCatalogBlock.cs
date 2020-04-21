@@ -23,19 +23,19 @@ namespace Plugin.Sample.Habitat
     public class InitializeCatalogBlock : PipelineBlock<string, string, CommercePipelineExecutionContext>
     {
         private readonly IHostingEnvironment _hostingEnvironment;
-        private readonly ImportCatalogsCommand _importCatalogsCommand;
+        private readonly IImportCatalogsPipeline _importCatalogsPipeline;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="InitializeCatalogBlock"/> class.
         /// </summary>
         /// <param name="hostingEnvironment">The hosting environment.</param>
-        /// <param name="importCatalogsCommand">The import catalogs command.</param>
+        /// <param name="importCatalogsPipeline">The import catalogs pipeline.</param>
         public InitializeCatalogBlock(
             IHostingEnvironment hostingEnvironment,
-            ImportCatalogsCommand importCatalogsCommand)
+            IImportCatalogsPipeline importCatalogsPipeline)
         {
             _hostingEnvironment = hostingEnvironment;
-            _importCatalogsCommand = importCatalogsCommand;
+            _importCatalogsPipeline = importCatalogsPipeline;
         }
 
         /// <summary>
@@ -74,7 +74,7 @@ namespace Plugin.Sample.Habitat
         /// <summary>
         /// Import catalog from file.
         /// </summary>
-        /// <param name="context">The context to execute <see cref="ImportCatalogsCommand"/>.</param>
+        /// <param name="context">The context to execute <see cref="IImportCatalogsPipeline"/>.</param>
         /// <returns></returns>
         protected virtual async Task ImportCatalogAsync(CommercePipelineExecutionContext context)
         {
@@ -82,7 +82,19 @@ namespace Plugin.Sample.Habitat
             {
                 var file = new FormFile(stream, 0, stream.Length, stream.Name, stream.Name);
 
-                await _importCatalogsCommand.Process(context.CommerceContext, file, CatalogConstants.Replace, -1, 10).ConfigureAwait(false);
+                var contextOptions = context.CommerceContext.PipelineContextOptions;
+
+                var argument = new ImportCatalogsArgument(file, CatalogConstants.Replace)
+                {
+                    BatchSize = -1,
+                    ErrorThreshold = 10
+                };
+
+                context.CommerceContext.Environment.SetPolicy(new AutoApprovePolicy());
+
+                await _importCatalogsPipeline.Run(argument, contextOptions).ConfigureAwait(false);
+
+                context.CommerceContext.Environment.RemovePolicy(typeof(AutoApprovePolicy));
             }
         }
 

@@ -1,0 +1,56 @@
+{
+  "$type": "Sitecore.Commerce.Core.PolicySet, Sitecore.Commerce.Core",
+  "Id": "Entity-PolicySet-SellableItemMappingPolicySet",
+  "Version": 1,
+  "IsPersisted": false,
+  "Name": "SellableItemMappingPolicySet",
+  "Policies": {
+    "$type": "System.Collections.Generic.List`1[[Sitecore.Commerce.Core.Policy, Sitecore.Commerce.Core]], mscorlib",
+    "$values": [
+      {
+        "$type": "Plugin.Sync.Commerce.CatalogImport.Policies.SellableItemMappingPolicy, Plugin.Sync.Commerce.CatalogImport",
+        "ClearFieldValues": true,
+        "EntityId": "id",
+        "EntityName": "id",
+        "ParentCategoryName": "ParentCategoryName",
+        "ParentCatalogName": "ParentCatalogName",
+        "UpdatedItemsList": "ImportedItems",
+        "DefaultCatalogName": "Test_Catalog",
+        "DefaultCategoryName": "Test_Category",
+        "ListPrice": "ListPrice",
+        "EntityFieldsPaths": {
+          "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.String, mscorlib]], mscorlib",
+          "Brand": "properties.SAPBrand",
+          "Manufacturer": "Manufacturer",
+          "TypeOfGoods": "TypeOfGoods",
+          "DisplayName": "properties.ProductName",
+          "Description": "properties.ShortDescription.en-US"
+        },
+        "ComposerFieldsRootPaths": {
+          "$type": "System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib",
+          "$values": [
+            "properties"
+          ]
+        },
+        "ComposerFieldsPaths": {
+          "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.String, mscorlib]], mscorlib",
+          "VolumeLabel": "properties.VolumeLabel.en-US",
+          "PackagingLabel": "properties.PackagingLabel.en-US"
+        },
+        "CustomFieldsRootPaths": {
+          "$type": "System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib",
+          "$values": [
+            "CustomFieldsRootOne",
+            "CustomFieldsRootTwo"
+          ]
+        },
+        "CustomFieldsPaths": {
+          "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.String, mscorlib]], mscorlib",
+          "CustomFieldA": "CustomFieldA",
+          "CustomFieldB": "CustomFieldB",
+          "three": "threeVal"
+        }
+      }
+    ]
+  }
+}

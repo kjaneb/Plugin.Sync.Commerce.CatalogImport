@@ -311,6 +311,18 @@
         "Journal": "OrdersJournal"
       },
       {
+        "$type": "Sitecore.Commerce.Core.PolicySetPolicy, Sitecore.Commerce.Core",
+        "PolicySetId": "Entity-PolicySet-SellableItemMappingPolicySet"
+      },
+      {
+        "$type": "Sitecore.Commerce.Core.PolicySetPolicy, Sitecore.Commerce.Core",
+        "PolicySetId": "Entity-PolicySet-CategoryMappingPolicySet"
+      },
+      {
+        "$type": "Sitecore.Commerce.Core.PolicySetPolicy, Sitecore.Commerce.Core",
+        "PolicySetId": "Entity-PolicySet-ContentHubConnectionPolicySet"
+      },
+      {
         "$type": "Sitecore.Commerce.Plugin.Returns.RequestRmaReasonsPolicy, Sitecore.Commerce.Plugin.Returns",
         "List": {
           "$type": "System.Collections.Generic.List`1[[Sitecore.Commerce.Plugin.Returns.RmaReason, Sitecore.Commerce.Plugin.Returns]], mscorlib",

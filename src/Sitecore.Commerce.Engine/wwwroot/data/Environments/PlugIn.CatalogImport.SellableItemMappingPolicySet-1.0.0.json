@@ -12,19 +12,19 @@
         "ClearFieldValues": true,
         "EntityId": "id",
         "EntityName": "id",
-        "ParentCategoryName": "ParentCategoryName",
-        "ParentCatalogName": "ParentCatalogName",
+        "ParentCategoryName": "Equipment",
+        "ParentCatalogName": "Quadfecta",
         "UpdatedItemsList": "ImportedItems",
-        "DefaultCatalogName": "Test_Catalog",
-        "DefaultCategoryName": "Test_Category",
-        "ListPrice": "ListPrice",
+        "DefaultCatalogName": "Quadfecta",
+        "DefaultCategoryName": "Equipment",
+        "ListPrice": "properties.Price",
         "EntityFieldsPaths": {
           "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.String, mscorlib]], mscorlib",
           "Brand": "properties.SAPBrand",
           "Manufacturer": "Manufacturer",
           "TypeOfGoods": "TypeOfGoods",
-          "DisplayName": "properties.ProductName",
-          "Description": "properties.ShortDescription.en-US"
+          "DisplayName": "properties.ProductLabel.en-US",
+          "Description": "properties.ProductLongDescription.en-US"
         },
         "ComposerFieldsRootPaths": {
           "$type": "System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib",
@@ -34,8 +34,10 @@
         },
         "ComposerFieldsPaths": {
           "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.String, mscorlib]], mscorlib",
-          "VolumeLabel": "properties.VolumeLabel.en-US",
-          "PackagingLabel": "properties.PackagingLabel.en-US"
+          "MainImage": "properties.MainImage",
+          "AdditionalImage": "properties.AdditionalImage",
+          "Warranty": "properties.Warranty",
+          "SKU": "properties.ProductNumber"
         },
         "CustomFieldsRootPaths": {
           "$type": "System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib",

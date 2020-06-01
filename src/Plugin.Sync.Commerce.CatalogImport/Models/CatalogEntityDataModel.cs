@@ -14,5 +14,7 @@ namespace Plugin.Sync.Commerce.CatalogImport.Models
         public Dictionary<string, string> ComposerFields { get; set; } = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
         public Dictionary<string, string> CustomFields { get; set; } = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
         public string CommerceEntityId { get; set; }
+
+        public decimal? ListPrice { get; set; }
     }
 }

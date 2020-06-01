@@ -10,8 +10,8 @@
       {
         "$type": "Plugin.Sync.Commerce.CatalogImport.Policies.ContentHubConnectionPolicy, Plugin.Sync.Commerce.CatalogImport",
         "TokenCacheName": "ContentHubTokenCache",
-        "ProtocolAndHost": "https://xc-shared-demo-content.stylelabs.io",
-        "UserName": "xccmpdemo",
+        "ProtocolAndHost": "https://quadfecta.stylelabsdev.com",
+        "UserName": "sxcsync",
         "Password": "Welcome20!"
       }
     ]

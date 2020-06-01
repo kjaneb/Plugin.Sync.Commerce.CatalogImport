@@ -6,9 +6,11 @@ using Sitecore.Commerce.Core;
 using Sitecore.Commerce.Core.Commands;
 using Sitecore.Commerce.Plugin.Catalog;
 using Sitecore.Commerce.Plugin.Composer;
+using Sitecore.Commerce.Plugin.Pricing;
 using Sitecore.Framework.Conditions;
 using Sitecore.Framework.Pipelines;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
@@ -60,7 +62,9 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
                 //Get or create sellable item
                 var sellableItem = await GetOrCreateSellableItem(entityData, context);
                 //Associate catalog and category
-                sellableItem = await AssociateSellableItemWithParentEntities(entityData.ParentCatalogName, entityData.ParentCategoryName, sellableItem, context.CommerceContext);
+
+                var parentEntityId = string.IsNullOrEmpty(arg.ParentEntityId) ? entityData.ParentCategoryName : arg.ParentEntityId;
+                sellableItem = await AssociateSellableItemWithParentEntities(entityData.ParentCatalogName, parentEntityId, sellableItem, context.CommerceContext);
 
                 //Check code running before this - this persist might be redindant
                 //var persistResult = await _commerceCommander.Pipeline<IPersistEntityPipeline>().Run(new PersistEntityArgument(sellableItem), context);
@@ -144,11 +148,28 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
                 sellableItem.Manufacturer = entityData.EntityFields.ContainsKey("Manufacturer") ? entityData.EntityFields["Manufacturer"] : string.Empty;
                 sellableItem.TypeOfGood = entityData.EntityFields.ContainsKey("TypeOfGoods") ? entityData.EntityFields["TypeOfGoods"] : string.Empty;
 
-                var persistResult = await _commerceCommander.Pipeline<IPersistEntityPipeline>().Run(new PersistEntityArgument(sellableItem), context);
+                await _commerceCommander.Pipeline<IPersistEntityPipeline>().Run(new PersistEntityArgument(sellableItem), context).ConfigureAwait(false);
             }
+
+            if (entityData.ListPrice != null && entityData.ListPrice.HasValue && entityData.ListPrice > 0)
+            {
+                var moneyPrice = new Money("USD", entityData.ListPrice.Value);
+                sellableItem.ListPrice = moneyPrice;
+                var pricingPolicy = sellableItem.GetPolicy<ListPricingPolicy>();
+                pricingPolicy.AddPrice(new Money("USD", entityData.ListPrice.Value));
+            }
+            else
+            {
+                sellableItem.ListPrice = null;
+                var pricingPolicy = sellableItem.GetPolicy<ListPricingPolicy>();
+                pricingPolicy.ClearPrices();
+            }
+
+            await _commerceCommander.Pipeline<IPersistEntityPipeline>().Run(new PersistEntityArgument(sellableItem), context).ConfigureAwait(false);
 
             return await _commerceCommander.Command<FindEntityCommand>().Process(context.CommerceContext, typeof(SellableItem), sellableItem.Id) as SellableItem;
         }
+
         #endregion
     }
 }

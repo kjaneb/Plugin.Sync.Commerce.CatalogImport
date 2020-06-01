@@ -22,5 +22,7 @@ namespace Plugin.Sync.Commerce.CatalogImport.Policies
         public string DefaultCatalogName { get; set; }
         public string DefaultCategoryName { get; set; }
 
+        public string ListPrice { get; set; }
+
     }
 }

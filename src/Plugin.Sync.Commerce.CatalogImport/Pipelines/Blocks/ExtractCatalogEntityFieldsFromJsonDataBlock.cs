@@ -61,6 +61,19 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
                 entityData.ParentCategoryName = mappingPolicy.DefaultCategoryName;
             }
 
+            if (!string.IsNullOrEmpty(mappingPolicy.ListPrice))
+            {
+                var price = jsonData.SelectValue<string>(mappingPolicy.ListPrice);
+                if (!string.IsNullOrEmpty(price))
+                {
+                    decimal parcedPrice;
+                    if (decimal.TryParse(price, out parcedPrice))
+                    {
+                        entityData.ListPrice = parcedPrice;
+                    }
+                }
+            }
+
             if (arg.CommerceEntityType != null && !string.IsNullOrEmpty(entityData.EntityName))
             {
                 if (arg.CommerceEntityType == typeof(Category) && !string.IsNullOrEmpty(entityData.ParentCatalogName))

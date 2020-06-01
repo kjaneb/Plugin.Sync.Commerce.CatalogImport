@@ -33,6 +33,9 @@ namespace Plugin.Sync.Commerce.CatalogImport
             var importSellableItemFromContentHub = modelBuilder.Action("ImportSellableItemFromContentHub");
             importSellableItemFromContentHub.ReturnsFromEntitySet<CommerceCommand>("Commands");
 
+            var importSellableItemsFromContentHub = modelBuilder.Action("ImportSellableItemsFromContentHub");
+            importSellableItemsFromContentHub.ReturnsFromEntitySet<CommerceCommand>("Commands");
+
             var processAzureQueue = modelBuilder.Action("ProcessAzureQueue");
             processAzureQueue.ReturnsFromEntitySet<CommerceCommand>("Commands");
 

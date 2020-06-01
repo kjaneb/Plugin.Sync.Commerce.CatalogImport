@@ -21,6 +21,7 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Arguments
         }
 
         public string ContentHubEntityId { get; set; }
+        public string ParentEntityId { get; set; }
         public JObject Request { get; set; }
         public MappingPolicyBase MappingPolicy { get; set; }
         public Type CommerceEntityType { get; set; }

@@ -8,7 +8,9 @@ using Serilog;
 using Sitecore.Commerce.Core;
 using Sitecore.Commerce.Core.Commands;
 using Sitecore.Commerce.Plugin.Catalog;
+using Sitecore.Services.Core.ComponentModel;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -63,7 +65,7 @@ namespace Plugin.Sync.Commerce.CatalogImport.Controllers
                 return new ObjectResult(ex);
             }
         }
-        
+
         /// <summary>
         /// Sync incoming data into Commerce SellableItem
         /// </summary>
@@ -122,6 +124,48 @@ namespace Plugin.Sync.Commerce.CatalogImport.Controllers
             }
         }
 
+        [HttpPost]
+        [Route("ImportSellableItemsFromContentHub()")]
+        public async Task<IActionResult> ImportSellableItemsFromContentHub([FromBody] JObject request)
+        {
+            InitializeEnvironment();
+            try
+            {
+                if (!request.ContainsKey("EntityIds") || request["EntityIds"] == null)
+                    return (IActionResult)new BadRequestObjectResult((object)request);
+                string entityIds = request["EntityIds"].ToString();
+
+                string parentEntityId = null;
+                if (request.ContainsKey("ParentEntityId") && request["ParentEntityId"] != null)
+                {
+                    parentEntityId = request["ParentEntityId"].ToString();
+                }
+
+                var command = Command<ImportSellableItemFromContentHubCommand>();
+                var mappingPolicy = CurrentContext.GetPolicy<SellableItemMappingPolicy>();
+                var entityIdList = entityIds.Split(',');
+
+                var results = new List<ImportCatalogEntityArgument>();
+                foreach (var entityId in entityIdList)
+                {
+                    var argument = new ImportCatalogEntityArgument(mappingPolicy, typeof(SellableItem))
+                    {
+                        ContentHubEntityId = entityId,
+                        ParentEntityId = string.IsNullOrEmpty(parentEntityId) ? null : parentEntityId
+                    };
+
+                    var result = await command.Process(CurrentContext, argument).ConfigureAwait(false);
+                    results.Add(result);
+                }
+
+                return results != null ? new ObjectResult(results) : new NotFoundObjectResult("Error importing SellableItems data");
+            }
+            catch (Exception ex)
+            {
+                return new ObjectResult(ex);
+            }
+        }
+
         /// <summary>
         /// Process messages (import CH entities in CE) 
         /// </summary>
@@ -158,9 +202,9 @@ namespace Plugin.Sync.Commerce.CatalogImport.Controllers
                             //TODO: complete on success, define failure(s) handling
                             message.Complete();
                         }
-                    } 
+                    }
                 }
-                
+
                 //TODO: return meaningful message(s)
                 return new ObjectResult(true);
                 //return result != null ? new ObjectResult(result) : new NotFoundObjectResult("Error importing SellableItem data");
@@ -179,7 +223,7 @@ namespace Plugin.Sync.Commerce.CatalogImport.Controllers
         private void InitializeEnvironment()
         {
             var commerceEnvironment = this.CurrentContext.Environment;
-                //await _getEnvironmentCommand.Process(this.CurrentContext, ENV_NAME) ??
+            //await _getEnvironmentCommand.Process(this.CurrentContext, ENV_NAME) ??
             var pipelineContextOptions = this.CurrentContext.PipelineContextOptions;
             pipelineContextOptions.CommerceContext.Environment = commerceEnvironment;
             this.CurrentContext.PipelineContextOptions.CommerceContext.Environment = commerceEnvironment;

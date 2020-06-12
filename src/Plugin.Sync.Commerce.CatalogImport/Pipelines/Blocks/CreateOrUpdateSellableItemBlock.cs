@@ -151,19 +151,19 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
                 await _commerceCommander.Pipeline<IPersistEntityPipeline>().Run(new PersistEntityArgument(sellableItem), context).ConfigureAwait(false);
             }
 
-            if (entityData.ListPrice != null && entityData.ListPrice.HasValue && entityData.ListPrice > 0)
-            {
-                var moneyPrice = new Money("USD", entityData.ListPrice.Value);
-                sellableItem.ListPrice = moneyPrice;
-                var pricingPolicy = sellableItem.GetPolicy<ListPricingPolicy>();
-                pricingPolicy.AddPrice(new Money("USD", entityData.ListPrice.Value));
-            }
-            else
-            {
-                sellableItem.ListPrice = null;
-                var pricingPolicy = sellableItem.GetPolicy<ListPricingPolicy>();
-                pricingPolicy.ClearPrices();
-            }
+            //if (entityData.ListPrice != null && entityData.ListPrice.HasValue && entityData.ListPrice > 0)
+            //{
+            //    var moneyPrice = new Money("USD", entityData.ListPrice.Value);
+            //    sellableItem.ListPrice = moneyPrice;
+            //    var pricingPolicy = sellableItem.GetPolicy<ListPricingPolicy>();
+            //    pricingPolicy.AddPrice(new Money("USD", entityData.ListPrice.Value));
+            //}
+            //else
+            //{
+            //    sellableItem.ListPrice = null;
+            //    var pricingPolicy = sellableItem.GetPolicy<ListPricingPolicy>();
+            //    pricingPolicy.ClearPrices();
+            //}
 
             await _commerceCommander.Pipeline<IPersistEntityPipeline>().Run(new PersistEntityArgument(sellableItem), context).ConfigureAwait(false);
 

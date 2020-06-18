@@ -17,6 +17,8 @@
         "UpdatedItemsList": "ImportedItems",
         "DefaultCatalogName": "Quadfecta",
         "DefaultCategoryName": "Equipment",
+        "ParentRelationEntityPath": "relations.PCMProductFamilyToProduct.href",
+        "ParentRelationParentsPath": "parents[*].href",
         "ListPrice": "properties.Price",
         "EntityFieldsPaths": {
           "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.String, mscorlib]], mscorlib",

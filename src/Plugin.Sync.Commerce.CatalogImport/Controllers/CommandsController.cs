@@ -136,10 +136,10 @@ namespace Plugin.Sync.Commerce.CatalogImport.Controllers
                     return (IActionResult)new BadRequestObjectResult((object)request);
                 string entityIds = request["EntityIds"].ToString();
 
-                string parentEntityId = null;
-                if (request.ContainsKey("ParentEntityId") && request["ParentEntityId"] != null)
+                string parentEntityIds = null;
+                if (request.ContainsKey("ParentEntityIds") && request["ParentEntityIds"] != null)
                 {
-                    parentEntityId = request["ParentEntityId"].ToString();
+                    parentEntityIds = request["ParentEntityIds"].ToString();
                 }
 
                 var command = Command<ImportSellableItemFromContentHubCommand>();
@@ -151,9 +151,14 @@ namespace Plugin.Sync.Commerce.CatalogImport.Controllers
                 {
                     var argument = new ImportCatalogEntityArgument(mappingPolicy, typeof(SellableItem))
                     {
-                        ContentHubEntityId = entityId,
-                        ParentEntityId = string.IsNullOrEmpty(parentEntityId) ? null : parentEntityId
+                        ContentHubEntityId = entityId
+                        //ParentEntityId = string.IsNullOrEmpty(parentEntityIds) ? null : parentEntityIds
                     };
+
+                    if (!string.IsNullOrEmpty(parentEntityIds))
+                    {
+                        argument.ParentEntityIds = parentEntityIds.Split(',').ToList();
+                    }
 
                     var result = await command.Process(CurrentContext, argument).ConfigureAwait(false);
                     results.Add(result);

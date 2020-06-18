@@ -2,6 +2,7 @@
 using Plugin.Sync.Commerce.CatalogImport.Policies;
 using Sitecore.Commerce.Core;
 using System;
+using System.Collections.Generic;
 
 namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Arguments
 {
@@ -9,7 +10,7 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Arguments
     {
         public ImportCatalogEntityArgument(JObject request, MappingPolicyBase mappingPolicy, Type commerceEntityType)
         {
-            Request = request;
+            Entity = request;
             MappingPolicy = mappingPolicy;
             CommerceEntityType = commerceEntityType;
         }
@@ -21,8 +22,9 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Arguments
         }
 
         public string ContentHubEntityId { get; set; }
-        public string ParentEntityId { get; set; }
-        public JObject Request { get; set; }
+        public List<string> ParentEntityIds { get; set; }
+        public JObject Entity { get; set; }
+        public JObject ParentRelationsEntity { get; set; }
         public MappingPolicyBase MappingPolicy { get; set; }
         public Type CommerceEntityType { get; set; }
     }

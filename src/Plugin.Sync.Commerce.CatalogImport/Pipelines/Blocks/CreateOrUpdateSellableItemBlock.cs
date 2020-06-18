@@ -11,6 +11,7 @@ using Sitecore.Framework.Conditions;
 using Sitecore.Framework.Pipelines;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
@@ -62,9 +63,19 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
                 //Get or create sellable item
                 var sellableItem = await GetOrCreateSellableItem(entityData, context);
                 //Associate catalog and category
-
-                var parentEntityId = string.IsNullOrEmpty(arg.ParentEntityId) ? entityData.ParentCategoryName : arg.ParentEntityId;
-                sellableItem = await AssociateSellableItemWithParentEntities(entityData.ParentCatalogName, parentEntityId, sellableItem, context.CommerceContext);
+                if (arg.ParentEntityIds != null && arg.ParentEntityIds.Count() > 0)
+                {
+                    foreach (var parentEntityId in arg.ParentEntityIds)
+                    {
+                        sellableItem = await AssociateSellableItemWithParentEntities(entityData.ParentCatalogName, parentEntityId, sellableItem, context.CommerceContext).ConfigureAwait(false);
+                    }
+                }
+                //else
+                //{
+                //    sellableItem = await AssociateSellableItemWithParentEntities(entityData.ParentCatalogName, entityData.ParentCategoryName, sellableItem, context.CommerceContext);
+                //}
+                //var parentEntityId = string.IsNullOrEmpty(arg.ParentEntityId) ? entityData.ParentCategoryName : arg.ParentEntityId;
+                
 
                 //Check code running before this - this persist might be redindant
                 //var persistResult = await _commerceCommander.Pipeline<IPersistEntityPipeline>().Run(new PersistEntityArgument(sellableItem), context);

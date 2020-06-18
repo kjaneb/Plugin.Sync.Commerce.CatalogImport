@@ -55,6 +55,7 @@
     <PackageReference Include="Sitecore.Commerce.Plugin.Management" Version="5.0.19" />
     <PackageReference Include="Sitecore.Commerce.Plugin.SQL" Version="5.0.22" />
     <PackageReference Include="Sitecore.Commerce.Plugin.Workflow" Version="5.0.42" />
+    <PackageReference Include="Stylelabs.M.Sdk.WebClient" Version="3.3.0" />
     <PackageReference Include="WindowsAzure.ServiceBus" Version="6.0.1" />
   </ItemGroup>
 

@@ -9,6 +9,7 @@ using Sitecore.Commerce.Plugin.Composer;
 using Sitecore.Framework.Conditions;
 using Sitecore.Framework.Pipelines;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
@@ -61,7 +62,18 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
                 //Get or create sellable item
                 var category = await GetOrCreateCategory(entityData, context);
                 //Associate catalog and category
-                category = await AssociateCategoryWithParentEntities(entityData.ParentCatalogName, entityData.ParentCategoryName, category, context.CommerceContext);
+                if (entityData.ParentEntityIDs != null && entityData.ParentEntityIDs.Count() > 0)
+                {
+                    //TODO: disassociate previous associations
+                    foreach (var parentEntityId in entityData.ParentEntityIDs)
+                    {
+                        if (!string.IsNullOrEmpty(parentEntityId))
+                        {
+                            category = await AssociateCategoryWithParentEntities(entityData.ParentCatalogName, parentEntityId, category, context.CommerceContext); 
+                        }
+                    }
+                }
+                
 
                 //Check code running before this - this persist might be redindant
                 //var persistResult = await _commerceCommander.Pipeline<IPersistEntityPipeline>().Run(new PersistEntityArgument(category), context);

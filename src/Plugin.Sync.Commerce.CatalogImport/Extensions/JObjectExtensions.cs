@@ -36,16 +36,16 @@ namespace Plugin.Sync.Commerce.CatalogImport.Extensions
         /// <param name="jsonData"></param>
         /// <param name="mappingPolicy"></param>
         /// <returns></returns>
-        public static string GetParentCategoryName(this JObject jsonData, MappingPolicyBase mappingPolicy)
-        {
-            var categoryName = jsonData.SelectValue<string>(mappingPolicy.ParentCategoryName);
-            if (string.IsNullOrEmpty(categoryName) && !string.IsNullOrEmpty(mappingPolicy.DefaultCategoryName))
-            {
-                categoryName = mappingPolicy.DefaultCategoryName;
-            }
+        //public static string GetParentCategoryName(this JObject jsonData, MappingPolicyBase mappingPolicy)
+        //{
+        //    var categoryName = jsonData.SelectValue<string>(mappingPolicy.ParentCategoryName);
+        //    if (string.IsNullOrEmpty(categoryName) && !string.IsNullOrEmpty(mappingPolicy.DefaultCategoryName))
+        //    {
+        //        categoryName = mappingPolicy.DefaultCategoryName;
+        //    }
 
-            return categoryName;
-        }
+        //    return categoryName;
+        //}
 
         public static string GetFieldValue(JObject jsonData, string jsonPath)
         {

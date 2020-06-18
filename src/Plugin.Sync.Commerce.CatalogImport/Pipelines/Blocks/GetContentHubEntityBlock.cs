@@ -1,5 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Plugin.Sync.Commerce.CatalogImport.Extensions;
+using Plugin.Sync.Commerce.CatalogImport.Helpers;
 using Plugin.Sync.Commerce.CatalogImport.Pipelines.Arguments;
 using Plugin.Sync.Commerce.CatalogImport.Policies;
 using Serilog;
@@ -21,8 +23,7 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
     public class GetContentHubEntityBlock : PipelineBlock<ImportCatalogEntityArgument, ImportCatalogEntityArgument, CommercePipelineExecutionContext>
     {
         #region Private fields
-        ICacheManager _cacheManager;
-        const string TOKEN_NAME = "ContentHubSecurityToken";
+        private ContentHubHelper _contentHubHelper;
         #endregion
 
         #region Public methods
@@ -34,7 +35,7 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
         /// <param name="importHelper"></param>
         public GetContentHubEntityBlock(ICacheManager cacheManager)
         {
-            _cacheManager = cacheManager;
+            _contentHubHelper = new ContentHubHelper(cacheManager);
         }
 
         /// <summary>
@@ -48,10 +49,22 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
             try
             {
                 var contentHubPolicy = context.GetPolicy<ContentHubConnectionPolicy>();
-                var entityObject = await GetEntity(arg.ContentHubEntityId, contentHubPolicy).ConfigureAwait(false);
+                var entityObject = await _contentHubHelper.GetEntityById(arg.ContentHubEntityId, contentHubPolicy).ConfigureAwait(false);
                 if (entityObject != null)
                 {
-                    arg.Request = entityObject;
+                    arg.Entity = entityObject;
+                    if (arg.MappingPolicy != null && !string.IsNullOrEmpty(arg.MappingPolicy.ParentRelationEntityPath))
+                    {
+                        var parentRelationUrl = arg.Entity.SelectValue<string>(arg.MappingPolicy.ParentRelationEntityPath);
+                        if (!string.IsNullOrEmpty(parentRelationUrl))
+                        {
+                            var parentRelationsEntity = await _contentHubHelper.GetEntityByUrl(parentRelationUrl, contentHubPolicy).ConfigureAwait(false);
+                            if (parentRelationsEntity != null)
+                            {
+                                arg.ParentRelationsEntity = parentRelationsEntity;
+                            } 
+                        }
+                    }
                 }
                 return arg;
             }
@@ -67,86 +80,7 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
         #endregion
 
         #region Private methods
-        private async Task<JObject> GetEntity(string entityId, ContentHubConnectionPolicy contentHubPolicy)
-        {
-            var request = WebRequest.Create($"{contentHubPolicy.ProtocolAndHost}/api/entities/{entityId}");
-            request.Method = "GET";
-            var token = await GetToken(contentHubPolicy).ConfigureAwait(false);
-            request.Headers.Add("X-Auth-Token", token);
-
-            string responseContent = null;
-            using (var response = request.GetResponse())
-            {
-                using (var responseStream = response.GetResponseStream())
-                {
-                    using (var streamReader = new StreamReader(responseStream))
-                    {
-                        responseContent = streamReader.ReadToEnd();
-                    }
-                }
-            }
-            if (!string.IsNullOrEmpty(responseContent))
-            {
-                return JObject.Parse(responseContent);
-            }
-
-            return null;
-        }
-
-        /// <summary>
-        /// Get security token to use for Content Hub API calls
-        /// </summary>
-        /// <param name="contentHubPolicy"></param>
-        /// <returns></returns>
-        private async Task<string> GetToken(ContentHubConnectionPolicy contentHubPolicy)
-        {
-            var cache = _cacheManager.GetCache(contentHubPolicy.TokenCacheName);
-            if (cache == null)
-            {
-                cache = _cacheManager.CreateCache(contentHubPolicy.TokenCacheName);
-            }
-
-            var securityToken = await cache.Get<string>(TOKEN_NAME).ConfigureAwait(false);
-            if (string.IsNullOrEmpty(securityToken))
-            {
-                var request = WebRequest.Create(string.Format("{0}/api/authenticate", contentHubPolicy.ProtocolAndHost));
-                request.Method = "POST";
-                request.ContentType = "application/json";
-
-                using (var streamWriter = new StreamWriter(request.GetRequestStream()))
-                {
-                    var jsonObject = new
-                    {
-                        user_name = contentHubPolicy.UserName,
-                        password = contentHubPolicy.Password,
-                        discard_existing = false
-                    };
-
-                    streamWriter.Write(JsonConvert.SerializeObject(jsonObject));
-                    streamWriter.Flush();
-                    streamWriter.Close();
-                }
-
-                string responseContent = null;
-                using (var response = request.GetResponse())
-                {
-                    using (var responseStream = response.GetResponseStream())
-                    {
-                        using (var streamReader = new StreamReader(responseStream))
-                        {
-                            responseContent = streamReader.ReadToEnd();
-                        }
-                    }
-                }
-
-                var o = JObject.Parse(responseContent);
-                securityToken = (string)o["token"];
-
-                await cache.SetString(TOKEN_NAME, securityToken).ConfigureAwait(false);
-            }
-
-            return securityToken;
-        }
+       
         #endregion
     }
 }

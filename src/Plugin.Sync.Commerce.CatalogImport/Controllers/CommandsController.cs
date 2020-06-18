@@ -24,9 +24,10 @@ namespace Plugin.Sync.Commerce.CatalogImport.Controllers
         private readonly GetEnvironmentCommand _getEnvironmentCommand;
 
         //TODO: move below consts into CH connection policy
-        static string _connectionString = "Endpoint=sb://xccontenthubdemo.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=HxyFUilEe7vGB0gXAYPnBUVQA8YaG63ElEJPkaJ5Pe4=";
-        static string _subscriptionName = "sitecore";
+        static string _connectionString = "Endpoint=sb://xccontenthubdemo.servicebus.windows.net/;SharedAccessKeyName=products_content;SharedAccessKey=yK0BD0C+ijNNWfl3cUJdmOJgC4MT/QSZZFqAAir7MZQ=";
+        static string _subscriptionName = "quadfectaproductsync";
         static string _topicName = "products_content";
+        static string _productEntityDefinition = "M.PCM.Product";
         static int _maxMessagesCount = 100;
 
         /// <summary>
@@ -179,10 +180,10 @@ namespace Plugin.Sync.Commerce.CatalogImport.Controllers
             try
             {
                 var subClient = SubscriptionClient.CreateFromConnectionString(_connectionString, _topicName, _subscriptionName);
-                subClient.OnMessage(m =>
-                {
-                    Log.Information($"Processing Azure Queue message: {m.GetBody<string>()}");
-                });
+                //subClient.OnMessage(m =>
+                //{
+                //    Log.Information($"Processing Azure Queue message: {m.GetBody<string>()}");
+                //});
                 var messages = subClient.ReceiveBatch(_maxMessagesCount);
                 if (messages != null && messages.Count() > 0)
                 {
@@ -191,16 +192,21 @@ namespace Plugin.Sync.Commerce.CatalogImport.Controllers
                     foreach (var message in messages)
                     {
                         //Check entity type and match it to policy settings
-                        if (message != null && message.Properties.ContainsKey("target_id"))
+                        if (message != null && message.Properties.ContainsKey("target_id") && message.Properties.ContainsKey("target_definition"))
                         {
-                            var argument = new ImportCatalogEntityArgument(mappingPolicy, typeof(SellableItem))
+                            var targetId = (string)message.Properties["target_id"];
+                            var targetDefinition = (string)message.Properties["target_definition"];
+                            if (!string.IsNullOrEmpty(targetId) && !string.IsNullOrEmpty(targetDefinition) && targetDefinition.Equals(_productEntityDefinition, StringComparison.OrdinalIgnoreCase))
                             {
-                                ContentHubEntityId = (string)message.Properties["target_id"]
-                            };
-                            var result = await command.Process(CurrentContext, argument).ConfigureAwait(false);
+                                var argument = new ImportCatalogEntityArgument(mappingPolicy, typeof(SellableItem))
+                                {
+                                    ContentHubEntityId = targetId
+                                };
+                                var result = await command.Process(CurrentContext, argument).ConfigureAwait(false);
 
-                            //TODO: complete on success, define failure(s) handling
-                            message.Complete();
+                                //TODO: complete on success, define failure(s) handling
+                                message.Complete(); 
+                            }
                         }
                     }
                 }

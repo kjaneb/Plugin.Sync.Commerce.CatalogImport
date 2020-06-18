@@ -102,7 +102,11 @@ namespace Plugin.Sync.Commerce.CatalogImport.Helpers
                 var o = JObject.Parse(responseContent);
                 securityToken = (string)o["token"];
 
-                await cache.SetString(TOKEN_NAME, securityToken).ConfigureAwait(false);
+                var cacheEntryOptions = new CacheEntryOptions
+                {
+                    AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(3000)
+                };
+                await cache.SetString(TOKEN_NAME, securityToken, cacheEntryOptions).ConfigureAwait(false);
             }
 
             return securityToken;

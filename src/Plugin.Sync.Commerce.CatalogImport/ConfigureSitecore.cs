@@ -1,11 +1,14 @@
 using Microsoft.Extensions.DependencyInjection;
 using Plugin.Sync.Commerce.CatalogImport.Pipelines;
 using Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks;
+using Plugin.Sync.Commerce.CatalogImport.ServiceBus;
 using Sitecore.Commerce.Core;
 using Sitecore.Commerce.Plugin.SQL;
 using Sitecore.Framework.Configuration;
 using Sitecore.Framework.Pipelines.Definitions.Extensions;
 using System.Reflection;
+using System.Web.Services.Description;
+using System.Linq;
 
 namespace Plugin.Sync.Commerce.CatalogImport
 {
@@ -17,7 +20,8 @@ namespace Plugin.Sync.Commerce.CatalogImport
         {
             var assembly = Assembly.GetExecutingAssembly();
             services.RegisterAllPipelineBlocks(assembly);
-
+            services.AddSingleton<IServiceBusConsumer, ServiceBusConsumer>();
+            services.AddScoped<CommandsController, CommandsController>();
             services.Sitecore().Pipelines(config => config
                 .ConfigurePipeline<IConfigureServiceApiPipeline>(configure => configure.Add<ConfigureServiceApiBlock>())
                 .AddPipeline<IImportCategoryPipeline, ImportCategoryPipeline>(

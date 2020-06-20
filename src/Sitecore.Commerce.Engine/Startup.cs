@@ -22,6 +22,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Plugin.Sync.Commerce.CatalogImport.ServiceBus;
 using Serilog;
 using Serilog.Events;
 using Sitecore.Commerce.Core;
@@ -156,7 +157,9 @@ namespace Sitecore.Commerce.Engine
             services.AddSingleton(_telemetryClient);
 
             services.AddMvc()
-                .AddJsonOptions(options => options.SerializerSettings.ContractResolver = new CommerceContractResolver());
+                .AddJsonOptions(options => options.SerializerSettings.ContractResolver = new CommerceContractResolver())
+                .AddControllersAsServices();
+            
             services.AddOData();
             services.AddCors();
             services.AddMvcCore(options => options.InputFormatters.Add(new ODataFormInputFormatter())).AddJsonFormatters();
@@ -372,6 +375,13 @@ namespace Sitecore.Commerce.Engine
             // Get the model and register the ODataRoute
             var opsModel = contextOpsResult.GetEdmModel();
             app.UseRouter(new ODataRoute("CommerceOps", opsModel));
+
+            var enableContentHubSync = Configuration.GetSection("AppSettings:EnableContentHubSync").Value;
+            if (enableContentHubSync != null && enableContentHubSync.Equals("true", StringComparison.OrdinalIgnoreCase))
+            {
+                var bus = app.ApplicationServices.GetService<IServiceBusConsumer>();
+                bus.RegisterOnMessageHandlerAndReceiveMessages();
+            }
 
             _nodeContext.PipelineTraceLoggingEnabled = loggingSettings.Value.PipelineTraceLoggingEnabled;
         }

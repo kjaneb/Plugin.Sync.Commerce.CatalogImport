@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.ServiceBus.Messaging;
 using Newtonsoft.Json.Linq;
 using Plugin.Sync.Commerce.CatalogImport.Commands;
@@ -11,8 +12,12 @@ using Sitecore.Commerce.Plugin.Catalog;
 using Sitecore.Services.Core.ComponentModel;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Polly;
 
 namespace Plugin.Sync.Commerce.CatalogImport.Controllers
 {
@@ -29,6 +34,9 @@ namespace Plugin.Sync.Commerce.CatalogImport.Controllers
         static string _topicName = "products_content";
         static string _productEntityDefinition = "M.PCM.Product";
         static int _maxMessagesCount = 100;
+        private const string ENV_NAME = "HabitatAuthoring";
+        private IServiceProvider _serviceProvider;
+        private CommerceEnvironment _globalEnvironment;
 
         /// <summary>
         /// Public constructor with DI
@@ -39,6 +47,9 @@ namespace Plugin.Sync.Commerce.CatalogImport.Controllers
         public CommandsController(IServiceProvider serviceProvider, CommerceEnvironment globalEnvironment, GetEnvironmentCommand getEnvironmentCommand) : base(serviceProvider, globalEnvironment)
         {
             _getEnvironmentCommand = getEnvironmentCommand;
+            _serviceProvider = serviceProvider;
+            _globalEnvironment = globalEnvironment;
+
         }
 
         /// <summary>
@@ -51,7 +62,7 @@ namespace Plugin.Sync.Commerce.CatalogImport.Controllers
         [Route("ImportCategory()")]
         public async Task<IActionResult> ImportCategory([FromBody] JObject request)
         {
-            InitializeEnvironment();
+            await InitializeEnvironment().ConfigureAwait(false);
             try
             {
                 var command = Command<ImportCategoryCommand>();
@@ -77,7 +88,7 @@ namespace Plugin.Sync.Commerce.CatalogImport.Controllers
         [Route("ImportSellableItem()")]
         public async Task<IActionResult> ImportSellableItem([FromBody] JObject request)
         {
-            InitializeEnvironment();
+            await InitializeEnvironment().ConfigureAwait(false);
             try
             {
                 var command = Command<ImportSellableItemCommand>();
@@ -102,7 +113,7 @@ namespace Plugin.Sync.Commerce.CatalogImport.Controllers
         [Route("ImportSellableItemFromContentHub()")]
         public async Task<IActionResult> ImportSellableItemFromContentHub([FromBody] JObject request)
         {
-            InitializeEnvironment();
+            await InitializeEnvironment().ConfigureAwait(false);
             try
             {
                 if (!request.ContainsKey("EntityId") || request["EntityId"] == null)
@@ -126,10 +137,65 @@ namespace Plugin.Sync.Commerce.CatalogImport.Controllers
         }
 
         [HttpPost]
+        [Route("ImportSellableItemFromContentHub()")]
+        public async Task<IActionResult> ImportSellableItem(string entityId)
+        {
+            await InitializeEnvironment().ConfigureAwait(false);
+            try
+            {
+                var command = Command<ImportSellableItemFromContentHubCommand>();
+                var mappingPolicy = CurrentContext.GetPolicy<SellableItemMappingPolicy>();
+                var argument = new ImportCatalogEntityArgument(mappingPolicy, typeof(SellableItem))
+                {
+                    ContentHubEntityId = entityId
+                };
+                var result = await command.Process(CurrentContext, argument);
+
+                return result != null ? new ObjectResult(result) : new NotFoundObjectResult("Error importing SellableItem data");
+            }
+            catch (Exception ex)
+            {
+                return new ObjectResult(ex);
+            }
+        }
+
+        [HttpPost]
         [Route("ImportSellableItemsFromContentHub()")]
         public async Task<IActionResult> ImportSellableItemsFromContentHub([FromBody] JObject request)
         {
-            InitializeEnvironment();
+            await InitializeEnvironment().ConfigureAwait(false);
+
+            //var newContext = GetCommerceContext();
+            //var environment = await _getEnvironmentCommand.Process(newContext, "HabitatAuthoring").ConfigureAwait(false);
+            //newContext.Environment = environment;
+            //newContext.GlobalEnvironment = CurrentContext.GlobalEnvironment;
+            //newContext.Headers = CurrentContext.Headers;
+            //newContext.Headers.Remove("Cache-Control");
+            //newContext.Headers.Remove("Connection");
+            //newContext.Headers.Remove("Content-Type");
+            //newContext.Headers.Remove("Accept");
+            //newContext.Headers.Remove("Accept-Encoding");
+            //newContext.Headers.Remove("Authorization");
+            //newContext.Headers.Remove("Host");
+            //newContext.Headers.Remove("User-Agent");
+            //newContext.Headers.Remove("Content-Length");
+            //newContext.Headers.Remove("ShopName");
+            //newContext.Headers.Remove("ShopperId");
+
+            //newContext.Headers.Remove("Language");
+            //newContext.Headers.Remove("Currency");
+            //newContext.Headers.Remove("Environment");
+            //newContext.Headers.Remove("GeoLocation");
+            //newContext.Headers.Remove("CustomerId");
+
+            //newContext.Headers.Remove("Postman-Token");
+            ////newContext.Headers.Remove("Roles");
+            //newContext.Headers.Remove("CsrId");
+            //newContext.Headers.Remove("CsrEmail");
+
+
+
+            //var context = CurrentContext;
             try
             {
                 if (!request.ContainsKey("EntityIds") || request["EntityIds"] == null)
@@ -181,7 +247,7 @@ namespace Plugin.Sync.Commerce.CatalogImport.Controllers
         [Route("ProcessAzureQueue()")]
         public async Task<IActionResult> ProcessAzureQueue([FromBody] JObject request)
         {
-            InitializeEnvironment();
+            await InitializeEnvironment().ConfigureAwait(false);
             try
             {
                 var subClient = SubscriptionClient.CreateFromConnectionString(_connectionString, _topicName, _subscriptionName);
@@ -210,7 +276,7 @@ namespace Plugin.Sync.Commerce.CatalogImport.Controllers
                                 var result = await command.Process(CurrentContext, argument).ConfigureAwait(false);
 
                                 //TODO: complete on success, define failure(s) handling
-                                message.Complete(); 
+                                message.Complete();
                             }
                         }
                     }
@@ -227,16 +293,40 @@ namespace Plugin.Sync.Commerce.CatalogImport.Controllers
             }
         }
 
+        private CommerceContext GetCommerceContext()
+        {
+            var logger = (Microsoft.Extensions.Logging.ILogger)_serviceProvider.GetService<ILogger<CommerceController>>();
+            var _nodeContext = _serviceProvider.GetService<NodeContext>();
+            ITrackActivityPipeline service = _serviceProvider.GetService<ITrackActivityPipeline>();
+            CommerceContext commerceContext = new CommerceContext(logger, new Microsoft.ApplicationInsights.TelemetryClient(), _serviceProvider.GetService<IGetLocalizableMessagePipeline>());
+            commerceContext.GlobalEnvironment = _globalEnvironment;
+            commerceContext.Environment = _globalEnvironment;
+            commerceContext.ConnectionId = Guid.NewGuid().ToString("N", (IFormatProvider)CultureInfo.InvariantCulture);
+            commerceContext.CorrelationId = Guid.NewGuid().ToString("N", (IFormatProvider)CultureInfo.InvariantCulture);
+            commerceContext.TrackActivityPipeline = service;
+            //NodeContext nodeContext = _nodeContext;
+            commerceContext.PipelineTraceLoggingEnabled = _nodeContext != null && _nodeContext.PipelineTraceLoggingEnabled;
+
+            commerceContext.Headers = new HeaderDictionary();
+            commerceContext.Headers.Add("Roles", @"sitecore\Commerce Administrator|sitecore\Customer Service Representative Administrator|sitecore\Customer Service Representative|sitecore\Commerce Business User|sitecore\Pricer Manager|sitecore\Pricer|sitecore\Promotioner Manager|sitecore\Promotioner|sitecore\Merchandiser|sitecore\Relationship Administrator");
+
+            return commerceContext;
+            //this._baseContext = commerceContext;
+        }
+
         /// <summary>
         /// Set default environment
         /// </summary>
         /// <returns></returns>
-        private void InitializeEnvironment()
+        private async Task InitializeEnvironment()
         {
-            var commerceEnvironment = this.CurrentContext.Environment;
+            //var commerceEnvironment = this.CurrentContext.Environment;
+            var commerceEnvironment = await _getEnvironmentCommand.Process(this.CurrentContext, ENV_NAME) ??
+                                      this.CurrentContext.Environment;
             //await _getEnvironmentCommand.Process(this.CurrentContext, ENV_NAME) ??
-            var pipelineContextOptions = this.CurrentContext.PipelineContextOptions;
-            pipelineContextOptions.CommerceContext.Environment = commerceEnvironment;
+            //this.CurrentContext. = "CommerceEngineDefaultStorefront";
+
+            this.CurrentContext.Environment = commerceEnvironment;
             this.CurrentContext.PipelineContextOptions.CommerceContext.Environment = commerceEnvironment;
         }
     }

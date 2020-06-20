@@ -19,6 +19,16 @@
       },
       {
         "$type": "Sitecore.Commerce.Core.MinionPolicy, Sitecore.Commerce.Core",
+        "WakeupInterval": "00:01:00",
+        "ListsToWatch": [
+          "PriceBooks"
+        ],
+        "FullyQualifiedName": "Plugin.Sync.Commerce.CatalogImport.Minions.ContentHubSyncMinion, Plugin.Sync.Commerce.CatalogImport",
+        "ItemsPerBatch": 10,
+        "SleepBetweenBatches": 500
+      },
+      {
+        "$type": "Sitecore.Commerce.Core.MinionPolicy, Sitecore.Commerce.Core",
         "ListsToWatch": [
           "PriceBooks",
           "PriceCards"

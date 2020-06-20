@@ -1,4 +1,5 @@
-﻿using Plugin.Sync.Commerce.CatalogImport.Extensions;
+﻿using Newtonsoft.Json;
+using Plugin.Sync.Commerce.CatalogImport.Extensions;
 using Plugin.Sync.Commerce.CatalogImport.Models;
 using Plugin.Sync.Commerce.CatalogImport.Pipelines.Arguments;
 using Serilog;
@@ -88,11 +89,39 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
         public async Task<bool> ImportComposerViewsFields(CommerceEntity commerceEntity, Dictionary<string, string> composerFields, CommerceContext context)
         {
             var masterView = await _commerceCommander.Command<GetEntityViewCommand>().Process(
-                context, commerceEntity.Id,
+                context, 
+                commerceEntity.Id,
                 commerceEntity.EntityVersion,
                 context.GetPolicy<KnownCatalogViewsPolicy>().Master,
                 string.Empty,
                 string.Empty);
+
+            //var isUpdated = false;
+            //var viewsComponent = commerceEntity.GetComponent<ComposerTemplateViewsComponent>();
+            //foreach (var view in viewsComponent.Views)
+            //{
+            //    var composerView = commerceEntity.GetComposerView(view.Key);
+            //    EntityView composerViewForEdit = null;
+            //    foreach (var viewField in composerView.Properties)
+            //    {
+            //        if (composerFields.Keys.Contains(viewField.Name))
+            //        {
+            //            if (composerViewForEdit == null)
+            //            {
+            //                composerViewForEdit = Task.Run<EntityView>(async () => await commerceEntity.GetComposerView(composerView.ItemId, _commerceCommander, context)).Result;
+            //            }
+            //            if (composerViewForEdit != null)
+            //            {
+            //                var composerProperty = composerViewForEdit.GetProperty(viewField.Name);
+            //                if (composerViewForEdit != null)
+            //                {
+            //                    composerProperty.ParseValueAndSetEntityView(composerFields[viewField.Name]);
+            //                    isUpdated = true;
+            //                }
+            //            }
+            //        }
+            //    }
+            //}
 
             if (masterView == null)
             {

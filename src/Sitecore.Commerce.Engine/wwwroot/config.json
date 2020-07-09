@@ -14,10 +14,10 @@
       "https://bizfx.sc9.com",
       "https://sxa.storefront.com"
     ],
-    "AntiForgeryEnabled": true,
+    "AntiForgeryEnabled": false,
     "CommerceServicesHostPostfix": "sc9.com",
     "UseHttpsInKestrel": false,
-    "EnableContentHubSync": true
+    "EnableContentHubSync": false
   },
   "ApplicationInsights": {
     "InstrumentationKey": ""

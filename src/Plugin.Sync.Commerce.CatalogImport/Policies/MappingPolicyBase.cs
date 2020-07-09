@@ -5,7 +5,7 @@ using Sitecore.Commerce.Core;
 
 namespace Plugin.Sync.Commerce.CatalogImport.Policies
 {
-    public class MappingPolicyBase: Policy
+    public class MappingPolicyBase : Policy
     {
         public bool ClearFieldValues { get; set; }
         public string EntityId { get; set; }
@@ -19,6 +19,7 @@ namespace Plugin.Sync.Commerce.CatalogImport.Policies
         public Dictionary<string, string> ComposerFieldsPaths { get; set; } = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
         public List<string> CustomFieldsRootPaths { get; set; }
         public Dictionary<string, string> CustomFieldsPaths { get; set; } = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        public Dictionary<string, List<string>> RelatedEntityPaths { get; set; } = new Dictionary<string, List<string>> (StringComparer.OrdinalIgnoreCase);
         public string UpdatedItemsList { get; set; }
         public string DefaultCatalogName { get; set; }
         public string DefaultCategoryName { get; set; }
@@ -26,5 +27,6 @@ namespace Plugin.Sync.Commerce.CatalogImport.Policies
         public string ListPrice { get; set; }
         public string ParentRelationEntityPath { get; set; }
         public string ParentRelationParentsPath { get; set; }
+
     }
 }

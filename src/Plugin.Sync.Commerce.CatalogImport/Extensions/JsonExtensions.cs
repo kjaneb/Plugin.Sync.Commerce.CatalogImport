@@ -36,7 +36,7 @@ namespace Plugin.Sync.Commerce.CatalogImport.Extensions
             return fieldValues;
         }
 
-        public static Dictionary<string, string> QueryMappedValuesFromRoot(this JToken jData, List<string> rootPaths)
+        public static Dictionary<string, string> QueryMappedValuesFromRoot(this JToken jData, IEnumerable<string> rootPaths)
         {
             var results = new Dictionary<string, string>();
             if (rootPaths != null)

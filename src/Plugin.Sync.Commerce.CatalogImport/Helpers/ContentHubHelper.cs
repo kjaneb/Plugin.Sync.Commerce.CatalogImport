@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Plugin.Sync.Commerce.CatalogImport.Policies;
+using Sitecore.Diagnostics;
 using Sitecore.Framework.Caching;
 using System;
 using System.Collections.Generic;
@@ -60,56 +61,64 @@ namespace Plugin.Sync.Commerce.CatalogImport.Helpers
         /// <returns></returns>
         public async Task<string> GetToken(ContentHubConnectionPolicy contentHubPolicy)
         {
-            var cache = _cacheManager.GetCache(contentHubPolicy.TokenCacheName);
-            if (cache == null)
+            try
             {
-                cache = _cacheManager.CreateCache(contentHubPolicy.TokenCacheName);
-            }
-
-            var securityToken = await cache.Get<string>(TOKEN_NAME).ConfigureAwait(false);
-            if (string.IsNullOrEmpty(securityToken))
-            {
-                var request = WebRequest.Create(string.Format("{0}/api/authenticate", contentHubPolicy.ProtocolAndHost));
-                request.Method = "POST";
-                request.ContentType = "application/json";
-
-                using (var streamWriter = new StreamWriter(request.GetRequestStream()))
+                var cache = _cacheManager.GetCache(contentHubPolicy.TokenCacheName);
+                if (cache == null)
                 {
-                    var jsonObject = new
-                    {
-                        user_name = contentHubPolicy.UserName,
-                        password = contentHubPolicy.Password,
-                        discard_existing = false
-                    };
-
-                    streamWriter.Write(JsonConvert.SerializeObject(jsonObject));
-                    streamWriter.Flush();
-                    streamWriter.Close();
+                    cache = _cacheManager.CreateCache(contentHubPolicy.TokenCacheName);
                 }
 
-                string responseContent = null;
-                using (var response = request.GetResponse())
+                string securityToken = await cache.Get<string>(TOKEN_NAME).ConfigureAwait(false);
+                if (string.IsNullOrEmpty(securityToken))
                 {
-                    using (var responseStream = response.GetResponseStream())
+                    var request = WebRequest.Create(string.Format("{0}/api/authenticate", contentHubPolicy.ProtocolAndHost));
+                    request.Method = "POST";
+                    request.ContentType = "application/json";
+
+                    using (var streamWriter = new StreamWriter(request.GetRequestStream()))
                     {
-                        using (var streamReader = new StreamReader(responseStream))
+                        var jsonObject = new
                         {
-                            responseContent = streamReader.ReadToEnd();
+                            user_name = contentHubPolicy.UserName,
+                            password = contentHubPolicy.Password,
+                            discard_existing = false
+                        };
+
+                        streamWriter.Write(JsonConvert.SerializeObject(jsonObject));
+                        streamWriter.Flush();
+                        streamWriter.Close();
+                    }
+
+                    string responseContent = null;
+                    using (var response = request.GetResponse())
+                    {
+                        using (var responseStream = response.GetResponseStream())
+                        {
+                            using (var streamReader = new StreamReader(responseStream))
+                            {
+                                responseContent = streamReader.ReadToEnd();
+                            }
                         }
                     }
+
+                    var o = JObject.Parse(responseContent);
+                    securityToken = (string)o["token"];
+
+                    var cacheEntryOptions = new CacheEntryOptions
+                    {
+                        AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(3000)
+                    };
+                    await cache.SetString(TOKEN_NAME, securityToken, cacheEntryOptions).ConfigureAwait(false);
                 }
-
-                var o = JObject.Parse(responseContent);
-                securityToken = (string)o["token"];
-
-                var cacheEntryOptions = new CacheEntryOptions
-                {
-                    AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(3000)
-                };
-                await cache.SetString(TOKEN_NAME, securityToken, cacheEntryOptions).ConfigureAwait(false);
+                //Log.Warn($"retrieved CH token: {securityToken}", this);
+                return securityToken;
             }
-
-            return securityToken;
+            catch (Exception ex)
+            {
+                Log.Error("Error retrieving Content Hub token", ex, this);
+                throw;
+            }
         }
     }
 }

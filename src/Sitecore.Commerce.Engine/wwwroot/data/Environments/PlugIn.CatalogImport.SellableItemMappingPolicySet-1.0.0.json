@@ -39,7 +39,8 @@
           "MainImage": "properties.MainImage",
           "AdditionalImage": "properties.AdditionalImage",
           "Warranty": "properties.Warranty",
-          "SKU": "properties.ProductNumber"
+          "SKU": "properties.ProductNumber",
+          "ProductImages": "public_link"
         },
         "CustomFieldsRootPaths": {
           "$type": "System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib",
@@ -53,6 +54,15 @@
           "CustomFieldA": "CustomFieldA",
           "CustomFieldB": "CustomFieldB",
           "three": "threeVal"
+        },
+        "RelatedEntityPaths": {
+          "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]]]], mscorlib",
+          "ProductImages": [
+            "relations.PCMProductToCommerceAssets.href",
+            "children[*].href",
+            "relations.AssetToPublicLink.href",
+            "children[*].href"
+          ]
         }
       }
     ]

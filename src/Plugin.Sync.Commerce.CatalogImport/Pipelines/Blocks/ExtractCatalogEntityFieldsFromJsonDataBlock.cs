@@ -5,6 +5,8 @@ using Plugin.Sync.Commerce.CatalogImport.Pipelines.Arguments;
 using Plugin.Sync.Commerce.CatalogImport.Policies;
 using Sitecore.Commerce.Core;
 using Sitecore.Commerce.Plugin.Catalog;
+using Sitecore.Data.Clones.ItemSourceUriProviders;
+using Sitecore.Data.Comparers;
 using Sitecore.Framework.Conditions;
 using Sitecore.Framework.Pipelines;
 using System.Collections;
@@ -48,6 +50,9 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
             context.AddModel(new JsonDataModel(jsonData));
 
             var entityDataModel = context.GetModel<CatalogEntityDataModel>();
+
+            var rootEntityFields = mappingPolicy.ComposerFieldsPaths.Where(s => !arg.RelatedEntities.ContainsKey(s.Key)).ToDictionary(k => k.Key, v => v.Value);
+
             var entityData = new CatalogEntityDataModel
             {
                 EntityId = jsonData.SelectValue<string>(mappingPolicy.EntityId),
@@ -55,12 +60,40 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
                 ParentCatalogName = jsonData.SelectValue<string>(mappingPolicy.ParentCatalogName),
                 //ParentCategoryName = jsonData.SelectValue<string>(mappingPolicy.ParentCategoryName),
                 EntityFields = jsonData.SelectMappedValues(mappingPolicy.EntityFieldsPaths),
-                ComposerFields = jsonData.SelectMappedValues(mappingPolicy.ComposerFieldsPaths),
+                ComposerFields = jsonData.SelectMappedValues(rootEntityFields),
                 CustomFields = jsonData.SelectMappedValues(mappingPolicy.CustomFieldsPaths),
             };
 
+            var refEntityFields = mappingPolicy.ComposerFieldsPaths.Where(s => arg.RelatedEntities.ContainsKey(s.Key)).ToDictionary(k => k.Key, v => v.Value);
+            if (refEntityFields != null && refEntityFields.Count > 0 && arg.RelatedEntities != null && arg.RelatedEntities.Count > 0)
+            {
+                foreach (var key in arg.RelatedEntities.Keys)
+                {
+                    if (arg.RelatedEntities[key] != null && refEntityFields.ContainsKey(key))
+                    {
+                        var fieldValues = new List<string>();
+                        foreach (var refEntity in arg.RelatedEntities[key])
+                        {
+                            if (refEntity != null)
+                            {
+                                var fieldValue = refEntity.SelectValue<string>(refEntityFields[key]);
+                                if (fieldValue != null)
+                                {
+                                    fieldValues.Add(fieldValue);
+                                }
+                            }
+                        }
+                        if (fieldValues.Any())
+                        {
+                            entityData.ComposerFields.Add(key, string.Join("|", fieldValues));
+                        }
+                    }
+                }
+            }
+
             entityData.EntityFields.AddRange(jsonData.QueryMappedValuesFromRoot(mappingPolicy.EntityFieldsRootPaths));
-            entityData.ComposerFields.AddRange(jsonData.QueryMappedValuesFromRoot(mappingPolicy.ComposerFieldsRootPaths));
+
+            //entityData.ComposerFields.AddRange(jsonData.QueryMappedValuesFromRoot(mappingPolicy.ComposerFieldsRootPaths)); 
             entityData.CustomFields.AddRange(jsonData.QueryMappedValuesFromRoot(mappingPolicy.CustomFieldsRootPaths));
 
             if (string.IsNullOrEmpty(entityData.ParentCatalogName))

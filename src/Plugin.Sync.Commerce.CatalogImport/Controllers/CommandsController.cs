@@ -165,37 +165,6 @@ namespace Plugin.Sync.Commerce.CatalogImport.Controllers
         {
             await InitializeEnvironment().ConfigureAwait(false);
 
-            //var newContext = GetCommerceContext();
-            //var environment = await _getEnvironmentCommand.Process(newContext, "HabitatAuthoring").ConfigureAwait(false);
-            //newContext.Environment = environment;
-            //newContext.GlobalEnvironment = CurrentContext.GlobalEnvironment;
-            //newContext.Headers = CurrentContext.Headers;
-            //newContext.Headers.Remove("Cache-Control");
-            //newContext.Headers.Remove("Connection");
-            //newContext.Headers.Remove("Content-Type");
-            //newContext.Headers.Remove("Accept");
-            //newContext.Headers.Remove("Accept-Encoding");
-            //newContext.Headers.Remove("Authorization");
-            //newContext.Headers.Remove("Host");
-            //newContext.Headers.Remove("User-Agent");
-            //newContext.Headers.Remove("Content-Length");
-            //newContext.Headers.Remove("ShopName");
-            //newContext.Headers.Remove("ShopperId");
-
-            //newContext.Headers.Remove("Language");
-            //newContext.Headers.Remove("Currency");
-            //newContext.Headers.Remove("Environment");
-            //newContext.Headers.Remove("GeoLocation");
-            //newContext.Headers.Remove("CustomerId");
-
-            //newContext.Headers.Remove("Postman-Token");
-            ////newContext.Headers.Remove("Roles");
-            //newContext.Headers.Remove("CsrId");
-            //newContext.Headers.Remove("CsrEmail");
-
-
-
-            //var context = CurrentContext;
             try
             {
                 if (!request.ContainsKey("EntityIds") || request["EntityIds"] == null)
@@ -218,7 +187,6 @@ namespace Plugin.Sync.Commerce.CatalogImport.Controllers
                     var argument = new ImportCatalogEntityArgument(mappingPolicy, typeof(SellableItem))
                     {
                         ContentHubEntityId = entityId
-                        //ParentEntityId = string.IsNullOrEmpty(parentEntityIds) ? null : parentEntityIds
                     };
 
                     if (!string.IsNullOrEmpty(parentEntityIds))

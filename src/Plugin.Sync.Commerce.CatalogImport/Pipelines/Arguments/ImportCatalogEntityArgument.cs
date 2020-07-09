@@ -25,6 +25,7 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Arguments
         public List<string> ParentEntityIds { get; set; }
         public JObject Entity { get; set; }
         public JObject ParentRelationsEntity { get; set; }
+        public Dictionary<string, List<JObject>> RelatedEntities { get; set; }
         public MappingPolicyBase MappingPolicy { get; set; }
         public Type CommerceEntityType { get; set; }
     }

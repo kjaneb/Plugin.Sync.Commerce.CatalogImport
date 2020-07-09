@@ -70,12 +70,6 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
                         sellableItem = await AssociateSellableItemWithParentEntities(entityData.ParentCatalogName, parentEntityId, sellableItem, context.CommerceContext).ConfigureAwait(false);
                     }
                 }
-                //else
-                //{
-                //    sellableItem = await AssociateSellableItemWithParentEntities(entityData.ParentCatalogName, entityData.ParentCategoryName, sellableItem, context.CommerceContext);
-                //}
-                //var parentEntityId = string.IsNullOrEmpty(arg.ParentEntityId) ? entityData.ParentCategoryName : arg.ParentEntityId;
-                
 
                 //Check code running before this - this persist might be redindant
                 //var persistResult = await _commerceCommander.Pipeline<IPersistEntityPipeline>().Run(new PersistEntityArgument(sellableItem), context);

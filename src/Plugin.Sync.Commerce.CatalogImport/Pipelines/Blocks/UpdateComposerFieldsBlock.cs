@@ -70,7 +70,7 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
                     context.Abort(errorMessage, this);
                     return arg;
                 }
-                await ImportComposerViewsFields(entity, entityDataModel.ComposerFields, context.CommerceContext);
+                await ImportComposerViewsFields(entity, entityDataModel.EntityFields, context.CommerceContext);
             }
             else
             {
@@ -84,9 +84,8 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
             return arg;
         }
         #endregion
-
         
-        public async Task<bool> ImportComposerViewsFields(CommerceEntity commerceEntity, Dictionary<string, string> composerFields, CommerceContext context)
+        public async Task<bool> ImportComposerViewsFields(CommerceEntity commerceEntity, Dictionary<string, string> entityFields, CommerceContext context)
         {
             var masterView = await _commerceCommander.Command<GetEntityViewCommand>().Process(
                 context, 
@@ -95,33 +94,6 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
                 context.GetPolicy<KnownCatalogViewsPolicy>().Master,
                 string.Empty,
                 string.Empty);
-
-            //var isUpdated = false;
-            //var viewsComponent = commerceEntity.GetComponent<ComposerTemplateViewsComponent>();
-            //foreach (var view in viewsComponent.Views)
-            //{
-            //    var composerView = commerceEntity.GetComposerView(view.Key);
-            //    EntityView composerViewForEdit = null;
-            //    foreach (var viewField in composerView.Properties)
-            //    {
-            //        if (composerFields.Keys.Contains(viewField.Name))
-            //        {
-            //            if (composerViewForEdit == null)
-            //            {
-            //                composerViewForEdit = Task.Run<EntityView>(async () => await commerceEntity.GetComposerView(composerView.ItemId, _commerceCommander, context)).Result;
-            //            }
-            //            if (composerViewForEdit != null)
-            //            {
-            //                var composerProperty = composerViewForEdit.GetProperty(viewField.Name);
-            //                if (composerViewForEdit != null)
-            //                {
-            //                    composerProperty.ParseValueAndSetEntityView(composerFields[viewField.Name]);
-            //                    isUpdated = true;
-            //                }
-            //            }
-            //        }
-            //    }
-            //}
 
             if (masterView == null)
             {
@@ -141,7 +113,7 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
                 EntityView composerViewForEdit = null;
                 foreach (var viewField in view.Properties)
                 {
-                    if (composerFields.Keys.Contains(viewField.Name))
+                    if (entityFields.Keys.Contains(viewField.Name))
                     {
                         if (composerViewForEdit == null)
                         {
@@ -152,7 +124,7 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
                             var composerProperty = composerViewForEdit.GetProperty(viewField.Name);
                             if (composerViewForEdit != null)
                             {
-                                composerProperty.ParseValueAndSetEntityView(composerFields[viewField.Name]);
+                                composerProperty.ParseValueAndSetEntityView(entityFields[viewField.Name]);
                                 isUpdated = true;
                             }
                         }

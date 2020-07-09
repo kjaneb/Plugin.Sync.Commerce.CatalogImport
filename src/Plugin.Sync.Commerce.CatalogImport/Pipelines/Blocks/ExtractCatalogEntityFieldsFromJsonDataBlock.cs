@@ -26,15 +26,6 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
         {
         }
 
-        //private IEnumerable<string> GetParentEntityIDs(JObject entityData, MappingPolicyBase mappingPolicy)
-        //{
-        //    var relationUrl = entityData.SelectValue<string>(mappingPolicy.ParentRelationEntityPath);
-        //    if (!string.IsNullOrEmpty(relationUrl))
-        //    {
-        //        var relationEntity = 
-        //    }
-        //}
-
         /// <summary>
         /// Main execution point
         /// </summary>
@@ -51,20 +42,17 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
 
             var entityDataModel = context.GetModel<CatalogEntityDataModel>();
 
-            var rootEntityFields = mappingPolicy.ComposerFieldsPaths.Where(s => !arg.RelatedEntities.ContainsKey(s.Key)).ToDictionary(k => k.Key, v => v.Value);
+            var rootEntityFields = mappingPolicy.FieldPaths.Where(s => !arg.RelatedEntities.ContainsKey(s.Key)).ToDictionary(k => k.Key, v => v.Value);
 
             var entityData = new CatalogEntityDataModel
             {
                 EntityId = jsonData.SelectValue<string>(mappingPolicy.EntityId),
                 EntityName = jsonData.SelectValue<string>(mappingPolicy.EntityName),
                 ParentCatalogName = jsonData.SelectValue<string>(mappingPolicy.ParentCatalogName),
-                //ParentCategoryName = jsonData.SelectValue<string>(mappingPolicy.ParentCategoryName),
-                EntityFields = jsonData.SelectMappedValues(mappingPolicy.EntityFieldsPaths),
-                ComposerFields = jsonData.SelectMappedValues(rootEntityFields),
-                CustomFields = jsonData.SelectMappedValues(mappingPolicy.CustomFieldsPaths),
+                EntityFields = jsonData.SelectMappedValues(rootEntityFields),
             };
 
-            var refEntityFields = mappingPolicy.ComposerFieldsPaths.Where(s => arg.RelatedEntities.ContainsKey(s.Key)).ToDictionary(k => k.Key, v => v.Value);
+            var refEntityFields = mappingPolicy.FieldPaths.Where(s => arg.RelatedEntities.ContainsKey(s.Key)).ToDictionary(k => k.Key, v => v.Value);
             if (refEntityFields != null && refEntityFields.Count > 0 && arg.RelatedEntities != null && arg.RelatedEntities.Count > 0)
             {
                 foreach (var key in arg.RelatedEntities.Keys)
@@ -85,30 +73,20 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
                         }
                         if (fieldValues.Any())
                         {
-                            entityData.ComposerFields.Add(key, string.Join("|", fieldValues));
+                            entityData.EntityFields.Add(key, string.Join("|", fieldValues));
                         }
                     }
                 }
             }
-
-            entityData.EntityFields.AddRange(jsonData.QueryMappedValuesFromRoot(mappingPolicy.EntityFieldsRootPaths));
-
-            //entityData.ComposerFields.AddRange(jsonData.QueryMappedValuesFromRoot(mappingPolicy.ComposerFieldsRootPaths)); 
-            entityData.CustomFields.AddRange(jsonData.QueryMappedValuesFromRoot(mappingPolicy.CustomFieldsRootPaths));
 
             if (string.IsNullOrEmpty(entityData.ParentCatalogName))
             {
                 entityData.ParentCatalogName = mappingPolicy.DefaultCatalogName;
             }
 
-            //if (string.IsNullOrEmpty(entityData.ParentCategoryName))
-            //{
-            //    entityData.ParentCategoryName = mappingPolicy.DefaultCategoryName;
-            //}
-
-            if (!string.IsNullOrEmpty(mappingPolicy.ListPrice))
+            if (!string.IsNullOrEmpty(mappingPolicy.ListPricePath))
             {
-                var price = jsonData.SelectValue<string>(mappingPolicy.ListPrice);
+                var price = jsonData.SelectValue<string>(mappingPolicy.ListPricePath);
                 if (!string.IsNullOrEmpty(price))
                 {
                     decimal parcedPrice;

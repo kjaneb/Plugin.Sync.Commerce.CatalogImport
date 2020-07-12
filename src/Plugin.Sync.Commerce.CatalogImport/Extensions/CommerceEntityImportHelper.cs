@@ -59,32 +59,10 @@ namespace Plugin.Sync.Commerce.CatalogImport.Extensions
         /// <param name="jsonData"></param>
         /// <param name="mappingPolicy"></param>
         /// <returns></returns>
-        public string GetCatalogName(JObject jsonData, MappingPolicyBase mappingPolicy)
+        public string GetCatalogName(JObject jsonData, MappingConfiguration mappingConfiguration)
         {
-            var catalogName = jsonData.SelectValue<string>(mappingPolicy.ParentCatalogName);
-            if (string.IsNullOrEmpty(catalogName) && !string.IsNullOrEmpty(mappingPolicy.DefaultCatalogName))
-            {
-                catalogName = mappingPolicy.DefaultCatalogName;
-            }
-            return catalogName;
+            return jsonData.SelectValue<string>(mappingConfiguration.CatalogName);
         }
-
-        /// <summary>
-        /// Get Parent Category name from input Json or fallback to default Category name in Mapping Policy configuration
-        /// </summary>
-        /// <param name="jsonData"></param>
-        /// <param name="mappingPolicy"></param>
-        /// <returns></returns>
-        //public string GetParentCategoryName(JObject jsonData, MappingPolicyBase mappingPolicy)
-        //{
-        //    var categoryName = jsonData.SelectValue<string>(mappingPolicy.ParentCategoryName);
-        //    if (string.IsNullOrEmpty(categoryName) && !string.IsNullOrEmpty(mappingPolicy.DefaultCategoryName))
-        //    {
-        //        categoryName = mappingPolicy.DefaultCategoryName;
-        //    }
-
-        //    return categoryName;
-        //}
 
         /// <summary>
         /// Import fields defined in Item's composer views

@@ -9,37 +9,53 @@
     "$values": [
       {
         "$type": "Plugin.Sync.Commerce.CatalogImport.Policies.SellableItemMappingPolicy, Plugin.Sync.Commerce.CatalogImport",
-        "ClearFieldValues": true,
-        "EntityId": "id",
-        "EntityName": "id",
-        "ParentCatalogName": "Quadfecta",
         "SyncedItemsList": "ImportedItems",
-        "DefaultCatalogName": "Quadfecta",
-        "ParentRelationEntityPath": "relations.PCMProductFamilyToProduct.href",
-        "ParentRelationParentsPath": "parents[*].href",
-        "ListPricePath": "properties.Price",
-        "FieldPaths": {
-          "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.String, mscorlib]], mscorlib",
-          "Brand": "properties.Brand",
-          "Manufacturer": "properties.Manufacturer",
-          "TypeOfGoods": "properties.ProductName",
-          "DisplayName": "properties.ProductLabel.en-US",
-          "Description": "properties.ProductLongDescription.en-US",
-          "MainImage": "properties.MainImage",
-          "AdditionalImage": "properties.AdditionalImage",
-          "Color": "properties.Color",
-          "Weight": "properties.Weight",
-          "Warranty": "properties.Warranty",
-          "SKU": "properties.ProductNumber",
-          "ProductImages": "public_link"
-        },
-        "RelatedEntityPaths": {
-          "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]]]], mscorlib",
-          "ProductImages": [
-            "relations.PCMProductToCommerceAssets.href",
-            "children[*].href",
-            "relations.AssetToPublicLink.href",
-            "children[*].href"
+        "MappingConfigurations": {
+          "$type": "System.Collections.Generic.List`1[[Plugin.Sync.Commerce.CatalogImport.Policies.MappingConfiguration, Plugin.Sync.Commerce.CatalogImport]], mscorlib",
+          "$values": [
+            {
+              "EntityType": "M.PCM.Product",
+              "AllowSycToRoot": false,
+              "ClearMissingFieldValues": true,
+              "EntityIdPath": "id",
+              "EntityNamePath": "id",
+              "ParentEntityIdPath": "id",
+              "ParentEntityNamePath": "id",
+              "CatalogName": "Quadfecta",
+              "FieldPaths": {
+                "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.String, mscorlib]], mscorlib",
+                "Brand": "properties.Brand",
+                "Manufacturer": "properties.Manufacturer",
+                "TypeOfGoods": "properties.ProductName",
+                "DisplayName": "properties.ProductLabel.en-US",
+                "Description": "properties.ProductLongDescription.en-US",
+                "ShortDescription": "properties.ProductShortDescription.en-US",
+                "MainImage": "properties.MainImage",
+                "AdditionalImage": "properties.AdditionalImage",
+                "Color": "properties.Color",
+                "Weight": "properties.Weight",
+                "Warranty": "properties.Warranty",
+                "SKU": "properties.ProductNumber",
+                "ProductImages": "public_link"
+              },
+              "RelatedEntityPaths": {
+                "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]]]], mscorlib",
+                "ProductImages": [
+                  "relations.PCMProductToCommerceAssets.href",
+                  "children[*].href",
+                  "relations.AssetToPublicLink.href",
+                  "children[*].href"
+                ],
+                "ParentEntityIdPath": [
+                  "relations.PCMProductFamilyToProduct.href",
+                  "parents[*].href"
+                ],
+                "ParentEntityNamePath": [
+                  "relations.PCMProductFamilyToProduct.href",
+                  "parents[*].href"
+                ]
+              }
+            }
           ]
         }
       }

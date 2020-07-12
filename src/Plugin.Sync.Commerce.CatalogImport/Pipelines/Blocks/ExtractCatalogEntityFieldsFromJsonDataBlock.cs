@@ -7,6 +7,7 @@ using Sitecore.Commerce.Core;
 using Sitecore.Commerce.Plugin.Catalog;
 using Sitecore.Data.Clones.ItemSourceUriProviders;
 using Sitecore.Data.Comparers;
+using Sitecore.Data.Query;
 using Sitecore.Framework.Conditions;
 using Sitecore.Framework.Pipelines;
 using System.Collections;
@@ -34,7 +35,7 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
         /// <returns></returns>
         public override async Task<ImportCatalogEntityArgument> Run(ImportCatalogEntityArgument arg, CommercePipelineExecutionContext context)
         {
-            var mappingPolicy = arg.MappingPolicy;
+            var mappingConfiguration = arg.MappingConfiguration;
 
             var jsonData = arg.Entity as JObject;
             Condition.Requires(jsonData, "Commerce Entity JSON parameter is required").IsNotNull();
@@ -42,17 +43,17 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
 
             var entityDataModel = context.GetModel<CatalogEntityDataModel>();
 
-            var rootEntityFields = mappingPolicy.FieldPaths.Where(s => !arg.RelatedEntities.ContainsKey(s.Key)).ToDictionary(k => k.Key, v => v.Value);
+            var rootEntityFields = mappingConfiguration.FieldPaths.Where(s => !arg.RelatedEntities.ContainsKey(s.Key)).ToDictionary(k => k.Key, v => v.Value);
 
             var entityData = new CatalogEntityDataModel
             {
-                EntityId = jsonData.SelectValue<string>(mappingPolicy.EntityId),
-                EntityName = jsonData.SelectValue<string>(mappingPolicy.EntityName),
-                ParentCatalogName = jsonData.SelectValue<string>(mappingPolicy.ParentCatalogName),
+                EntityId = jsonData.SelectValue<string>(mappingConfiguration.EntityIdPath),
+                EntityName = jsonData.SelectValue<string>(mappingConfiguration.EntityNamePath),
+                CatalogName = mappingConfiguration.CatalogName,
                 EntityFields = jsonData.SelectMappedValues(rootEntityFields),
             };
 
-            var refEntityFields = mappingPolicy.FieldPaths.Where(s => arg.RelatedEntities.ContainsKey(s.Key)).ToDictionary(k => k.Key, v => v.Value);
+            var refEntityFields = mappingConfiguration.FieldPaths.Where(s => arg.RelatedEntities.ContainsKey(s.Key)).ToDictionary(k => k.Key, v => v.Value);
             if (refEntityFields != null && refEntityFields.Count > 0 && arg.RelatedEntities != null && arg.RelatedEntities.Count > 0)
             {
                 foreach (var key in arg.RelatedEntities.Keys)
@@ -79,59 +80,70 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
                 }
             }
 
-            if (string.IsNullOrEmpty(entityData.ParentCatalogName))
+            if (string.IsNullOrEmpty(entityData.CatalogName))
             {
-                entityData.ParentCatalogName = mappingPolicy.DefaultCatalogName;
+                entityData.CatalogName = mappingConfiguration.CatalogName;
             }
 
-            if (!string.IsNullOrEmpty(mappingPolicy.ListPricePath))
-            {
-                var price = jsonData.SelectValue<string>(mappingPolicy.ListPricePath);
-                if (!string.IsNullOrEmpty(price))
-                {
-                    decimal parcedPrice;
-                    if (decimal.TryParse(price, out parcedPrice))
-                    {
-                        entityData.ListPrice = parcedPrice;
-                    }
-                }
-            }
+            //if (!string.IsNullOrEmpty(mappingConfiguration.ListPricePath))
+            //{
+            //    var price = jsonData.SelectValue<string>(mappingConfiguration.ListPricePath);
+            //    if (!string.IsNullOrEmpty(price))
+            //    {
+            //        decimal parcedPrice;
+            //        if (decimal.TryParse(price, out parcedPrice))
+            //        {
+            //            entityData.ListPrice = parcedPrice;
+            //        }
+            //    }
+            //}
 
-            arg.ParentEntityIds = new List<string>();
-            if (arg.ParentRelationsEntity != null && !string.IsNullOrEmpty(mappingPolicy.ParentRelationParentsPath))
+            entityData.ParentEntityIDs = new List<string>();
+            entityData.ParentEntityNames = new List<string>();
+            if (!string.IsNullOrEmpty(mappingConfiguration.ParentEntityIdPath))
             {
-                var parentTokens = arg.ParentRelationsEntity.SelectTokens(mappingPolicy.ParentRelationParentsPath);
-                if (parentTokens != null )
+                if (arg.RelatedEntities.ContainsKey("ParentEntityIdPath") && arg.RelatedEntities["ParentEntityIdPath"] != null)
                 {
-                    foreach (JToken parentToken in parentTokens)
+                    foreach (var parentEntity in arg.RelatedEntities["ParentEntityIdPath"])
                     {
-                        var parentUrl = parentToken.Value<string>();
-                        if (!string.IsNullOrEmpty(parentUrl))
+                        var parentEntityId = parentEntity.SelectValue<string>(mappingConfiguration.ParentEntityIdPath);
+                        if (!string.IsNullOrEmpty(parentEntityId))
                         {
-                            var parentEntityId = parentUrl.Split('/').LastOrDefault();
-                            if (long.TryParse(parentEntityId, out long value))
-                            {
-                                arg.ParentEntityIds.Add(parentEntityId);
-                            }
+                            entityData.ParentEntityIDs.Add(parentEntityId);
                         }
                     }
                 }
-            }
-
-            if (arg.CommerceEntityType != null && !string.IsNullOrEmpty(entityData.EntityName))
-            {
-                if (arg.CommerceEntityType == typeof(Category) && !string.IsNullOrEmpty(entityData.ParentCatalogName))
+                else
                 {
-                    entityData.CommerceEntityId = $"{CommerceEntity.IdPrefix<Category>()}{entityData.ParentCatalogName}-{entityData.EntityName}";
+                    var parentEntityId = arg.Entity.SelectValue<string>(mappingConfiguration.ParentEntityIdPath);
+                    if (!string.IsNullOrEmpty(parentEntityId))
+                    {
+                        entityData.ParentEntityIDs.Add(parentEntityId);
+                    }
                 }
-                else if (arg.CommerceEntityType == typeof(SellableItem))
+
+                if (arg.RelatedEntities.ContainsKey("ParentEntityNamePath") && arg.RelatedEntities["ParentEntityNamePath"] != null)
                 {
-                    entityData.CommerceEntityId = $"{CommerceEntity.IdPrefix<SellableItem>()}{entityData.EntityId}";
+                    foreach (var parentEntity in arg.RelatedEntities["ParentEntityNamePath"])
+                    {
+                        var parentEntityName = parentEntity.SelectValue<string>(mappingConfiguration.ParentEntityNamePath);
+                        if (!string.IsNullOrEmpty(parentEntityName))
+                        {
+                            entityData.ParentEntityNames.Add(parentEntityName);
+                        }
+                    }
+                }
+                else
+                {
+                    var parentEntityName = arg.Entity.SelectValue<string>(mappingConfiguration.ParentEntityNamePath);
+                    if (!string.IsNullOrEmpty(parentEntityName))
+                    {
+                        entityData.ParentEntityNames.Add(parentEntityName);
+                    }
                 }
             }
 
             context.AddModel(entityData);
-
             await Task.CompletedTask;
 
             return arg;

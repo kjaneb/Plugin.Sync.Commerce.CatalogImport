@@ -9,44 +9,51 @@
     "$values": [
       {
         "$type": "Plugin.Sync.Commerce.CatalogImport.Policies.CategoryMappingPolicy, Plugin.Sync.Commerce.CatalogImport",
-        "ClearFieldValues": true,
-        "EntityId": "Id",
-        "EntityName": "Name",
-        "ParentCategoryName": "ParentCategoryName",
-        "ParentCatalogName": "ParentCatalogName",
-        "UpdatedItemsList": "ImportedItems",
-        "DefaultCatalogName": "TestCatalog",
-        "DefaultCategoryName": "TestCategory",
-        "EntityFieldsPaths": {
-          "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.String, mscorlib]], mscorlib",
-          "DisplayName": "DisplayName",
-          "Description": "Description"
-        },
-        "ComposerFieldsRootPaths": {
-          "$type": "System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib",
+        "SyncedItemsList": "ImportedItems",
+        "MappingConfigurations": {
+          "$type": "System.Collections.Generic.List`1[[Plugin.Sync.Commerce.CatalogImport.Policies.MappingConfiguration, Plugin.Sync.Commerce.CatalogImport]], mscorlib",
           "$values": [
-            "ComposerFieldsRootOne",
-            "ComposerFieldsRootTwo"
+            {
+              "EntityType": "M.PCM.ProductFamily",
+              "AllowSycToRoot": false,
+              "ClearMissingFieldValues": true,
+              "EntityIdPath": "id",
+              "EntityNamePath": "id",
+              "ParentEntityIdPath": "id",
+              "ParentEntityNamePath": "id",
+              "CatalogName": "Quadfecta",
+              "FieldPaths": {
+                "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.String, mscorlib]], mscorlib",
+                "DisplayName": "properties.ProductFamilyLabel.en-US",
+                "Description": "properties.ProductFamilyLongDescription.en-US"
+              },
+              "RelatedEntityPaths": {
+                "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]]]], mscorlib",
+                "ParentEntityIdPath": [
+                  "relations.PCMProductCategoryToProductFamily.href",
+                  "parents[*].href"
+                ],
+                "ParentEntityNamePath": [
+                  "relations.PCMProductCategoryToProductFamily.href",
+                  "parents[*].href"
+                ]
+              }
+            },
+            {
+              "EntityType": "M.PCM.ProductCategory",
+              "AllowSycToRoot": true,
+              "ClearMissingFieldValues": true,
+              "EntityIdPath": "id",
+              "EntityNamePath": "id",
+              "CatalogName": "Quadfecta",
+              "FieldPaths": {
+                "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.String, mscorlib]], mscorlib",
+                "DisplayName": "properties.ProductCategoryLabel.en-US",
+                "Description": "properties.ProductCategoryDescription.en-US",
+                "Synonyms": "properties.ProductCategorySynonyms.en-US"
+              }              
+            }
           ]
-        },
-        "ComposerFieldsPaths": {
-          "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.String, mscorlib]], mscorlib",
-          "one": "One",
-          "two": "twoVal",
-          "three": "threeVal"
-        },
-        "CustomFieldsRootPaths": {
-          "$type": "System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib",
-          "$values": [
-            "CustomFieldsRootOne",
-            "CustomFieldsRootTwo"
-          ]
-        },
-        "CustomFieldsPaths": {
-          "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.String, mscorlib]], mscorlib",
-          "one": "One",
-          "two": "twoVal",
-          "three": "threeVal"
         }
       }
     ]

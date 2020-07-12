@@ -8,25 +8,25 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Arguments
 {
     public class ImportCatalogEntityArgument : PipelineArgument
     {
-        public ImportCatalogEntityArgument(JObject request, MappingPolicyBase mappingPolicy, Type commerceEntityType)
+        public string ContentHubEntityId { get; set; }
+        public JObject Entity { get; set; }
+        public Dictionary<string, List<JObject>> RelatedEntities { get; set; }
+        public MappingConfiguration MappingConfiguration { get; set; }
+        public Type CommerceEntityType { get; set; }
+        public string SourceEntityType { get; set; }
+        public ImportCatalogEntityArgument(JObject request, MappingConfiguration mappingConfiguration, Type commerceEntityType)
         {
             Entity = request;
-            MappingPolicy = mappingPolicy;
+            this.MappingConfiguration = mappingConfiguration;
             CommerceEntityType = commerceEntityType;
         }
 
-        public ImportCatalogEntityArgument(MappingPolicyBase mappingPolicy, Type commerceEntityType)
+        public ImportCatalogEntityArgument(MappingConfiguration mappingConfiguration, Type commerceEntityType)
         {
-            MappingPolicy = mappingPolicy;
+            this.MappingConfiguration = mappingConfiguration;
             CommerceEntityType = commerceEntityType;
         }
 
-        public string ContentHubEntityId { get; set; }
-        public List<string> ParentEntityIds { get; set; }
-        public JObject Entity { get; set; }
-        public JObject ParentRelationsEntity { get; set; }
-        public Dictionary<string, List<JObject>> RelatedEntities { get; set; }
-        public MappingPolicyBase MappingPolicy { get; set; }
-        public Type CommerceEntityType { get; set; }
+       
     }
 }

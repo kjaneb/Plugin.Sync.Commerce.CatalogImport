@@ -56,36 +56,28 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
                 if (entityObject != null)
                 {
                     arg.Entity = entityObject;
-                    if (arg.MappingPolicy != null && !string.IsNullOrEmpty(arg.MappingPolicy.ParentRelationEntityPath))
-                    {
-                        var parentRelationUrl = arg.Entity.SelectValue<string>(arg.MappingPolicy.ParentRelationEntityPath);
-                        if (!string.IsNullOrEmpty(parentRelationUrl))
-                        {
-                            var parentRelationsEntity = await _contentHubHelper.GetEntityByUrl(parentRelationUrl, contentHubPolicy).ConfigureAwait(false);
-                            if (parentRelationsEntity != null)
-                            {
-                                arg.ParentRelationsEntity = parentRelationsEntity;
-                            } 
-                        }
-                    }
 
-                    if (arg.MappingPolicy?.RelatedEntityPaths != null)
+                    if (arg.MappingConfiguration?.RelatedEntityPaths != null)
                     {
-                        var addedPaths = new List<string>();
+                        var addedPaths = new Dictionary<string, string>();
                         arg.RelatedEntities = new Dictionary<string, List<JObject>>();
-                        foreach (var key in arg.MappingPolicy.RelatedEntityPaths.Keys)
+                        foreach (var key in arg.MappingConfiguration.RelatedEntityPaths.Keys)
                         {
-                            if (arg.MappingPolicy.RelatedEntityPaths[key] != null && arg.MappingPolicy.RelatedEntityPaths[key].Count > 0)
+                            if (arg.MappingConfiguration.RelatedEntityPaths[key] != null && arg.MappingConfiguration.RelatedEntityPaths[key].Count > 0)
                             {
-                                var pathValues = string.Join("|", arg.MappingPolicy.RelatedEntityPaths[key]).ToLower();
-                                if (!addedPaths.Contains(pathValues))
+                                var pathValues = string.Join("|", arg.MappingConfiguration.RelatedEntityPaths[key]).ToLower();
+                                if (!addedPaths.ContainsKey(pathValues))
                                 {
-                                    var relatedEntities = await GetRelatedEntitiesRecursively(entityObject, arg.MappingPolicy.RelatedEntityPaths[key], contentHubPolicy).ConfigureAwait(false);
+                                    var relatedEntities = await GetRelatedEntitiesRecursively(entityObject, arg.MappingConfiguration.RelatedEntityPaths[key], contentHubPolicy).ConfigureAwait(false);
                                     if (relatedEntities != null)
                                     {
                                         arg.RelatedEntities.Add(key, relatedEntities.Values.ToList());
-                                        addedPaths.Add(pathValues);  
+                                        addedPaths.Add(pathValues, key);
                                     }
+                                }
+                                else
+                                {
+                                    arg.RelatedEntities.Add(key, arg.RelatedEntities[addedPaths[pathValues]]);
                                 }
                             }
                         }

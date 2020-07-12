@@ -29,16 +29,16 @@ namespace Plugin.Sync.Commerce.CatalogImport
                     {
                         configure.Add<ExtractCatalogEntityFieldsFromJsonDataBlock>()
                         .Add<CreateOrUpdateCategoryBlock>()
-                        .Add<UpdateComposerFieldsBlock>()
-                        .Add<UpdateCustomComponentsBlock>();
+                        .Add<UpdateComposerFieldsBlock>();
+                        //.Add<UpdateCustomComponentsBlock>();
                     })
                 .AddPipeline<IImportSellableItemPipeline, ImportSellableItemPipeline>(
                     configure =>
                     {
                         configure.Add<ExtractCatalogEntityFieldsFromJsonDataBlock>()
                         .Add<CreateOrUpdateSellableItemBlock>()
-                        .Add<UpdateComposerFieldsBlock>()
-                        .Add<UpdateCustomComponentsBlock>();
+                        .Add<UpdateComposerFieldsBlock>();
+                        //.Add<UpdateCustomComponentsBlock>();
                     })
                 .AddPipeline<IImportSellableItemFromContentHubPipeline, ImportSellableItemFromContentHubPipeline>(
                     configure =>
@@ -47,6 +47,16 @@ namespace Plugin.Sync.Commerce.CatalogImport
                         .Add<GetContentHubEntityBlock>()
                         .Add<ExtractCatalogEntityFieldsFromJsonDataBlock>()
                         .Add<CreateOrUpdateSellableItemBlock>()
+                        .Add<UpdateComposerFieldsBlock>()
+                        .Add<UpdateCustomComponentsBlock>();
+                    })
+                .AddPipeline<IImportCategoryFromContentHubPipeline, ImportCategoryFromContentHubPipeline>(
+                    configure =>
+                    {
+                        configure //.Add<GetAzureQueueMessageBlock>()
+                        .Add<GetContentHubEntityBlock>()
+                        .Add<ExtractCatalogEntityFieldsFromJsonDataBlock>()
+                        .Add<CreateOrUpdateCategoryBlock>()
                         .Add<UpdateComposerFieldsBlock>()
                         .Add<UpdateCustomComponentsBlock>();
                     })

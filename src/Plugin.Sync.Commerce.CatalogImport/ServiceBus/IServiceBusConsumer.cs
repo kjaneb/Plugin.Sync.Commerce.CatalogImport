@@ -15,6 +15,8 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using System.Globalization;
 using Microsoft.AspNetCore.Http;
+using System.Configuration;
+using System.Linq;
 
 namespace Plugin.Sync.Commerce.CatalogImport.ServiceBus
 {
@@ -28,10 +30,11 @@ namespace Plugin.Sync.Commerce.CatalogImport.ServiceBus
     {
         //static string _connectionString = "Endpoint=sb://xccontenthubdemo.servicebus.windows.net/;SharedAccessKeyName=products_content;SharedAccessKey=yK0BD0C+ijNNWfl3cUJdmOJgC4MT/QSZZFqAAir7MZQ=;EntityPath=products_content";
         //static string _connectionString = "Endpoint=sb://xccontenthubdemo.servicebus.windows.net/;SharedAccessKeyName=products_content;SharedAccessKey=yK0BD0C+ijNNWfl3cUJdmOJgC4MT/QSZZFqAAir7MZQ=";
+        //static string _connectionString = "Endpoint=sb://xccontenthubdemo.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=HxyFUilEe7vGB0gXAYPnBUVQA8YaG63ElEJPkaJ5Pe4=";
         static string _connectionString = "Endpoint=sb://xccontenthubdemo.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=HxyFUilEe7vGB0gXAYPnBUVQA8YaG63ElEJPkaJ5Pe4=";
         //static string _subscriptionName = "quadfectaproductsync";
         static string _topicName = "xccontenthubdemoqueue"; //"products_content";
-        static string _productEntityDefinition = "M.PCM.Product";
+        //static string _productEntityDefinition = "M.PCM.Product";
 
         //private readonly IProcessData _processData;
         private readonly IConfiguration _configuration;
@@ -42,6 +45,7 @@ namespace Plugin.Sync.Commerce.CatalogImport.ServiceBus
         CommerceCommander _commerceCommander;
         GetEnvironmentCommand _getEnvironmentCommand;
         ImportSellableItemFromContentHubCommand _importSellableItemFromContentHubCommand;
+        ImportCategoryFromContentHubCommand _importCategoryFromContentHubCommand;
         protected internal IServiceProvider _serviceProvider { get; }
         private readonly NodeContext _nodeContext;
 
@@ -52,6 +56,7 @@ namespace Plugin.Sync.Commerce.CatalogImport.ServiceBus
             CommerceCommander commerceCommander,
             GetEnvironmentCommand getEnvironmentCommand,
             ImportSellableItemFromContentHubCommand importSellableItemFromContentHubCommand,
+            ImportCategoryFromContentHubCommand importCategoryFromContentHubCommand,
             IConfiguration configuration,
             ILogger<ServiceBusConsumer> logger,
             IServiceProvider serviceProvider,
@@ -61,6 +66,7 @@ namespace Plugin.Sync.Commerce.CatalogImport.ServiceBus
             _globalEnvironment = globalEnvironment;
             _getEnvironmentCommand = getEnvironmentCommand;
             _importSellableItemFromContentHubCommand = importSellableItemFromContentHubCommand;
+            _importCategoryFromContentHubCommand = importCategoryFromContentHubCommand;
             _commerceCommander = commerceCommander;
             //_processData = processData;
             _commandsController = commandsController;
@@ -91,33 +97,62 @@ namespace Plugin.Sync.Commerce.CatalogImport.ServiceBus
             {
                 var targetId = (string)message.UserProperties["target_id"];
                 var targetDefinition = (string)message.UserProperties["target_definition"];
-                if (!string.IsNullOrEmpty(targetId) && !string.IsNullOrEmpty(targetDefinition) && targetDefinition.Equals(_productEntityDefinition, StringComparison.OrdinalIgnoreCase))
+                if (!string.IsNullOrEmpty(targetId) && !string.IsNullOrEmpty(targetDefinition))
                 {
-                    //var command = _commerceCommander.Command<ImportSellableItemFromContentHubCommand>();
-                    //var context = new CommerceContext(_logger, new Microsoft.ApplicationInsights.TelemetryClient());
                     var context = GetCommerceContext();
                     var environment = await _getEnvironmentCommand.Process(context, "HabitatAuthoring").ConfigureAwait(false);
-                    
-
-                    //context.Environment = modeEnvironment;
                     context.PipelineContextOptions.CommerceContext.Environment = environment;
-                    var mappingPolicy = context.GetPolicy<SellableItemMappingPolicy>();
-                    var argument = new ImportCatalogEntityArgument(mappingPolicy, typeof(SellableItem))
+
+                    var result = await TryProcessSellableItem(targetId, targetDefinition, context).ConfigureAwait(false);
+                    if (result == null)
                     {
-                        ContentHubEntityId = targetId
-                        //ParentEntityId = string.IsNullOrEmpty(parentEntityIds) ? null : parentEntityIds
-                    };
-                    var command = _serviceProvider.GetService<ImportSellableItemFromContentHubCommand>();
-                    //var result = await command.Process(context, argument).ConfigureAwait(false);
-                    var result = await _importSellableItemFromContentHubCommand.Process(context, argument).ConfigureAwait(false);
-                    //await _commandsController.ImportSellableItem(targetId).ConfigureAwait(false);
+                        result = await TryProcessCategory(targetId, targetDefinition, context).ConfigureAwait(false);
+                    }
+
                 }
             }
 
-            //var myPayload = JsonConvert.DeserializeObject<MyPayload>(Encoding.UTF8.GetString(message.Body));
-            //await _processData.Process(myPayload);
             await _queueClient.CompleteAsync(message.SystemProperties.LockToken);
         }
+
+        private async Task<ImportCatalogEntityArgument> TryProcessSellableItem(string sourceId, string sourceEntityType, CommerceContext context)
+        {
+            var mappingPolicy = context.GetPolicy<SellableItemMappingPolicy>();
+            var mappingConfiguration = mappingPolicy?.MappingConfigurations?.FirstOrDefault(c => c.EntityType.Equals(sourceEntityType, StringComparison.OrdinalIgnoreCase));
+
+            if (mappingConfiguration != null)
+            {
+                var argument = new ImportCatalogEntityArgument(mappingConfiguration, typeof(SellableItem))
+                {
+                    ContentHubEntityId = sourceId,
+                    SourceEntityType = sourceEntityType
+                };
+                //var command = _serviceProvider.GetService<ImportSellableItemFromContentHubCommand>();
+                return await _importSellableItemFromContentHubCommand.Process(context, argument).ConfigureAwait(false);
+            }
+
+            return null;
+        }
+
+        private async Task<ImportCatalogEntityArgument> TryProcessCategory(string sourceId, string sourceEntityType, CommerceContext context)
+        {
+            var mappingPolicy = context.GetPolicy<CategoryMappingPolicy>();
+            var mappingConfiguration = mappingPolicy?.MappingConfigurations?.FirstOrDefault(c => c.EntityType.Equals(sourceEntityType, StringComparison.OrdinalIgnoreCase));
+
+            if (mappingConfiguration != null)
+            {
+                var argument = new ImportCatalogEntityArgument(mappingConfiguration, typeof(SellableItem))
+                {
+                    ContentHubEntityId = sourceId,
+                    SourceEntityType = sourceEntityType
+                };
+                //var command = _serviceProvider.GetService<ImportCategoryFromContentHubCommand>();
+                return await _importCategoryFromContentHubCommand.Process(context, argument).ConfigureAwait(false);
+            }
+
+            return null;
+        }
+
 
         private CommerceContext GetCommerceContext()
         {
@@ -144,7 +179,7 @@ namespace Plugin.Sync.Commerce.CatalogImport.ServiceBus
             }
             return commerceContext;
 
-            
+
             //this._baseContext = commerceContext;
         }
 

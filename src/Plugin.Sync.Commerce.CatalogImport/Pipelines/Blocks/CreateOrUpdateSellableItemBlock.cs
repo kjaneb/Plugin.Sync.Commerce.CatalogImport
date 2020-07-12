@@ -9,6 +9,7 @@ using Sitecore.Commerce.Plugin.Composer;
 using Sitecore.Commerce.Plugin.Pricing;
 using Sitecore.Framework.Conditions;
 using Sitecore.Framework.Pipelines;
+using Sitecore.Rules.Conditions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -56,19 +57,35 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
             Condition.Requires(entityData, "CatalogEntityDataModel is required to exist in order for CommercePipelineExecutionContext to run").IsNotNull();
             Condition.Requires(entityData.EntityId, "EntityId is reguired in input JSON data").IsNotNullOrEmpty();
             Condition.Requires(entityData.EntityName, "EntityName is reguired in input JSON data").IsNotNullOrEmpty();
-            Condition.Requires(entityData.ParentCatalogName, "ParentCatalogName Name is reguired to be present in input JSON data or set default in SellabeItemMappingPolicy").IsNotNullOrEmpty();
+            Condition.Requires(entityData.CatalogName, "ParentCatalogName Name is reguired to be present in input JSON data or set default in SellabeItemMappingPolicy").IsNotNullOrEmpty();
+            if (!((entityData.ParentEntityIDs != null && entityData.ParentEntityIDs.Count() > 0) || arg.MappingConfiguration.AllowSycToRoot))
+            {
+                var errorMessage = $"Cannot save SellableItem Entity withID == {entityData.EntityId} when Parent relationships not defined and AllowSycToRoot is set to false in mapping configuration.";
+                Log.Error(errorMessage);
+                context.Abort(errorMessage, this);
+                //TODO: cleanup response
+                return arg;
+            }
 
             try
             {
+                entityData.CommerceEntityId = $"{CommerceEntity.IdPrefix<SellableItem>()}{entityData.EntityId}";
                 //Get or create sellable item
                 var sellableItem = await GetOrCreateSellableItem(entityData, context);
                 //Associate catalog and category
-                if (arg.ParentEntityIds != null && arg.ParentEntityIds.Count() > 0)
+                if (entityData.ParentEntityIDs != null && entityData.ParentEntityIDs.Count() > 0)
                 {
-                    foreach (var parentEntityId in arg.ParentEntityIds)
+                    foreach (var parentEntityId in entityData.ParentEntityIDs)
                     {
-                        sellableItem = await AssociateSellableItemWithParentEntities(entityData.ParentCatalogName, parentEntityId, sellableItem, context.CommerceContext).ConfigureAwait(false);
+                        if (!string.IsNullOrEmpty(parentEntityId))
+                        {
+                            sellableItem = await AssociateSellableItemWithParent(entityData.CatalogName, parentEntityId, sellableItem, context.CommerceContext).ConfigureAwait(false);
+                        }
                     }
+                }
+                else if(arg.MappingConfiguration.AllowSycToRoot)
+                {
+                    sellableItem = await AssociateSellableItemWithParent(entityData.CatalogName, null, sellableItem, context.CommerceContext).ConfigureAwait(false);
                 }
 
                 //Check code running before this - this persist might be redindant
@@ -103,7 +120,7 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
         /// <param name="sellableItem"></param>
         /// <param name="context"></param>
         /// <returns></returns>
-        private async Task<SellableItem> AssociateSellableItemWithParentEntities(string catalogName, string parentCategoryName, SellableItem sellableItem, CommerceContext context)
+        private async Task<SellableItem> AssociateSellableItemWithParent(string catalogName, string parentCategoryName, SellableItem sellableItem, CommerceContext context)
         {
             string parentCategoryCommerceId = null;
             if (!string.IsNullOrEmpty(parentCategoryName))

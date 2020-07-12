@@ -17,7 +17,7 @@
     "AntiForgeryEnabled": false,
     "CommerceServicesHostPostfix": "sc9.com",
     "UseHttpsInKestrel": false,
-    "EnableContentHubSync": false
+    "EnableContentHubSync": true
   },
   "ApplicationInsights": {
     "InstrumentationKey": ""

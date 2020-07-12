@@ -5,7 +5,7 @@ using Newtonsoft.Json.Linq;
 using Plugin.Sync.Commerce.CatalogImport.Commands;
 using Plugin.Sync.Commerce.CatalogImport.Pipelines.Arguments;
 using Plugin.Sync.Commerce.CatalogImport.Policies;
-using Serilog;
+//using Serilog;
 using Sitecore.Commerce.Core;
 using Sitecore.Commerce.Core.Commands;
 using Sitecore.Commerce.Plugin.Catalog;
@@ -18,6 +18,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Polly;
+using Sitecore.Diagnostics;
 
 namespace Plugin.Sync.Commerce.CatalogImport.Controllers
 {
@@ -29,9 +30,13 @@ namespace Plugin.Sync.Commerce.CatalogImport.Controllers
         private readonly GetEnvironmentCommand _getEnvironmentCommand;
 
         //TODO: move below consts into CH connection policy
-        static string _connectionString = "Endpoint=sb://xccontenthubdemo.servicebus.windows.net/;SharedAccessKeyName=products_content;SharedAccessKey=yK0BD0C+ijNNWfl3cUJdmOJgC4MT/QSZZFqAAir7MZQ=";
+        //static string _connectionString = "Endpoint=sb://xccontenthubdemo.servicebus.windows.net/;SharedAccessKeyName=products_content;SharedAccessKey=yK0BD0C+ijNNWfl3cUJdmOJgC4MT/QSZZFqAAir7MZQ=";
+        static string _connectionString = "Endpoint=sb://xccontenthubdemo.servicebus.windows.net/;SharedAccessKeyName=ManageSendListenAccessKey;SharedAccessKey=XWWm4N78ZewXzLJHkA0C1wxwqaFBABQFrKth8/U+vNQ=";
+
+        //static string _subscriptionName = "quadfectaproductsync";
         static string _subscriptionName = "quadfectaproductsync";
-        static string _topicName = "products_content";
+        //static string _topicName = "products_content";
+        static string _topicName = "xccontenthubdemoqueue";
         static string _productEntityDefinition = "M.PCM.Product";
         static int _maxMessagesCount = 100;
         private const string ENV_NAME = "HabitatAuthoring";
@@ -65,12 +70,18 @@ namespace Plugin.Sync.Commerce.CatalogImport.Controllers
             await InitializeEnvironment().ConfigureAwait(false);
             try
             {
+                var entityType = "M.PCM.ProductFamily";
                 var command = Command<ImportCategoryCommand>();
                 var mappingPolicy = CurrentContext.GetPolicy<CategoryMappingPolicy>();
-                var argument = new ImportCatalogEntityArgument(request, mappingPolicy, typeof(Category));
-                var result = await command.Process(CurrentContext, argument);
+                var mappingConfiguration = mappingPolicy?.MappingConfigurations?.FirstOrDefault(c => c.EntityType.Equals(entityType, StringComparison.OrdinalIgnoreCase));
+                if (mappingConfiguration != null)
+                {
+                    var argument = new ImportCatalogEntityArgument(request, mappingConfiguration, typeof(Category));
+                    var result = await command.Process(CurrentContext, argument);
+                    return result != null ? new ObjectResult(result) : new NotFoundObjectResult("Error importing Category data");
+                }
 
-                return result != null ? new ObjectResult(result) : new NotFoundObjectResult("Error importing Category data");
+                return new NotFoundObjectResult("No suitable mapping configuration found");
             }
             catch (Exception ex)
             {
@@ -93,10 +104,17 @@ namespace Plugin.Sync.Commerce.CatalogImport.Controllers
             {
                 var command = Command<ImportSellableItemCommand>();
                 var mappingPolicy = CurrentContext.GetPolicy<SellableItemMappingPolicy>();
-                var argument = new ImportCatalogEntityArgument(request, mappingPolicy, typeof(SellableItem));
-                var result = await command.Process(CurrentContext, argument);
+                var entityType = "M.PCM.Product";
 
-                return result != null ? new ObjectResult(result) : new NotFoundObjectResult("Error importing SellableItem data");
+                var mappingConfiguration = mappingPolicy?.MappingConfigurations?.FirstOrDefault(c => c.EntityType.Equals(entityType, StringComparison.OrdinalIgnoreCase));
+                if (mappingConfiguration != null)
+                {
+                    var argument = new ImportCatalogEntityArgument(request, mappingConfiguration, typeof(SellableItem));
+                    var result = await command.Process(CurrentContext, argument);
+                    return result != null ? new ObjectResult(result) : new NotFoundObjectResult("Error importing Category data");
+                }
+
+                return new NotFoundObjectResult("No suitable mapping configuration found");
             }
             catch (Exception ex)
             {
@@ -119,16 +137,33 @@ namespace Plugin.Sync.Commerce.CatalogImport.Controllers
                 if (!request.ContainsKey("EntityId") || request["EntityId"] == null)
                     return (IActionResult)new BadRequestObjectResult((object)request);
                 string entityId = request["EntityId"].ToString();
+                string entityType = null;
+                if (Request?.Headers != null && Request.Headers.ContainsKey("EntityType"))
+                {
+                    entityType = Request.Headers["EntityType"];
+                }
+                if (string.IsNullOrEmpty(entityType))
+                {
+                    throw new ArgumentNullException($"Error syncing Entity with EntityId={entityId}. entityType header value must be set.");
+                }
 
                 var command = Command<ImportSellableItemFromContentHubCommand>();
                 var mappingPolicy = CurrentContext.GetPolicy<SellableItemMappingPolicy>();
-                var argument = new ImportCatalogEntityArgument(mappingPolicy, typeof(SellableItem))
-                {
-                    ContentHubEntityId = entityId
-                };
-                var result = await command.Process(CurrentContext, argument);
 
-                return result != null ? new ObjectResult(result) : new NotFoundObjectResult("Error importing SellableItem data");
+                var mappingConfiguration = mappingPolicy?.MappingConfigurations?.FirstOrDefault(c => c.EntityType.Equals(entityType, StringComparison.OrdinalIgnoreCase));
+                if (mappingConfiguration != null)
+                {
+                    var argument = new ImportCatalogEntityArgument(mappingConfiguration, typeof(SellableItem))
+                    {
+                        ContentHubEntityId = entityId,
+                        SourceEntityType = entityType
+                    };
+                    var result = await command.Process(CurrentContext, argument);
+
+                    return result != null ? new ObjectResult(result) : new NotFoundObjectResult("Error importing SellableItem data");
+                }
+
+                return new NotFoundObjectResult("No suitable mapping configuration found");
             }
             catch (Exception ex)
             {
@@ -137,27 +172,75 @@ namespace Plugin.Sync.Commerce.CatalogImport.Controllers
         }
 
         [HttpPost]
-        [Route("ImportSellableItemFromContentHub()")]
-        public async Task<IActionResult> ImportSellableItem(string entityId)
+        [Route("ImportCategoryFromContentHub()")]
+        public async Task<IActionResult> ImportCategoryFromContentHub([FromBody] JObject request)
         {
             await InitializeEnvironment().ConfigureAwait(false);
             try
             {
-                var command = Command<ImportSellableItemFromContentHubCommand>();
-                var mappingPolicy = CurrentContext.GetPolicy<SellableItemMappingPolicy>();
-                var argument = new ImportCatalogEntityArgument(mappingPolicy, typeof(SellableItem))
+                if (!request.ContainsKey("EntityId") || request["EntityId"] == null)
+                    return (IActionResult)new BadRequestObjectResult((object)request);
+                string entityId = request["EntityId"].ToString();
+                string entityType = null;
+                if (Request?.Headers != null && Request.Headers.ContainsKey("EntityType"))
                 {
-                    ContentHubEntityId = entityId
-                };
-                var result = await command.Process(CurrentContext, argument);
+                    entityType = Request.Headers["EntityType"];
+                }
+                if (string.IsNullOrEmpty(entityType))
+                {
+                    throw new ArgumentNullException($"Error syncing Entity with EntityId={entityId}. entityType header value must be set.");
+                }
 
-                return result != null ? new ObjectResult(result) : new NotFoundObjectResult("Error importing SellableItem data");
+                var command = Command<ImportCategoryFromContentHubCommand>();
+                var mappingPolicy = CurrentContext.GetPolicy<CategoryMappingPolicy>();
+
+                var mappingConfiguration = mappingPolicy?.MappingConfigurations?.FirstOrDefault(c => c.EntityType.Equals(entityType, StringComparison.OrdinalIgnoreCase));
+                if (mappingConfiguration != null)
+                {
+                    var argument = new ImportCatalogEntityArgument(mappingConfiguration, typeof(SellableItem))
+                    {
+                        ContentHubEntityId = entityId,
+                        SourceEntityType = entityType
+                    };
+                    var result = await command.Process(CurrentContext, argument);
+
+                    return result != null ? new ObjectResult(result) : new NotFoundObjectResult("Error importing SellableItem data");
+                }
+
+                return new NotFoundObjectResult("No suitable mapping configuration found");
             }
             catch (Exception ex)
             {
                 return new ObjectResult(ex);
             }
         }
+
+        //[HttpPost]
+        //[Route("ImportCategoryFromContentHub()")]
+        //public async Task<IActionResult> ImportCategoryFromContentHub([FromBody] JObject request)
+        //{
+        //    await InitializeEnvironment().ConfigureAwait(false);
+        //    try
+        //    {
+        //        if (!request.ContainsKey("EntityId") || request["EntityId"] == null)
+        //            return (IActionResult)new BadRequestObjectResult((object)request);
+        //        string entityId = request["EntityId"].ToString();
+
+        //        var command = Command<ImportCategoryFromContentHubCommand>();
+        //        var mappingPolicy = CurrentContext.GetPolicy<CategoryMappingPolicy>();
+        //        var argument = new ImportCatalogEntityArgument(mappingPolicy, typeof(SellableItem))
+        //        {
+        //            ContentHubEntityId = entityId
+        //        };
+        //        var result = await command.Process(CurrentContext, argument);
+
+        //        return result != null ? new ObjectResult(result) : new NotFoundObjectResult("Error importing SellableItem data");
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return new ObjectResult(ex);
+        //    }
+        //}
 
         [HttpPost]
         [Route("ImportSellableItemsFromContentHub()")]
@@ -171,28 +254,34 @@ namespace Plugin.Sync.Commerce.CatalogImport.Controllers
                     return (IActionResult)new BadRequestObjectResult((object)request);
                 string entityIds = request["EntityIds"].ToString();
 
-                string parentEntityIds = null;
-                if (request.ContainsKey("ParentEntityIds") && request["ParentEntityIds"] != null)
+                string entityType = null;
+                if (Request?.Headers != null && Request.Headers.ContainsKey("EntityType"))
                 {
-                    parentEntityIds = request["ParentEntityIds"].ToString();
+                    entityType = Request.Headers["EntityType"];
+                }
+                if (string.IsNullOrEmpty(entityType))
+                {
+                    throw new ArgumentNullException($"Error syncing Entities with EntityId={entityIds}. entityType header value must be set.");
                 }
 
                 var command = Command<ImportSellableItemFromContentHubCommand>();
                 var mappingPolicy = CurrentContext.GetPolicy<SellableItemMappingPolicy>();
+                var mappingConfiguration = mappingPolicy?.MappingConfigurations?.FirstOrDefault(c => c.EntityType.Equals(entityType, StringComparison.OrdinalIgnoreCase));
+                if (mappingConfiguration == null)
+                {
+                    return new NotFoundObjectResult("No suitable mapping configuration found");
+                }
+
                 var entityIdList = entityIds.Split(',');
 
                 var results = new List<ImportCatalogEntityArgument>();
                 foreach (var entityId in entityIdList)
                 {
-                    var argument = new ImportCatalogEntityArgument(mappingPolicy, typeof(SellableItem))
+                    var argument = new ImportCatalogEntityArgument(mappingConfiguration, typeof(SellableItem))
                     {
-                        ContentHubEntityId = entityId
+                        ContentHubEntityId = entityId,
+                        SourceEntityType = entityType
                     };
-
-                    if (!string.IsNullOrEmpty(parentEntityIds))
-                    {
-                        argument.ParentEntityIds = parentEntityIds.Split(',').ToList();
-                    }
 
                     var result = await command.Process(CurrentContext, argument).ConfigureAwait(false);
                     results.Add(result);
@@ -228,23 +317,32 @@ namespace Plugin.Sync.Commerce.CatalogImport.Controllers
                 {
                     var command = Command<ImportSellableItemFromContentHubCommand>();
                     var mappingPolicy = CurrentContext.GetPolicy<SellableItemMappingPolicy>();
+                    var entityType = "M.PCM.Product";
+
                     foreach (var message in messages)
                     {
                         //Check entity type and match it to policy settings
                         if (message != null && message.Properties.ContainsKey("target_id") && message.Properties.ContainsKey("target_definition"))
                         {
                             var targetId = (string)message.Properties["target_id"];
-                            var targetDefinition = (string)message.Properties["target_definition"];
-                            if (!string.IsNullOrEmpty(targetId) && !string.IsNullOrEmpty(targetDefinition) && targetDefinition.Equals(_productEntityDefinition, StringComparison.OrdinalIgnoreCase))
-                            {
-                                var argument = new ImportCatalogEntityArgument(mappingPolicy, typeof(SellableItem))
-                                {
-                                    ContentHubEntityId = targetId
-                                };
-                                var result = await command.Process(CurrentContext, argument).ConfigureAwait(false);
+                            var targetDefinition = (string)message.Properties["SaveEntityMessage"];
+                            var MessageType = (string)message.Properties["target_definition"];
+                            var mappingConfiguration = mappingPolicy?.MappingConfigurations?.FirstOrDefault(c => c.EntityType.Equals(entityType, StringComparison.OrdinalIgnoreCase));
 
-                                //TODO: complete on success, define failure(s) handling
-                                message.Complete();
+                            if (mappingConfiguration != null)
+                            {
+                                if (!string.IsNullOrEmpty(targetId) && !string.IsNullOrEmpty(targetDefinition) && targetDefinition.Equals(_productEntityDefinition, StringComparison.OrdinalIgnoreCase))
+                                {
+                                    var argument = new ImportCatalogEntityArgument(mappingConfiguration, typeof(SellableItem))
+                                    {
+                                        ContentHubEntityId = targetId,
+                                        SourceEntityType = entityType
+                                    };
+                                    var result = await command.Process(CurrentContext, argument).ConfigureAwait(false);
+
+                                    //TODO: complete on success, define failure(s) handling
+                                    message.Complete();
+                                } 
                             }
                         }
                     }
@@ -256,7 +354,7 @@ namespace Plugin.Sync.Commerce.CatalogImport.Controllers
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Error processing Azure queue message(s)");
+                Log.Error("Error processing Azure queue message(s)", ex, this);
                 return new ObjectResult(ex);
             }
         }

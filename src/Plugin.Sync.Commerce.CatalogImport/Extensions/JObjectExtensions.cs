@@ -20,14 +20,9 @@ namespace Plugin.Sync.Commerce.CatalogImport.Extensions
         /// <param name="jsonData"></param>
         /// <param name="mappingPolicy"></param>
         /// <returns></returns>
-        public static string GetCatalogName(this JObject jsonData, MappingPolicyBase mappingPolicy)
+        public static string GetCatalogName(this JObject jsonData, MappingConfiguration mappingConfiguration)
         {
-            var catalogName = jsonData.SelectValue<string>(mappingPolicy.ParentCatalogName);
-            if (string.IsNullOrEmpty(catalogName) && !string.IsNullOrEmpty(mappingPolicy.DefaultCatalogName))
-            {
-                catalogName = mappingPolicy.DefaultCatalogName;
-            }
-            return catalogName;
+            return jsonData.SelectValue<string>(mappingConfiguration.CatalogName);
         }
 
         /// <summary>

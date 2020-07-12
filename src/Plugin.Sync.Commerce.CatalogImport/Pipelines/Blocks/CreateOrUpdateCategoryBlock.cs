@@ -50,15 +50,24 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
             //TODO: add an option to only import data if SellableItem don't exist (don't update existing ones)
 
             var entityData = context.GetModel<CatalogEntityDataModel>();
+            
 
             Condition.Requires(entityData, "CatalogEntityDataModel is required to exist in order for CommercePipelineExecutionContext to run").IsNotNull();
             Condition.Requires(entityData.EntityId, "EntityId is reguired in input JSON data").IsNotNullOrEmpty();
             Condition.Requires(entityData.EntityName, "EntityName is reguired in input JSON data").IsNotNullOrEmpty();
-            Condition.Requires(entityData.CommerceEntityId, "Commerce Entity ID cannot be identified based on input JSON data").IsNotNullOrEmpty();
-            Condition.Requires(entityData.ParentCatalogName, "ParentCatalogName Name is reguired to be present in input JSON data or set default in SellabeItemMappingPolicy").IsNotNullOrEmpty();
-
+            //Condition.Requires(entityData.CommerceEntityId, "Commerce Entity ID cannot be identified based on input JSON data").IsNotNullOrEmpty();
+            Condition.Requires(entityData.CatalogName, "CatalogName Name is reguired to be present in input JSON data or set default in SellabeItemMappingPolicy").IsNotNullOrEmpty();
+            if (!((entityData.ParentEntityIDs != null && entityData.ParentEntityIDs.Count() > 0) || arg.MappingConfiguration.AllowSycToRoot))
+            {
+                var errorMessage = $"Cannot save Category Entity withID == {entityData.EntityId} when Parent relationships not defined and AllowSycToRoot is set to false in mapping configuration.";
+                Log.Error(errorMessage);
+                context.Abort(errorMessage, this);
+                //TODO: cleanup response
+                return arg;
+            }
             try
             {
+                entityData.CommerceEntityId = $"{CommerceEntity.IdPrefix<Category>()}{entityData.CatalogName}-{entityData.EntityName}";
                 //Get or create sellable item
                 var category = await GetOrCreateCategory(entityData, context);
                 //Associate catalog and category
@@ -69,11 +78,14 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
                     {
                         if (!string.IsNullOrEmpty(parentEntityId))
                         {
-                            category = await AssociateCategoryWithParentEntities(entityData.ParentCatalogName, parentEntityId, category, context.CommerceContext); 
+                            category = await AssociateCategoryWithParentEntities(entityData.CatalogName, parentEntityId, category, context.CommerceContext); 
                         }
                     }
                 }
-                
+                else if (arg.MappingConfiguration.AllowSycToRoot)
+                {
+                    category = await AssociateCategoryWithParentEntities(entityData.CatalogName, null, category, context.CommerceContext).ConfigureAwait(false);
+                }
 
                 //Check code running before this - this persist might be redindant
                 //var persistResult = await _commerceCommander.Pipeline<IPersistEntityPipeline>().Run(new PersistEntityArgument(category), context);
@@ -141,7 +153,7 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
             if (category == null)
             {
                 category = await _commerceCommander.Command<CreateCategoryCommand>().Process(context.CommerceContext,
-                    entityData.ParentCatalogName,
+                    entityData.CatalogName,
                     entityData.EntityName,
                     entityData.EntityFields.ContainsKey("DisplayName") ? entityData.EntityFields["DisplayName"] : entityData.EntityName,
                     entityData.EntityFields.ContainsKey("Description") ? entityData.EntityFields["Description"] : string.Empty);
@@ -155,6 +167,28 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
             }
 
             return await _commerceCommander.Command<FindEntityCommand>().Process(context.CommerceContext, typeof(Category), category.Id) as Category;
+        }
+
+        private async Task<Category> AssociateCategoryWithParent(string catalogName, string parentCategoryName, Category category, CommerceContext context)
+        {
+            string parentCategoryCommerceId = null;
+            if (!string.IsNullOrEmpty(parentCategoryName))
+            {
+                var categoryCommerceId = $"{CommerceEntity.IdPrefix<Category>()}{catalogName}-{parentCategoryName}";
+                var parentCategory = await _commerceCommander.Command<FindEntityCommand>().Process(context, typeof(Category), categoryCommerceId) as Category;
+                parentCategoryCommerceId = parentCategory?.Id;
+            }
+
+            //TODO: Delete old relationships
+            //var deassociateResult = await _commerceCommander.Command<DeleteRelationshipCommand>().Process(context, oldParentCategory.Id, sellableItem.Id, "CategoryToSellableItem");
+
+            var catalogCommerceId = $"{CommerceEntity.IdPrefix<Catalog>()}{catalogName}";
+            var sellableItemAssociation = await _commerceCommander.Command<AssociateCategoryToParentCommand>().Process(context,
+                catalogCommerceId,
+                parentCategoryCommerceId ?? catalogCommerceId,
+                category.Id);
+
+            return await _commerceCommander.Command<FindEntityCommand>().Process(context, typeof(SellableItem), category.Id) as Category;
         }
         #endregion
     }

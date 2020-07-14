@@ -1,15 +1,10 @@
-﻿using System;
+﻿using Sitecore.Commerce.Core;
 using System.Collections.Generic;
-using Sitecore.Commerce.Core;
-
 
 namespace Plugin.Sync.Commerce.CatalogImport.Policies
 {
     public class ContentHubConnectionPolicy : Policy
     {
-        public string TokenCacheName { get; set; }
-        public string ProtocolAndHost { get; set; }
-        public string UserName { get; set; }
-        public string Password { get; set; }
+        public List<ContentHubConnectionSettings> Connections { get; set; }
     }
 }

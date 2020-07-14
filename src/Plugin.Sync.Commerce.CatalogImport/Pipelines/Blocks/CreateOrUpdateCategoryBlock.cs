@@ -50,7 +50,7 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
             //TODO: add an option to only import data if SellableItem don't exist (don't update existing ones)
 
             var entityData = context.GetModel<CatalogEntityDataModel>();
-            
+
 
             Condition.Requires(entityData, "CatalogEntityDataModel is required to exist in order for CommercePipelineExecutionContext to run").IsNotNull();
             Condition.Requires(entityData.EntityId, "EntityId is reguired in input JSON data").IsNotNullOrEmpty();
@@ -78,7 +78,7 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
                     {
                         if (!string.IsNullOrEmpty(parentEntityId))
                         {
-                            category = await AssociateCategoryWithParentEntities(entityData.CatalogName, parentEntityId, category, context.CommerceContext); 
+                            category = await AssociateCategoryWithParentEntities(entityData.CatalogName, parentEntityId, category, context.CommerceContext);
                         }
                     }
                 }
@@ -86,6 +86,8 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
                 {
                     category = await AssociateCategoryWithParentEntities(entityData.CatalogName, null, category, context.CommerceContext).ConfigureAwait(false);
                 }
+
+                category = await _commerceCommander.Command<FindEntityCommand>().Process(context.CommerceContext, typeof(Category), category.Id) as Category;
 
                 //Check code running before this - this persist might be redindant
                 //var persistResult = await _commerceCommander.Pipeline<IPersistEntityPipeline>().Run(new PersistEntityArgument(category), context);
@@ -133,7 +135,7 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
             //var deassociateResult = await _commerceCommander.Command<DeleteRelationshipCommand>().Process(context, oldParentCategory.Id, sellableItem.Id, "CategoryToSellableItem");
 
             var catalogCommerceId = $"{CommerceEntity.IdPrefix<Catalog>()}{catalogName}";
-            var sellableItemAssociation = await _commerceCommander.Command<AssociateCategoryToParentCommand>().Process(context,
+            var categoryAssociation = await _commerceCommander.Command<AssociateCategoryToParentCommand>().Process(context,
                 catalogCommerceId,
                 parentCategoryCommerceId ?? catalogCommerceId,
                 category.Id);
@@ -188,7 +190,7 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
                 parentCategoryCommerceId ?? catalogCommerceId,
                 category.Id);
 
-            return await _commerceCommander.Command<FindEntityCommand>().Process(context, typeof(SellableItem), category.Id) as Category;
+            return await _commerceCommander.Command<FindEntityCommand>().Process(context, typeof(Category), category.Id) as Category;
         }
         #endregion
     }

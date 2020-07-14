@@ -4,9 +4,10 @@ using Plugin.Sync.Commerce.CatalogImport.Extensions;
 using Plugin.Sync.Commerce.CatalogImport.Helpers;
 using Plugin.Sync.Commerce.CatalogImport.Pipelines.Arguments;
 using Plugin.Sync.Commerce.CatalogImport.Policies;
-using Serilog;
+//using Serilog;
 using Sitecore.Commerce.Core;
 using Sitecore.Data.Eventing.Remote;
+using Sitecore.Diagnostics;
 using Sitecore.Framework.Caching;
 using Sitecore.Framework.Pipelines;
 using System;
@@ -51,8 +52,15 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
         {
             try
             {
+                Assert.IsNotNull(arg, "arg is required");
+                Assert.IsNotNull(arg.MappingConfiguration, "MappingConfiguration is required");
+                Assert.IsNotNullOrEmpty(arg.MappingConfiguration.SourceName, "SourceName must be set in MappingConfiguration");
+                
                 var contentHubPolicy = context.GetPolicy<ContentHubConnectionPolicy>();
-                var entityObject = await _contentHubHelper.GetEntityById(arg.ContentHubEntityId, contentHubPolicy).ConfigureAwait(false);
+                Assert.IsNotNull(contentHubPolicy, "ContentHubConnectionPolicy is required, check your configuration");
+                var contentHubConnectionSettings = contentHubPolicy.Connections.FirstOrDefault(c => c.InstanceName.Equals(arg.MappingConfiguration.SourceName, StringComparison.OrdinalIgnoreCase));
+                Assert.IsNotNull(contentHubConnectionSettings, $"contentHubConnectionSettings not found for arg.SourceInstanceName=={arg.MappingConfiguration.SourceName}");
+                var entityObject = await _contentHubHelper.GetEntityById(arg.ContentHubEntityId, contentHubConnectionSettings).ConfigureAwait(false);
                 if (entityObject != null)
                 {
                     arg.Entity = entityObject;
@@ -68,7 +76,7 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
                                 var pathValues = string.Join("|", arg.MappingConfiguration.RelatedEntityPaths[key]).ToLower();
                                 if (!addedPaths.ContainsKey(pathValues))
                                 {
-                                    var relatedEntities = await GetRelatedEntitiesRecursively(entityObject, arg.MappingConfiguration.RelatedEntityPaths[key], contentHubPolicy).ConfigureAwait(false);
+                                    var relatedEntities = await GetRelatedEntitiesRecursively(entityObject, arg.MappingConfiguration.RelatedEntityPaths[key], contentHubConnectionSettings).ConfigureAwait(false);
                                     if (relatedEntities != null)
                                     {
                                         arg.RelatedEntities.Add(key, relatedEntities.Values.ToList());
@@ -89,7 +97,7 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
             catch (Exception ex)
             {
                 var errorMessage = $"Error retrieving Content Hub Entity {arg.ContentHubEntityId}.";
-                Log.Error(ex, errorMessage);
+                Log.Error(errorMessage, ex, this);
                 context.Abort(errorMessage, ex);
                 return arg;
             }
@@ -98,7 +106,7 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
         #endregion
 
         #region Private methods
-        private async Task<Dictionary<string, JObject>> GetRelatedEntitiesRecursively(JObject startEntity, List<string> relatedEntityPaths, ContentHubConnectionPolicy contentHubPolicy)
+        private async Task<Dictionary<string, JObject>> GetRelatedEntitiesRecursively(JObject startEntity, List<string> relatedEntityPaths, ContentHubConnectionSettings contentHubConnectionSettings)
         {
             try
             {
@@ -117,7 +125,7 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
                                 var relatedEntityUrl = relatedEntityToken.Value<string>();
                                 if (!string.IsNullOrEmpty(relatedEntityUrl) && !relatedObjects.ContainsKey(relatedEntityUrl))
                                 {
-                                    relatedEntity = await _contentHubHelper.GetEntityByUrl(relatedEntityUrl, contentHubPolicy).ConfigureAwait(false);
+                                    relatedEntity = await _contentHubHelper.GetEntityByUrl(relatedEntityUrl, contentHubConnectionSettings).ConfigureAwait(false);
                                     if (relatedEntity == null)
                                     {
                                         return null;
@@ -129,7 +137,7 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
                                     else
                                     {
                                         var remainingPaths = relatedEntityPaths.GetRange(i + 1, relatedEntityPaths.Count - i - 1);
-                                        var recursiveResults = await GetRelatedEntitiesRecursively(relatedEntity, remainingPaths, contentHubPolicy).ConfigureAwait(false);
+                                        var recursiveResults = await GetRelatedEntitiesRecursively(relatedEntity, remainingPaths, contentHubConnectionSettings).ConfigureAwait(false);
                                         if (recursiveResults != null && recursiveResults.Values.Count > 0)
                                         {
                                             relatedObjects.AddRange(recursiveResults);
@@ -147,7 +155,7 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
             }
             catch (Exception ex)
             {
-                Log.Error($"Cannot parse entity at one of the path provided: {string.Join(", ", relatedEntityPaths)}", ex);
+                Log.Error($"Cannot parse entity at one of the path provided: {string.Join(", ", relatedEntityPaths)}",  ex, this);
                 throw ex;
             }
         }

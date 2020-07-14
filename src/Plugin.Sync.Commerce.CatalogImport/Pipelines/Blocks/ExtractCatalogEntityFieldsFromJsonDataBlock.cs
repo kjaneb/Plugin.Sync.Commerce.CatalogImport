@@ -85,19 +85,6 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
                 entityData.CatalogName = mappingConfiguration.CatalogName;
             }
 
-            //if (!string.IsNullOrEmpty(mappingConfiguration.ListPricePath))
-            //{
-            //    var price = jsonData.SelectValue<string>(mappingConfiguration.ListPricePath);
-            //    if (!string.IsNullOrEmpty(price))
-            //    {
-            //        decimal parcedPrice;
-            //        if (decimal.TryParse(price, out parcedPrice))
-            //        {
-            //            entityData.ListPrice = parcedPrice;
-            //        }
-            //    }
-            //}
-
             entityData.ParentEntityIDs = new List<string>();
             entityData.ParentEntityNames = new List<string>();
             if (!string.IsNullOrEmpty(mappingConfiguration.ParentEntityIdPath))
@@ -107,7 +94,7 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
                     foreach (var parentEntity in arg.RelatedEntities["ParentEntityIdPath"])
                     {
                         var parentEntityId = parentEntity.SelectValue<string>(mappingConfiguration.ParentEntityIdPath);
-                        if (!string.IsNullOrEmpty(parentEntityId))
+                        if (!string.IsNullOrEmpty(parentEntityId) && parentEntityId != entityData.EntityId)
                         {
                             entityData.ParentEntityIDs.Add(parentEntityId);
                         }
@@ -116,7 +103,7 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
                 else
                 {
                     var parentEntityId = arg.Entity.SelectValue<string>(mappingConfiguration.ParentEntityIdPath);
-                    if (!string.IsNullOrEmpty(parentEntityId))
+                    if (!string.IsNullOrEmpty(parentEntityId) && parentEntityId != entityData.EntityId)
                     {
                         entityData.ParentEntityIDs.Add(parentEntityId);
                     }
@@ -127,7 +114,7 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
                     foreach (var parentEntity in arg.RelatedEntities["ParentEntityNamePath"])
                     {
                         var parentEntityName = parentEntity.SelectValue<string>(mappingConfiguration.ParentEntityNamePath);
-                        if (!string.IsNullOrEmpty(parentEntityName))
+                        if (!string.IsNullOrEmpty(parentEntityName) && parentEntityName != entityData.EntityName)
                         {
                             entityData.ParentEntityNames.Add(parentEntityName);
                         }
@@ -136,7 +123,7 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
                 else
                 {
                     var parentEntityName = arg.Entity.SelectValue<string>(mappingConfiguration.ParentEntityNamePath);
-                    if (!string.IsNullOrEmpty(parentEntityName))
+                    if (!string.IsNullOrEmpty(parentEntityName) && parentEntityName != entityData.EntityName)
                     {
                         entityData.ParentEntityNames.Add(parentEntityName);
                     }

@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using org.apache.zookeeper.data;
 using Plugin.Sync.Commerce.CatalogImport.Policies;
 using Sitecore.Diagnostics;
 using Sitecore.Framework.Caching;
@@ -15,18 +16,18 @@ namespace Plugin.Sync.Commerce.CatalogImport.Helpers
 {
     public class ContentHubHelper
     {
+        private static string CACHE_NAME = "CH_tokens";
         ICacheManager _cacheManager;
-        const string TOKEN_NAME = "ContentHubSecurityToken";
         public ContentHubHelper(ICacheManager cacheManager)
         {
             _cacheManager = cacheManager;
         }
 
-        public async Task<JObject> GetEntityByUrl(string entityUrl, ContentHubConnectionPolicy contentHubPolicy)
+        public async Task<JObject> GetEntityByUrl(string entityUrl, ContentHubConnectionSettings contentHubConnectionSettings)
         {
             var request = WebRequest.Create(entityUrl);
             request.Method = "GET";
-            var token = await GetToken(contentHubPolicy).ConfigureAwait(false);
+            var token = await GetToken(contentHubConnectionSettings).ConfigureAwait(false);
             request.Headers.Add("X-Auth-Token", token);
 
             string responseContent = null;
@@ -48,10 +49,10 @@ namespace Plugin.Sync.Commerce.CatalogImport.Helpers
             return null;
         }
 
-        public async Task<JObject> GetEntityById(string entityId, ContentHubConnectionPolicy contentHubPolicy)
+        public async Task<JObject> GetEntityById(string entityId, ContentHubConnectionSettings contentHubConnectionSettings)
         {
-            var entityUrl = $"{contentHubPolicy.ProtocolAndHost}/api/entities/{entityId}";
-            return await GetEntityByUrl(entityUrl, contentHubPolicy);
+            var entityUrl = $"{contentHubConnectionSettings.ProtocolAndHost}/api/entities/{entityId}";
+            return await GetEntityByUrl(entityUrl, contentHubConnectionSettings);
         }
 
         /// <summary>
@@ -59,20 +60,20 @@ namespace Plugin.Sync.Commerce.CatalogImport.Helpers
         /// </summary>
         /// <param name="contentHubPolicy"></param>
         /// <returns></returns>
-        public async Task<string> GetToken(ContentHubConnectionPolicy contentHubPolicy)
+        public async Task<string> GetToken(ContentHubConnectionSettings contentHubConnectionSettings)
         {
             try
             {
-                var cache = _cacheManager.GetCache(contentHubPolicy.TokenCacheName);
+                var cache = _cacheManager.GetCache(CACHE_NAME);
                 if (cache == null)
                 {
-                    cache = _cacheManager.CreateCache(contentHubPolicy.TokenCacheName);
+                    cache = _cacheManager.CreateCache(CACHE_NAME);
                 }
 
-                string securityToken = await cache.Get<string>(TOKEN_NAME).ConfigureAwait(false);
+                string securityToken = await cache.Get<string>(contentHubConnectionSettings.InstanceName).ConfigureAwait(false);
                 if (string.IsNullOrEmpty(securityToken))
                 {
-                    var request = WebRequest.Create(string.Format("{0}/api/authenticate", contentHubPolicy.ProtocolAndHost));
+                    var request = WebRequest.Create(string.Format("{0}/api/authenticate", contentHubConnectionSettings.ProtocolAndHost));
                     request.Method = "POST";
                     request.ContentType = "application/json";
 
@@ -80,8 +81,8 @@ namespace Plugin.Sync.Commerce.CatalogImport.Helpers
                     {
                         var jsonObject = new
                         {
-                            user_name = contentHubPolicy.UserName,
-                            password = contentHubPolicy.Password,
+                            user_name = contentHubConnectionSettings.UserName,
+                            password = contentHubConnectionSettings.Password,
                             discard_existing = false
                         };
 
@@ -109,7 +110,7 @@ namespace Plugin.Sync.Commerce.CatalogImport.Helpers
                     {
                         AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(3000)
                     };
-                    await cache.SetString(TOKEN_NAME, securityToken, cacheEntryOptions).ConfigureAwait(false);
+                    await cache.SetString(contentHubConnectionSettings.InstanceName, securityToken, cacheEntryOptions).ConfigureAwait(false);
                 }
                 //Log.Warn($"retrieved CH token: {securityToken}", this);
                 return securityToken;

@@ -9,10 +9,24 @@
     "$values": [
       {
         "$type": "Plugin.Sync.Commerce.CatalogImport.Policies.ContentHubConnectionPolicy, Plugin.Sync.Commerce.CatalogImport",
-        "TokenCacheName": "ContentHubTokenCache",
-        "ProtocolAndHost": "https://quadfecta.stylelabsdev.com",
-        "UserName": "sxcsync",
-        "Password": "Welcome20!"
+        "Connections": {
+          "$type": "System.Collections.Generic.List`1[[Plugin.Sync.Commerce.CatalogImport.Policies.ContentHubConnectionSettings, Plugin.Sync.Commerce.CatalogImport]], mscorlib",
+          "$values": [
+            {
+              "InstanceName": "quadfecta.stylelabsdev.com",
+              "ProtocolAndHost": "https://quadfecta.stylelabsdev.com",
+              "UserName": "sxcsync",
+              "Password": "Welcome20!"
+            },
+            {
+              "InstanceName": "xcdemo.stylelabsdev.com",
+              "ProtocolAndHost": "https://xcdemo.stylelabsdev.com",
+              "UserName": "sxcsync",
+              "Password": "Welcome20!"
+            }
+          ]
+        }
+
       }
     ]
   }

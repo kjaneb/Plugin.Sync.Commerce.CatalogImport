@@ -14,9 +14,8 @@ namespace Plugin.Sync.Commerce.CatalogImport.Policies
         public string ParentEntityIdPath { get; set; }
         public string ParentEntityNamePath { get; set; }
         //public string ListPricePath { get; set; }
+        public string SourceName { get; set; }
         public string CatalogName { get; set; }
-        //public string ParentRelationEntityPath { get; set; }
-        //public string ParentRelationParentsPath { get; set; }
         public Dictionary<string, string> FieldPaths { get; set; } = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
         public Dictionary<string, List<string>> RelatedEntityPaths { get; set; } = new Dictionary<string, List<string>> (StringComparer.OrdinalIgnoreCase);
     }

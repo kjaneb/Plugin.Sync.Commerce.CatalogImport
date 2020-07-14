@@ -14,6 +14,7 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Arguments
         public MappingConfiguration MappingConfiguration { get; set; }
         public Type CommerceEntityType { get; set; }
         public string SourceEntityType { get; set; }
+
         public ImportCatalogEntityArgument(JObject request, MappingConfiguration mappingConfiguration, Type commerceEntityType)
         {
             Entity = request;

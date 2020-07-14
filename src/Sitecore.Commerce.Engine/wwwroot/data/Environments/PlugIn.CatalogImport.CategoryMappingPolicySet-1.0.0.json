@@ -22,6 +22,7 @@
               "ParentEntityIdPath": "id",
               "ParentEntityNamePath": "id",
               "CatalogName": "Quadfecta",
+              "SourceName": "quadfecta.stylelabsdev.com",
               "FieldPaths": {
                 "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.String, mscorlib]], mscorlib",
                 "DisplayName": "properties.ProductFamilyLabel.en-US",
@@ -46,12 +47,55 @@
               "EntityIdPath": "id",
               "EntityNamePath": "id",
               "CatalogName": "Quadfecta",
+              "SourceName": "quadfecta.stylelabsdev.com",
               "FieldPaths": {
                 "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.String, mscorlib]], mscorlib",
                 "DisplayName": "properties.ProductCategoryLabel.en-US",
                 "Description": "properties.ProductCategoryDescription.en-US",
                 "Synonyms": "properties.ProductCategorySynonyms.en-US"
-              }              
+              }
+            },
+            {
+              "EntityType": "M.PCM.ProductFamily",
+              "AllowSycToRoot": true,
+              "ClearMissingFieldValues": true,
+              "EntityIdPath": "id",
+              "EntityNamePath": "id",
+              "ParentEntityIdPath": "id",
+              "ParentEntityNamePath": "id",
+              "CatalogName": "Outdoors",
+              "SourceName": "xcdemo.stylelabsdev.com",
+              "FieldPaths": {
+                "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.String, mscorlib]], mscorlib",
+                "DisplayName": "properties.ProductFamilyLabel.en-US",
+                "Description": "properties.ProductFamilyLongDescription.en-US"
+              },
+              "RelatedEntityPaths": {
+                "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]]]], mscorlib",
+                "ParentEntityIdPath": [
+                  "relations.PCMProductCategoryToProductFamily.href",
+                  "parents[*].href"
+                ],
+                "ParentEntityNamePath": [
+                  "relations.PCMProductCategoryToProductFamily.href",
+                  "parents[*].href"
+                ]
+              }
+            },
+            {
+              "EntityType": "M.PCM.ProductCategory",
+              "AllowSycToRoot": true,
+              "ClearMissingFieldValues": true,
+              "EntityIdPath": "id",
+              "EntityNamePath": "id",
+              "CatalogName": "Outdoors",
+              "SourceName": "xcdemo.stylelabsdev.com",
+              "FieldPaths": {
+                "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.String, mscorlib]], mscorlib",
+                "DisplayName": "properties.ProductCategoryLabel.en-US",
+                "Description": "properties.ProductCategoryDescription.en-US",
+                "Synonyms": "properties.ProductCategorySynonyms.en-US"
+              }
             }
           ]
         }

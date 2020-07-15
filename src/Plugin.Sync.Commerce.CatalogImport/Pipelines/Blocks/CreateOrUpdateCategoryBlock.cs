@@ -78,13 +78,13 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
                     {
                         if (!string.IsNullOrEmpty(parentEntityId))
                         {
-                            category = await AssociateCategoryWithParentEntities(entityData.CatalogName, parentEntityId, category, context.CommerceContext);
+                            category = await AssociateCategoryWithParentEntities(entityData.CatalogName, parentEntityId, category, arg.MappingConfiguration.AllowSycToRoot, context.CommerceContext);
                         }
                     }
                 }
-                else if (arg.MappingConfiguration.AllowSycToRoot)
+                else 
                 {
-                    category = await AssociateCategoryWithParentEntities(entityData.CatalogName, null, category, context.CommerceContext).ConfigureAwait(false);
+                    category = await AssociateCategoryWithParentEntities(entityData.CatalogName, null, category, arg.MappingConfiguration.AllowSycToRoot, context.CommerceContext).ConfigureAwait(false);
                 }
 
                 category = await _commerceCommander.Command<FindEntityCommand>().Process(context.CommerceContext, typeof(Category), category.Id) as Category;
@@ -121,7 +121,7 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
         /// <param name="category"></param>
         /// <param name="context"></param>
         /// <returns></returns>
-        private async Task<Category> AssociateCategoryWithParentEntities(string catalogName, string parentCategoryName, Category category, CommerceContext context)
+        private async Task<Category> AssociateCategoryWithParentEntities(string catalogName, string parentCategoryName, Category category, bool allowSyncToRoot, CommerceContext context)
         {
             string parentCategoryCommerceId = null;
             if (!string.IsNullOrEmpty(parentCategoryName))
@@ -135,12 +135,26 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
             //var deassociateResult = await _commerceCommander.Command<DeleteRelationshipCommand>().Process(context, oldParentCategory.Id, sellableItem.Id, "CategoryToSellableItem");
 
             var catalogCommerceId = $"{CommerceEntity.IdPrefix<Catalog>()}{catalogName}";
-            var categoryAssociation = await _commerceCommander.Command<AssociateCategoryToParentCommand>().Process(context,
+            if (!string.IsNullOrEmpty(parentCategoryCommerceId))
+            {
+                var categoryAssociation = await _commerceCommander.Command<AssociateCategoryToParentCommand>().Process(context,
                 catalogCommerceId,
-                parentCategoryCommerceId ?? catalogCommerceId,
+                parentCategoryCommerceId,
                 category.Id);
 
-            return await _commerceCommander.Command<FindEntityCommand>().Process(context, typeof(Category), category.Id) as Category;
+                return await _commerceCommander.Command<FindEntityCommand>().Process(context, typeof(Category), category.Id) as Category;
+            }
+            else if (allowSyncToRoot)
+            {
+                var categoryAssociation = await _commerceCommander.Command<AssociateCategoryToParentCommand>().Process(context,
+                catalogCommerceId,
+                catalogCommerceId,
+                category.Id);
+
+                return await _commerceCommander.Command<FindEntityCommand>().Process(context, typeof(Category), category.Id) as Category;
+            }
+
+            return category;
         }
 
         /// <summary>

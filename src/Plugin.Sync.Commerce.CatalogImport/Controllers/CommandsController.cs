@@ -261,12 +261,23 @@ namespace Plugin.Sync.Commerce.CatalogImport.Controllers
                 }
                 if (string.IsNullOrEmpty(entityType))
                 {
-                    throw new ArgumentNullException($"Error syncing Entities with EntityId={entityIds}. entityType header value must be set.");
+                    throw new ArgumentNullException($"Error syncing Entities with EntityId={entityIds}. EntityType header value must be set.");
+                }
+
+                string instanceName = null;
+                if (Request?.Headers != null && Request.Headers.ContainsKey("InstanceName"))
+                {
+                    instanceName = Request.Headers["InstanceName"];
+                }
+                if (string.IsNullOrEmpty(instanceName))
+                {
+                    throw new ArgumentNullException($"Error syncing Entities with EntityId={entityIds}. InstanceName header value must be set.");
                 }
 
                 var command = Command<ImportSellableItemFromContentHubCommand>();
                 var mappingPolicy = CurrentContext.GetPolicy<SellableItemMappingPolicy>();
-                var mappingConfiguration = mappingPolicy?.MappingConfigurations?.FirstOrDefault(c => c.EntityType.Equals(entityType, StringComparison.OrdinalIgnoreCase));
+                var mappingConfiguration = mappingPolicy?.MappingConfigurations?.FirstOrDefault(c => c.EntityType.Equals(entityType, StringComparison.OrdinalIgnoreCase)
+                                                                                                && c.SourceName.Equals(instanceName, StringComparison.OrdinalIgnoreCase));
                 if (mappingConfiguration == null)
                 {
                     return new NotFoundObjectResult("No suitable mapping configuration found");
@@ -280,7 +291,8 @@ namespace Plugin.Sync.Commerce.CatalogImport.Controllers
                     var argument = new ImportCatalogEntityArgument(mappingConfiguration, typeof(SellableItem))
                     {
                         ContentHubEntityId = entityId,
-                        SourceEntityType = entityType
+                        SourceEntityType = entityType,
+                        
                     };
 
                     var result = await command.Process(CurrentContext, argument).ConfigureAwait(false);

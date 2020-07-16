@@ -57,7 +57,7 @@
             },
             {
               "EntityType": "M.PCM.ProductFamily",
-              "AllowSycToRoot": true,
+              "AllowSycToRoot": false,
               "ClearMissingFieldValues": true,
               "EntityIdPath": "id",
               "EntityNamePath": "id",
@@ -65,10 +65,12 @@
               "ParentEntityNamePath": "id",
               "CatalogName": "Outdoors",
               "SourceName": "xcdemo.stylelabsdev.com",
+              "MasterAsset": "public_link",
+              "Assets": "public_link",
               "FieldPaths": {
                 "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.String, mscorlib]], mscorlib",
                 "DisplayName": "properties.ProductFamilyLabel.en-US",
-                "Description": "properties.ProductFamilyLongDescription.en-US"
+                "Description": "properties.ProductFamilyShortDescription.en-US"
               },
               "RelatedEntityPaths": {
                 "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]]]], mscorlib",
@@ -79,6 +81,18 @@
                 "ParentEntityNamePath": [
                   "relations.PCMProductCategoryToProductFamily.href",
                   "parents[*].href"
+                ],
+                "MasterAsset": [
+                  "relations.PCMProductFamilyToMasterAsset.href",
+                  "children[*].href",
+                  "relations.AssetToPublicLink.href",
+                  "children[*].href"
+                ],
+                "Assets": [
+                  "relations.PCMProductFamilyToAsset.href",
+                  "children[*].href",
+                  "relations.AssetToPublicLink.href",
+                  "children[*].href"
                 ]
               }
             },
@@ -94,7 +108,20 @@
                 "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.String, mscorlib]], mscorlib",
                 "DisplayName": "properties.ProductCategoryLabel.en-US",
                 "Description": "properties.ProductCategoryDescription.en-US",
-                "Synonyms": "properties.ProductCategorySynonyms.en-US"
+                "Synonyms": "properties.ProductCategorySynonyms.en-US",
+                "MenuSection": "properties.PCMCategoryToMenuSection.labels.en-US",
+                "Icon": "properties.Entity.Visualization.icon",
+                "Color": "properties.Entity.Visualization.color",
+                "MasterAsset": "public_link"
+              },
+              "RelatedEntityPaths": {
+                "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]]]], mscorlib",
+                "MasterAsset": [
+                  "relations.PCMProductCategoryToMasterAsset.href",
+                  "children[*].href",
+                  "relations.AssetToPublicLink.href",
+                  "children[*].href"
+                ]
               }
             }
           ]

@@ -190,11 +190,21 @@ namespace Plugin.Sync.Commerce.CatalogImport.Controllers
                 {
                     throw new ArgumentNullException($"Error syncing Entity with EntityId={entityId}. entityType header value must be set.");
                 }
+                string instanceName = null;
+                if (Request?.Headers != null && Request.Headers.ContainsKey("InstanceName"))
+                {
+                    instanceName = Request.Headers["InstanceName"];
+                }
+                if (string.IsNullOrEmpty(instanceName))
+                {
+                    throw new ArgumentNullException($"Error syncing Entity with EntityId={entityId}. InstanceName header value must be set.");
+                }
 
                 var command = Command<ImportCategoryFromContentHubCommand>();
                 var mappingPolicy = CurrentContext.GetPolicy<CategoryMappingPolicy>();
 
-                var mappingConfiguration = mappingPolicy?.MappingConfigurations?.FirstOrDefault(c => c.EntityType.Equals(entityType, StringComparison.OrdinalIgnoreCase));
+                var mappingConfiguration = mappingPolicy?.MappingConfigurations?.FirstOrDefault(c => c.EntityType.Equals(entityType, StringComparison.OrdinalIgnoreCase)
+                                                                                                && c.SourceName.Equals(instanceName, StringComparison.OrdinalIgnoreCase));
                 if (mappingConfiguration != null)
                 {
                     var argument = new ImportCatalogEntityArgument(mappingConfiguration, typeof(SellableItem))

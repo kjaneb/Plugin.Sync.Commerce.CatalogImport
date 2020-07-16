@@ -6,6 +6,7 @@ using Sitecore.Commerce.Core;
 using Sitecore.Commerce.Core.Commands;
 using Sitecore.Commerce.Plugin.Catalog;
 using Sitecore.Commerce.Plugin.Composer;
+using Sitecore.Commerce.Plugin.ManagedLists;
 using Sitecore.Commerce.Plugin.Pricing;
 using Sitecore.Framework.Conditions;
 using Sitecore.Framework.Pipelines;
@@ -17,6 +18,7 @@ using System.Threading.Tasks;
 
 namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
 {
+
     /// <summary>
     /// Import data into an existing or a new SellableItem entity
     /// </summary>
@@ -24,6 +26,8 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
     public class CreateOrUpdateSellableItemBlock : PipelineBlock<ImportCatalogEntityArgument, ImportCatalogEntityArgument, CommercePipelineExecutionContext>
     {
         #region Private fields
+        private readonly GetManagedListCommand _getManagedListCommand;
+        private readonly DeleteRelationshipCommand _deleteRelationshipCommand;
         private readonly CommerceCommander _commerceCommander;
         private readonly CommerceEntityImportHelper _importHelper;
         #endregion
@@ -35,9 +39,12 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
         /// <param name="commerceCommander"></param>
         /// <param name="composerCommander"></param>
         /// <param name="importHelper"></param>
-        public CreateOrUpdateSellableItemBlock(CommerceCommander commerceCommander, ComposerCommander composerCommander)
+        public CreateOrUpdateSellableItemBlock(CommerceCommander commerceCommander, ComposerCommander composerCommander,
+            GetManagedListCommand getManagedListCommand, DeleteRelationshipCommand deleteRelationshipCommand)
         {
             _commerceCommander = commerceCommander;
+            _deleteRelationshipCommand = deleteRelationshipCommand;
+            _getManagedListCommand = getManagedListCommand;
             _importHelper = new CommerceEntityImportHelper(commerceCommander, composerCommander);
         }
 
@@ -72,7 +79,7 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
                 entityData.CommerceEntityId = $"{CommerceEntity.IdPrefix<SellableItem>()}{entityData.EntityId}";
                 //Get or create sellable item
                 var sellableItem = await GetOrCreateSellableItem(entityData, context);
-                //Associate catalog and category
+                await DisassociateParentCategories(sellableItem, context.CommerceContext).ConfigureAwait(false);
                 if (entityData.ParentEntityIDs != null && entityData.ParentEntityIDs.Count() > 0)
                 {
                     foreach (var parentEntityId in entityData.ParentEntityIDs)
@@ -112,6 +119,30 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
         #endregion
 
         #region Private methods
+        public async Task DisassociateParentCategories(SellableItem sellableItem, CommerceContext context)
+        {
+
+            var parentCategorySitecoreIds = sellableItem?.ParentCategoryList?.Split('|');
+            if (parentCategorySitecoreIds == null || parentCategorySitecoreIds.Length == 0)
+            {
+                return;
+            }
+
+            var categoryList = await _getManagedListCommand.Process(context, CommerceEntity.ListName<SellableItem>()).ConfigureAwait(false);
+            var allCategories = categoryList?.Items?.Cast<Category>();
+
+            if (allCategories != null)
+            {
+                foreach (var parentCategorySitecoreId in parentCategorySitecoreIds)
+                {
+                    var parentCategory = allCategories.FirstOrDefault(c => c.SitecoreId == parentCategorySitecoreId);
+                    if (parentCategory != null)
+                    {
+                        await _deleteRelationshipCommand.Process(context, parentCategory.Id, sellableItem.Id, "CategoryToSellableItem");
+                    }
+                }
+            }
+        }
         /// <summary>
         /// Associate SellableItem with parent Catalog and Category(if exists)
         /// </summary>

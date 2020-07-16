@@ -6,6 +6,7 @@ using Sitecore.Commerce.Core;
 using Sitecore.Commerce.Core.Commands;
 using Sitecore.Commerce.Plugin.Catalog;
 using Sitecore.Commerce.Plugin.Composer;
+using Sitecore.Commerce.Plugin.ManagedLists;
 using Sitecore.Framework.Conditions;
 using Sitecore.Framework.Pipelines;
 using System;
@@ -23,6 +24,8 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
         #region Private fields
         private readonly CommerceCommander _commerceCommander;
         private readonly CommerceEntityImportHelper _importHelper;
+        private readonly GetManagedListCommand _getManagedListCommand;
+        private readonly DeleteRelationshipCommand _deleteRelationshipCommand;
         #endregion
 
         #region Public methods
@@ -32,9 +35,12 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
         /// <param name="commerceCommander"></param>
         /// <param name="composerCommander"></param>
         /// <param name="importHelper"></param>
-        public CreateOrUpdateCategoryBlock(CommerceCommander commerceCommander, ComposerCommander composerCommander)
+        public CreateOrUpdateCategoryBlock(CommerceCommander commerceCommander, ComposerCommander composerCommander,
+            GetManagedListCommand getManagedListCommand, DeleteRelationshipCommand deleteRelationshipCommand)
         {
             _commerceCommander = commerceCommander;
+            _deleteRelationshipCommand = deleteRelationshipCommand;
+            _getManagedListCommand = getManagedListCommand;
             _importHelper = new CommerceEntityImportHelper(commerceCommander, composerCommander);
         }
 
@@ -70,6 +76,7 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
                 entityData.CommerceEntityId = $"{CommerceEntity.IdPrefix<Category>()}{entityData.CatalogName}-{entityData.EntityName}";
                 //Get or create sellable item
                 var category = await GetOrCreateCategory(entityData, context);
+                await DisassociateParentCategories(entityData.CatalogName, category, context.CommerceContext).ConfigureAwait(false);
                 //Associate catalog and category
                 if (entityData.ParentEntityIDs != null && entityData.ParentEntityIDs.Count() > 0)
                 {
@@ -82,7 +89,7 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
                         }
                     }
                 }
-                else 
+                else
                 {
                     category = await AssociateCategoryWithParentEntities(entityData.CatalogName, null, category, arg.MappingConfiguration.AllowSycToRoot, context.CommerceContext).ConfigureAwait(false);
                 }
@@ -113,6 +120,34 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
         #endregion
 
         #region Private methods
+
+        public async Task DisassociateParentCategories(string catalogName, Category category, CommerceContext context)
+        {
+            var catalogCommerceId = $"{CommerceEntity.IdPrefix<Catalog>()}{catalogName}";
+            await _deleteRelationshipCommand.Process(context, catalogCommerceId, category.Id, "CategoryToCategory");
+
+            var parentCategorySitecoreIds = category?.ParentCategoryList?.Split('|');
+            if (parentCategorySitecoreIds == null || parentCategorySitecoreIds.Length == 0)
+            {
+                return;
+            }
+
+            var categoryList = await _getManagedListCommand.Process(context, CommerceEntity.ListName<Category>()).ConfigureAwait(false);
+            var allCategories = categoryList?.Items?.Cast<Category>();
+
+            if (allCategories != null)
+            {
+                foreach (var parentCategorySitecoreId in parentCategorySitecoreIds)
+                {
+                    var parentCategory = allCategories.FirstOrDefault(c => c.SitecoreId == parentCategorySitecoreId);
+                    if (parentCategory != null)
+                    {
+                        await _deleteRelationshipCommand.Process(context, parentCategory.Id, category.Id, "CategoryToCategory");
+                    }
+                }
+            }
+        }
+
         /// <summary>
         /// Associate SellableItem with parent Catalog and Category(if exists)
         /// </summary>

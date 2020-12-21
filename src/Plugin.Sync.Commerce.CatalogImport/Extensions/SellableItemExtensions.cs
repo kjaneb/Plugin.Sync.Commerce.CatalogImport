@@ -10,16 +10,16 @@ namespace Plugin.Sync.Commerce.CatalogImport.Extensions
 {
     public static class SellableItemExtensions
     {
-        //public static void AddListPrice(this ImportSellableItemResponse sellableItem, decimal sellableItemListPrice)
-        //{
-        //    var listPricingPolicy = sellableItem.SellableItem.GetPolicy<ListPricingPolicy>();
-        //    listPricingPolicy.ClearPrices();
-        //    if (sellableItemListPrice == 0)
-        //    {
-        //        return;
-        //    }
-        //    listPricingPolicy.AddPrice(new Money("USD", sellableItemListPrice));
-        //}
+        public static void AddListPrice(this SellableItem sellableItem, decimal sellableItemListPrice)
+        {
+            var listPricingPolicy = sellableItem.GetPolicy<ListPricingPolicy>();
+            listPricingPolicy.ClearPrices();
+            if (sellableItemListPrice == 0)
+            {
+                return;
+            }
+            listPricingPolicy.AddPrice(new Money("USD", sellableItemListPrice));
+        }
 
         public static decimal GetLisPrice(this SellableItem sellableItem)
         {

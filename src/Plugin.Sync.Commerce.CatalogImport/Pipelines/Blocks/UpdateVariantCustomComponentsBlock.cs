@@ -21,7 +21,7 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
     /// Import data into an existing SellableItem or new SellableItem entity
     /// </summary>
     [PipelineDisplayName("UpdateCustomComponentsBlock")]
-    public class UpdateCustomComponentsBlock : AsyncPipelineBlock<ImportCatalogEntityArgument, ImportCatalogEntityArgument, CommercePipelineExecutionContext>
+    public class UpdateVariantCustomComponentsBlock : AsyncPipelineBlock<ImportCatalogEntityArgument, ImportCatalogEntityArgument, CommercePipelineExecutionContext>
     {
         #region Private fields
         private readonly CommerceCommander _commerceCommander;
@@ -36,7 +36,7 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
         /// <param name="commerceCommander"></param>
         /// <param name="composerCommander"></param>
         /// <param name="importHelper"></param>
-        public UpdateCustomComponentsBlock(CommerceCommander commerceCommander, ComposerCommander composerCommander)
+        public UpdateVariantCustomComponentsBlock(CommerceCommander commerceCommander, ComposerCommander composerCommander)
         {
             _commerceCommander = commerceCommander;
             _composerCommander = composerCommander;
@@ -65,21 +65,25 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
                 return arg;
             }
 
+
+            var variant = ((SellableItem)entity).GetVariation(entityDataModel.EntityId);
+
+
             foreach (var component in entityDataModel.CustomComponentFields )
             {
                 var type = Type.GetType(component.ComponentType);
-                var method = typeof(CommerceEntity).GetMethod(nameof(CommerceEntity.GetComponent));
+                var method = typeof(ItemVariationComponent).GetMethod(nameof(ItemVariationComponent.GetComponent));
                 if (method != null)
                 {
                     var generic = method.MakeGenericMethod(type);
                     if (generic != null)
                     {
-                        var c = generic.Invoke(entity, null);
+                        var c = generic.Invoke(variant, null);
 
                         if (c == null)
                         {
                             c = Activator.CreateInstance(type);
-                            entity.AddComponents(c as Component);
+                            variant.SetComponent(c as Component);
                         }
 
                         foreach (var field in component.Fields)

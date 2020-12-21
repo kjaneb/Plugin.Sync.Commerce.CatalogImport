@@ -1,9 +1,13 @@
-using Microsoft.AspNetCore.OData.Builder;
+
+using System.Collections.Generic;
 using Sitecore.Commerce.Core;
 using Sitecore.Commerce.Core.Commands;
 using Sitecore.Framework.Conditions;
 using Sitecore.Framework.Pipelines;
 using System.Threading.Tasks;
+using Microsoft.AspNet.OData.Builder;
+using Plugin.Sync.Commerce.CatalogImport.Models;
+using Sitecore.Framework.Pipelines.Abstractions;
 
 namespace Plugin.Sync.Commerce.CatalogImport
 {
@@ -18,9 +22,9 @@ namespace Plugin.Sync.Commerce.CatalogImport
     ///     </cref>
     /// </seealso>
     [PipelineDisplayName("CatalogSyncConfigureServiceApiBlock")]
-    public class ConfigureServiceApiBlock : PipelineBlock<ODataConventionModelBuilder, ODataConventionModelBuilder, CommercePipelineExecutionContext>
+    public class ConfigureServiceApiBlock : AsyncPipelineBlock<ODataConventionModelBuilder, ODataConventionModelBuilder, CommercePipelineExecutionContext>
     {
-        public override Task<ODataConventionModelBuilder> Run(ODataConventionModelBuilder modelBuilder, CommercePipelineExecutionContext context)
+        public override Task<ODataConventionModelBuilder> RunAsync(ODataConventionModelBuilder modelBuilder, CommercePipelineExecutionContext context)
         {
             Condition.Requires(modelBuilder).IsNotNull($"{this.Name}: The argument cannot be null.");
 
@@ -30,6 +34,15 @@ namespace Plugin.Sync.Commerce.CatalogImport
             var importSellableItem = modelBuilder.Action("ImportSellableItem");
             importSellableItem.ReturnsFromEntitySet<CommerceCommand>("Commands");
 
+            var importSellableItemVariant = modelBuilder.Action("ImportVariant");
+            importSellableItemVariant.ReturnsFromEntitySet<CommerceCommand>("Commands");
+
+            var importItemDefintion = modelBuilder.Action("ImportItemDefinition");
+            importItemDefintion.Parameter<string>("name");
+            importItemDefintion.Parameter<string>("displayName");
+            importItemDefintion.Parameter<ItemDefinitionProperties>("properties");
+            importItemDefintion.ReturnsFromEntitySet<CommerceCommand>("Commands");
+
             var importSellableItemFromContentHub = modelBuilder.Action("ImportSellableItemFromContentHub");
             importSellableItemFromContentHub.ReturnsFromEntitySet<CommerceCommand>("Commands");
 
@@ -38,5 +51,6 @@ namespace Plugin.Sync.Commerce.CatalogImport
 
             return Task.FromResult(modelBuilder);
         }
+
     }
 }

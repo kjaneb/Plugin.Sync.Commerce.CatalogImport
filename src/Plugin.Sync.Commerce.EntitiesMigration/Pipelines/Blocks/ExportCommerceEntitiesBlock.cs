@@ -16,7 +16,7 @@ namespace Plugin.Sync.Commerce.EntitiesMigration.Pipelines.Blocks
     /// Import Composer Templates Block
     /// </summary>
     [PipelineDisplayName("ExportCommerceEntitiesBlock")]
-    public class ExportCommerceEntitiesBlock : PipelineBlock<ExportEntitiesArgument, EntityCollectionModel, CommercePipelineExecutionContext>
+    public class ExportCommerceEntitiesBlock : AsyncPipelineBlock<ExportEntitiesArgument, EntityCollectionModel, CommercePipelineExecutionContext>
     {
         /// <summary>
         /// Commerce Commander
@@ -47,7 +47,7 @@ namespace Plugin.Sync.Commerce.EntitiesMigration.Pipelines.Blocks
         /// <param name="arg">arg</param>
         /// <param name="context">context</param>
         /// <returns>flag if the process was sucessfull</returns>
-        public override async Task<EntityCollectionModel> Run(ExportEntitiesArgument arg, CommercePipelineExecutionContext context)
+        public override async Task<EntityCollectionModel> RunAsync(ExportEntitiesArgument arg, CommercePipelineExecutionContext context)
         {
             Condition.Requires(arg).IsNotNull($"{this.Name}: The argument can not be null");
             switch (arg.EntityType.ToLower())

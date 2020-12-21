@@ -5,8 +5,10 @@ using Sitecore.Commerce.Core;
 
 namespace Plugin.Sync.Commerce.CatalogImport.Policies
 {
-    public class SellableItemMappingPolicy : MappingPolicyBase
+    public class VariantMappingPolicy : MappingPolicyBase
     {
         public List<CustomComponentPolicy> CustomComponentPaths { get; set; }
+
+        public string ParentProductName { get; set; }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Plugin.Sync.Commerce.EntitiesMigration.Commands;
@@ -11,7 +10,7 @@ using System;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
-using System.Web.Http.OData;
+using Microsoft.AspNet.OData;
 
 namespace Plugin.Sync.Commerce.EntitiesMigration.Controllers
 {

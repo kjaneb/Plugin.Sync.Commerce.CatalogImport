@@ -8,11 +8,11 @@ using Sitecore.Commerce.Core.Commands;
 
 namespace Plugin.Sync.Commerce.CatalogImport.Commands
 {
-    public class ImportSellableItemCommand : CommerceCommand
+    public class ImportVariantCommand : CommerceCommand
     {
-        private readonly IImportSellableItemPipeline _pipeline;
+        private readonly IImportSellableItemVariantPipeline _pipeline;
 
-        public ImportSellableItemCommand(IImportSellableItemPipeline pipeline, IServiceProvider serviceProvider) : base(serviceProvider)
+        public ImportVariantCommand(IImportSellableItemVariantPipeline pipeline, IServiceProvider serviceProvider) : base(serviceProvider)
         {
             this._pipeline = pipeline;
         }

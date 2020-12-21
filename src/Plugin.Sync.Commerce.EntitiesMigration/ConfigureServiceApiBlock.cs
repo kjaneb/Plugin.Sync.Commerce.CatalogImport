@@ -1,14 +1,15 @@
-﻿namespace Plugin.Sync.Commerce.EntitiesMigration
+﻿using Microsoft.AspNet.OData.Builder;
+
+namespace Plugin.Sync.Commerce.EntitiesMigration
 {
     using System.Threading.Tasks;
-    using Microsoft.AspNetCore.OData.Builder;
     using Sitecore.Commerce.Core;
     using Sitecore.Commerce.Core.Commands;
     using Sitecore.Framework.Conditions;
     using Sitecore.Framework.Pipelines;
 
     [PipelineDisplayName("EntitiesMigrationConfigureServiceApiBlock")]
-    public class ConfigureServiceApiBlock : PipelineBlock<ODataConventionModelBuilder, ODataConventionModelBuilder, CommercePipelineExecutionContext>
+    public class ConfigureServiceApiBlock : AsyncPipelineBlock<ODataConventionModelBuilder, ODataConventionModelBuilder, CommercePipelineExecutionContext>
     {
         /// <summary>
         /// Add cutom APIs to CE
@@ -16,7 +17,7 @@
         /// <param name="modelBuilder"></param>
         /// <param name="context"></param>
         /// <returns></returns>
-        public override Task<ODataConventionModelBuilder> Run(ODataConventionModelBuilder modelBuilder, CommercePipelineExecutionContext context)
+        public override Task<ODataConventionModelBuilder> RunAsync(ODataConventionModelBuilder modelBuilder, CommercePipelineExecutionContext context)
         {
             Condition.Requires(modelBuilder).IsNotNull($"{this.Name}: The argument cannot be null.");
 

@@ -4,7 +4,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
+using Plugin.Sync.Commerce.CatalogImport.Models;
+using Plugin.Sync.Commerce.CatalogImport.Policies;
 
 namespace Plugin.Sync.Commerce.CatalogImport.Extensions
 {
@@ -21,19 +24,46 @@ namespace Plugin.Sync.Commerce.CatalogImport.Extensions
         public static Dictionary<string, string> SelectMappedValues(this JToken jObj, Dictionary<string, string> mappings)
         {
             var fieldValues = new Dictionary<string, string>();
-            foreach (var key in mappings.Keys)
+            if (mappings != null)
             {
-                if (!string.IsNullOrEmpty(mappings[key]))
+                foreach (var key in mappings.Keys)
                 {
-                    var value = jObj.SelectValue<string>(mappings[key]);
-                    if (!string.IsNullOrEmpty(value))
+                    if (!string.IsNullOrEmpty(mappings[key]))
                     {
-                        fieldValues.Add(key, value);
+                        var value = jObj.SelectValue<string>(mappings[key]);
+                        if (!string.IsNullOrEmpty(value))
+                        {
+                            fieldValues.Add(key, value);
+                        }
                     }
                 }
             }
 
             return fieldValues;
+        }
+
+        public static List<CustomComponentModel> SelectMappedValues(this JToken jObj, List<CustomComponentPolicy> components)
+        {
+            var results = new List<CustomComponentModel>();
+
+            foreach (var component in components)
+            {
+                var fieldValues = new Dictionary<string, string>();
+                foreach (var key in component.Fields.Keys)
+                {
+                    if (!string.IsNullOrEmpty(component.Fields[key]))
+                    {
+                        var value = jObj.SelectValue<string>(component.Fields[key]);
+                        if (!string.IsNullOrEmpty(value))
+                        {
+                            fieldValues.Add(key, value);
+                        }
+                    }
+                }
+                results.Add(new CustomComponentModel { ComponentType = component.ComponentType, Fields = fieldValues});
+            }
+
+            return results;
         }
 
         public static Dictionary<string, string> QueryMappedValuesFromRoot(this JToken jData, List<string> rootPaths)

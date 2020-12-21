@@ -17,7 +17,7 @@ namespace Plugin.Sync.Commerce.CatalogImport.Policies
         public List<string> ComposerFieldsRootPaths { get; set; }
         public Dictionary<string, string> ComposerFieldsPaths { get; set; } = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
         public List<string> CustomFieldsRootPaths { get; set; }
-        public Dictionary<string, string> CustomFieldsPaths { get; set; } = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        public Dictionary<string, string> CustomFieldsPaths { get; set; }
         public string UpdatedItemsList { get; set; }
         public string DefaultCatalogName { get; set; }
         public string DefaultCategoryName { get; set; }

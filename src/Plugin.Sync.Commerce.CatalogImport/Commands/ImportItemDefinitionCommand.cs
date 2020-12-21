@@ -8,16 +8,16 @@ using Sitecore.Commerce.Core.Commands;
 
 namespace Plugin.Sync.Commerce.CatalogImport.Commands
 {
-    public class ImportSellableItemCommand : CommerceCommand
+    public class ImportItemDefinitionCommand : CommerceCommand
     {
-        private readonly IImportSellableItemPipeline _pipeline;
+        private readonly IImportItemDefinitionPipeline _pipeline;
 
-        public ImportSellableItemCommand(IImportSellableItemPipeline pipeline, IServiceProvider serviceProvider) : base(serviceProvider)
+        public ImportItemDefinitionCommand(IImportItemDefinitionPipeline pipeline, IServiceProvider serviceProvider) : base(serviceProvider)
         {
             this._pipeline = pipeline;
         }
 
-        public async Task<ImportCatalogEntityArgument> Process(CommerceContext commerceContext, ImportCatalogEntityArgument args)
+        public async Task<ImportItemDefinitionArgument> Process(CommerceContext commerceContext, ImportItemDefinitionArgument args)
         {
             using (var activity = CommandActivity.Start(commerceContext, this))
             {

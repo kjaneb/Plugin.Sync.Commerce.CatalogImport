@@ -21,7 +21,7 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
     /// Update Composer Template fields on Commerce Entity
     /// </summary>
     [PipelineDisplayName("UpdateComposerFieldsBlock")]
-    public class UpdateComposerFieldsBlock : PipelineBlock<ImportCatalogEntityArgument, ImportCatalogEntityArgument, CommercePipelineExecutionContext>
+    public class UpdateComposerFieldsBlock : AsyncPipelineBlock<ImportCatalogEntityArgument, ImportCatalogEntityArgument, CommercePipelineExecutionContext>
     {
         #region Private fields
         private readonly CommerceCommander _commerceCommander;
@@ -49,7 +49,7 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
         /// <param name="arg"></param>
         /// <param name="context"></param>
         /// <returns></returns>
-        public override async Task<ImportCatalogEntityArgument> Run(ImportCatalogEntityArgument arg, CommercePipelineExecutionContext context)
+        public override async Task<ImportCatalogEntityArgument> RunAsync(ImportCatalogEntityArgument arg, CommercePipelineExecutionContext context)
         {
            
                 

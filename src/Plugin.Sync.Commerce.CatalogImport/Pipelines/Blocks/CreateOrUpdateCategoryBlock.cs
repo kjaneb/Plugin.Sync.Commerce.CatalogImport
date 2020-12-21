@@ -17,7 +17,7 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
     /// Import data into an existing Category or new SellableItem entity
     /// </summary>
     [PipelineDisplayName("CreateOrUpdateCategoryBlock")]
-    public class CreateOrUpdateCategoryBlock : PipelineBlock<ImportCatalogEntityArgument, ImportCatalogEntityArgument, CommercePipelineExecutionContext>
+    public class CreateOrUpdateCategoryBlock : AsyncPipelineBlock<ImportCatalogEntityArgument, ImportCatalogEntityArgument, CommercePipelineExecutionContext>
     {
         #region Private fields
         private readonly CommerceCommander _commerceCommander;
@@ -43,7 +43,7 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
         /// <param name="arg"></param>
         /// <param name="context"></param>
         /// <returns></returns>
-        public override async Task<ImportCatalogEntityArgument> Run(ImportCatalogEntityArgument arg, CommercePipelineExecutionContext context)
+        public override async Task<ImportCatalogEntityArgument> RunAsync(ImportCatalogEntityArgument arg, CommercePipelineExecutionContext context)
         {
             //TODO: add an option to only import data if SellableItem already exists (don't create a new one)
             //TODO: add an option to only import data if SellableItem don't exist (don't update existing ones)
@@ -139,7 +139,7 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
                 category.DisplayName = entityData.EntityFields.ContainsKey("DisplayName") ? entityData.EntityFields["DisplayName"] : entityData.EntityName;
                 category.Description = entityData.EntityFields.ContainsKey("Description") ? entityData.EntityFields["Description"] : string.Empty;
 
-                var persistResult = await _commerceCommander.Pipeline<IPersistEntityPipeline>().Run(new PersistEntityArgument(category), context);
+                var persistResult = await _commerceCommander.Pipeline<IPersistEntityPipeline>().RunAsync(new PersistEntityArgument(category), context);
             }
 
             return await _commerceCommander.Command<FindEntityCommand>().Process(context.CommerceContext, typeof(Category), category.Id) as Category;

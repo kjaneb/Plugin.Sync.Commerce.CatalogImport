@@ -37,7 +37,7 @@ namespace Plugin.Sync.Commerce.EntitiesMigration.Commands
         {
             using (var activity = CommandActivity.Start(commerceContext, this))
             {                
-                var result = await this._pipeline.Run(args, new CommercePipelineExecutionContextOptions(commerceContext));
+                var result = await this._pipeline.RunAsync(args, new CommercePipelineExecutionContextOptions(commerceContext));
                 return this;
             }
         }

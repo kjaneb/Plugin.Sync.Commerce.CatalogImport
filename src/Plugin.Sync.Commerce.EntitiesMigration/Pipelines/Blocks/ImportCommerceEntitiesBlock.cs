@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 namespace Plugin.Sync.Commerce.EntitiesMigration.Pipelines.Blocks
 {
     [PipelineDisplayName("ImportCommerceEntitiesBlock")]
-    public class ImportCommerceEntitiesBlock : PipelineBlock<ImportEntitiesArgument, bool, CommercePipelineExecutionContext>
+    public class ImportCommerceEntitiesBlock : AsyncPipelineBlock<ImportEntitiesArgument, bool, CommercePipelineExecutionContext>
     {
         /// <summary>
         /// Commerce Entity service
@@ -40,7 +40,7 @@ namespace Plugin.Sync.Commerce.EntitiesMigration.Pipelines.Blocks
         /// <param name="arg">arg</param>
         /// <param name="context">context</param>
         /// <returns>flag if the process was sucessfull</returns>
-        public override async Task<bool> Run(ImportEntitiesArgument arg, CommercePipelineExecutionContext context)
+        public override async Task<bool> RunAsync(ImportEntitiesArgument arg, CommercePipelineExecutionContext context)
         {
             Condition.Requires(arg).IsNotNull($"{this.Name}: The argument can not be null");
             await _commerceEntityService.ImportCommerceEntities(arg.EntityModel, context);

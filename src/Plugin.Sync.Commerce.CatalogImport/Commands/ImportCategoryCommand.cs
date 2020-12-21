@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Plugin.Sync.Commerce.CatalogImport.Commands
 {
-    public class ImportCategoryCommand : CommerceCommand
+    public class   ImportCategoryCommand : CommerceCommand
     {
         private readonly IImportCategoryPipeline _pipeline;
 
@@ -21,7 +21,7 @@ namespace Plugin.Sync.Commerce.CatalogImport.Commands
         {
             using (var activity = CommandActivity.Start(commerceContext, this))
             {
-                var result = await this._pipeline.Run(args, new CommercePipelineExecutionContextOptions(commerceContext));
+                var result = await this._pipeline.RunAsync(args, new CommercePipelineExecutionContextOptions(commerceContext));
                 return result;
             }
         }

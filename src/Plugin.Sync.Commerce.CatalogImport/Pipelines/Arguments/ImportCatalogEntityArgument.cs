@@ -2,6 +2,7 @@
 using Plugin.Sync.Commerce.CatalogImport.Policies;
 using Sitecore.Commerce.Core;
 using System;
+using System.Text.Json;
 
 namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Arguments
 {

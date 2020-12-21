@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using System.Text.Json;
+using Newtonsoft.Json.Linq;
 using Plugin.Sync.Commerce.CatalogImport.Extensions;
 using Plugin.Sync.Commerce.CatalogImport.Models;
 using Plugin.Sync.Commerce.CatalogImport.Pipelines.Arguments;
@@ -15,7 +16,7 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
     /// Extract Commerce Entity fields from input JSON using Entity's MappingPolicy to find matching fields in input JSON
     /// </summary>
     [PipelineDisplayName("ExtractCatalogEntityFieldsFromJsonDataBlock")]
-    public class ExtractCatalogEntityFieldsFromJsonDataBlock : PipelineBlock<ImportCatalogEntityArgument, ImportCatalogEntityArgument, CommercePipelineExecutionContext>
+    public class ExtractCatalogEntityFieldsFromJsonDataBlock : AsyncPipelineBlock<ImportCatalogEntityArgument, ImportCatalogEntityArgument, CommercePipelineExecutionContext>
     {
         public ExtractCatalogEntityFieldsFromJsonDataBlock()
         {
@@ -27,7 +28,8 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
         /// <param name="arg"></param>
         /// <param name="context"></param>
         /// <returns></returns>
-        public override async Task<ImportCatalogEntityArgument> Run(ImportCatalogEntityArgument arg, CommercePipelineExecutionContext context)
+        public override async Task<ImportCatalogEntityArgument> RunAsync(ImportCatalogEntityArgument arg,
+            CommercePipelineExecutionContext context)
         {
             var mappingPolicy = arg.MappingPolicy;
 
@@ -44,12 +46,26 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
                 ParentCategoryName = jsonData.SelectValue<string>(mappingPolicy.ParentCategoryName),
                 EntityFields = jsonData.SelectMappedValues(mappingPolicy.EntityFieldsPaths),
                 ComposerFields = jsonData.SelectMappedValues(mappingPolicy.ComposerFieldsPaths),
-                CustomFields = jsonData.SelectMappedValues(mappingPolicy.CustomFieldsPaths),
+                CustomFields = jsonData.SelectMappedValues(mappingPolicy.CustomFieldsPaths)
             };
+
+            if (mappingPolicy is SellableItemMappingPolicy)
+            {
+                entityData.CustomComponentFields =
+                    jsonData.SelectMappedValues(((SellableItemMappingPolicy) mappingPolicy).CustomComponentPaths);
+            }
+
+            if (mappingPolicy is VariantMappingPolicy)
+            {
+                entityData.ParentProductName =
+                    jsonData.SelectValue<string>(((VariantMappingPolicy) mappingPolicy).ParentProductName);
+                entityData.CustomComponentFields =
+                    jsonData.SelectMappedValues(((VariantMappingPolicy)mappingPolicy).CustomComponentPaths);
+            }
 
             entityData.EntityFields.AddRange(jsonData.QueryMappedValuesFromRoot(mappingPolicy.EntityFieldsRootPaths));
             entityData.ComposerFields.AddRange(jsonData.QueryMappedValuesFromRoot(mappingPolicy.ComposerFieldsRootPaths));
-            entityData.CustomFields.AddRange(jsonData.QueryMappedValuesFromRoot(mappingPolicy.CustomFieldsRootPaths));
+            //entityData.CustomFields.AddRange(jsonData.QueryMappedValuesFromRoot(mappingPolicy.CustomFieldsRootPaths));
 
             if (string.IsNullOrEmpty(entityData.ParentCatalogName))
             {
@@ -67,7 +83,11 @@ namespace Plugin.Sync.Commerce.CatalogImport.Pipelines.Blocks
                 {
                     entityData.CommerceEntityId = $"{CommerceEntity.IdPrefix<Category>()}{entityData.ParentCatalogName}-{entityData.EntityName}";
                 }
-                else if (arg.CommerceEntityType == typeof(SellableItem))
+                else if (mappingPolicy is VariantMappingPolicy)
+                {
+                    entityData.CommerceEntityId = $"{CommerceEntity.IdPrefix<SellableItem>()}{entityData.ParentProductName}";
+                }
+                else
                 {
                     entityData.CommerceEntityId = $"{CommerceEntity.IdPrefix<SellableItem>()}{entityData.EntityId}";
                 }

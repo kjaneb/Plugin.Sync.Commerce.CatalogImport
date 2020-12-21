@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.ServiceBus.Messaging;
 using Newtonsoft.Json.Linq;
 using Plugin.Sync.Commerce.CatalogImport.Commands;
 using Plugin.Sync.Commerce.CatalogImport.Pipelines.Arguments;
@@ -10,14 +9,18 @@ using Sitecore.Commerce.Core.Commands;
 using Sitecore.Commerce.Plugin.Catalog;
 using System;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
+using Microsoft.AspNet.OData;
+using Microsoft.AspNet.OData.Routing;
+using Plugin.Sync.Commerce.CatalogImport.Models;
 
 namespace Plugin.Sync.Commerce.CatalogImport.Controllers
 {
     /// <summary>
     /// Catalog Entities Import Controller
     /// </summary>
-    public class CommandsController : CommerceController
+    public class CommandsController : CommerceODataController
     {
         private readonly GetEnvironmentCommand _getEnvironmentCommand;
 
@@ -45,7 +48,7 @@ namespace Plugin.Sync.Commerce.CatalogImport.Controllers
         /// <returns></returns>
         [HttpPost]
         [DisableRequestSizeLimit]
-        [Route("ImportCategory()")]
+        [ODataRoute("ImportCategory()", RouteName = "api")]
         public async Task<IActionResult> ImportCategory([FromBody] JObject request)
         {
             InitializeEnvironment();
@@ -63,7 +66,7 @@ namespace Plugin.Sync.Commerce.CatalogImport.Controllers
                 return new ObjectResult(ex);
             }
         }
-        
+
         /// <summary>
         /// Sync incoming data into Commerce SellableItem
         /// </summary>
@@ -71,7 +74,7 @@ namespace Plugin.Sync.Commerce.CatalogImport.Controllers
         /// <returns></returns>
         [HttpPost]
         [DisableRequestSizeLimit]
-        [Route("ImportSellableItem()")]
+        [ODataRoute("ImportSellableItem()", RouteName = "api")]
         public async Task<IActionResult> ImportSellableItem([FromBody] JObject request)
         {
             InitializeEnvironment();
@@ -90,31 +93,20 @@ namespace Plugin.Sync.Commerce.CatalogImport.Controllers
             }
         }
 
-        /// <summary>
-        /// Import Content Hub entity into Commerce Sellable Item
-        /// </summary>
-        /// <param name="request"></param>
-        /// <returns></returns>
         [HttpPost]
-        [Route("ImportSellableItemFromContentHub()")]
-        public async Task<IActionResult> ImportSellableItemFromContentHub([FromBody] JObject request)
+        [DisableRequestSizeLimit]
+        [ODataRoute("ImportVariant()", RouteName = "api")]
+        public async Task<IActionResult> ImportVariant([FromBody] JObject request)
         {
             InitializeEnvironment();
             try
             {
-                if (!request.ContainsKey("EntityId") || request["EntityId"] == null)
-                    return (IActionResult)new BadRequestObjectResult((object)request);
-                string entityId = request["EntityId"].ToString();
-
-                var command = Command<ImportSellableItemFromContentHubCommand>();
-                var mappingPolicy = CurrentContext.GetPolicy<SellableItemMappingPolicy>();
-                var argument = new ImportCatalogEntityArgument(mappingPolicy, typeof(SellableItem))
-                {
-                    ContentHubEntityId = entityId
-                };
+                var command = Command<ImportVariantCommand>();
+                var mappingPolicy = CurrentContext.GetPolicy<VariantMappingPolicy>();
+                var argument = new ImportCatalogEntityArgument(request, mappingPolicy, typeof(Sitecore.Commerce.Plugin.Catalog.SellableItem));
                 var result = await command.Process(CurrentContext, argument);
 
-                return result != null ? new ObjectResult(result) : new NotFoundObjectResult("Error importing SellableItem data");
+                return result != null ? new ObjectResult(result) : new NotFoundObjectResult("Error importing Variant data");
             }
             catch (Exception ex)
             {
@@ -122,52 +114,27 @@ namespace Plugin.Sync.Commerce.CatalogImport.Controllers
             }
         }
 
-        /// <summary>
-        /// Process messages (import CH entities in CE) 
-        /// </summary>
-        /// <param name="request"></param>
-        /// <returns></returns>
         [HttpPost]
-        [Route("ProcessAzureQueue()")]
-        public async Task<IActionResult> ProcessAzureQueue([FromBody] JObject request)
+        [ODataRoute("ImportItemDefinition", RouteName = "api")]
+        public async Task<IActionResult> ImportItemDefinition([FromBody] ODataActionParameters value)
         {
             InitializeEnvironment();
             try
             {
-                var subClient = SubscriptionClient.CreateFromConnectionString(_connectionString, _topicName, _subscriptionName);
-                subClient.OnMessage(m =>
-                {
-                    Log.Information($"Processing Azure Queue message: {m.GetBody<string>()}");
-                });
-                var messages = subClient.ReceiveBatch(_maxMessagesCount);
-                if (messages != null && messages.Count() > 0)
-                {
-                    var command = Command<ImportSellableItemFromContentHubCommand>();
-                    var mappingPolicy = CurrentContext.GetPolicy<SellableItemMappingPolicy>();
-                    foreach (var message in messages)
-                    {
-                        //Check entity type and match it to policy settings
-                        if (message != null && message.Properties.ContainsKey("target_id"))
-                        {
-                            var argument = new ImportCatalogEntityArgument(mappingPolicy, typeof(SellableItem))
-                            {
-                                ContentHubEntityId = (string)message.Properties["target_id"]
-                            };
-                            var result = await command.Process(CurrentContext, argument).ConfigureAwait(false);
+                var command = Command<ImportItemDefinitionCommand>();
 
-                            //TODO: complete on success, define failure(s) handling
-                            message.Complete();
-                        }
-                    } 
-                }
-                
-                //TODO: return meaningful message(s)
-                return new ObjectResult(true);
-                //return result != null ? new ObjectResult(result) : new NotFoundObjectResult("Error importing SellableItem data");
+                var argument = new ImportItemDefinitionArgument();
+                argument.Name = value["name"].ToString();
+                argument.DisplayName = value["displayName"].ToString();
+                var fields = value["properties"] as ItemDefinitionProperties;
+                argument.Fields = fields.Values;
+
+                var result = await command.Process(CurrentContext, argument);
+
+                return result != null ? new ObjectResult(result) : new NotFoundObjectResult("Error importing Variant data");
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Error processing Azure queue message(s)");
                 return new ObjectResult(ex);
             }
         }

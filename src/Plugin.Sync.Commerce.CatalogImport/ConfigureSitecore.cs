@@ -36,21 +36,33 @@ namespace Plugin.Sync.Commerce.CatalogImport
                         .Add<UpdateComposerFieldsBlock>()
                         .Add<UpdateCustomComponentsBlock>();
                     })
+                .AddPipeline<IImportSellableItemVariantPipeline, ImportSellableItemVariantPipeline>(
+                    configure =>
+                    {
+                        configure.Add<ExtractCatalogEntityFieldsFromJsonDataBlock>()
+                            .Add<CreateOrUpdateVariantBlock>()
+                            .Add<UpdateVariantCustomComponentsBlock>();
+                    })
+                .AddPipeline<IImportItemDefinitionPipeline, ImportItemDefinitionPipeline>(
+                    configure =>
+                    {
+                        configure.Add<CreateOrUpdateComposerTemplateBlock>();
+                    })
                 .AddPipeline<IImportSellableItemFromContentHubPipeline, ImportSellableItemFromContentHubPipeline>(
                     configure =>
                     {
                         configure //.Add<GetAzureQueueMessageBlock>()
-                        .Add<GetContentHubEntityBlock>()
                         .Add<ExtractCatalogEntityFieldsFromJsonDataBlock>()
                         .Add<CreateOrUpdateSellableItemBlock>()
                         .Add<UpdateComposerFieldsBlock>()
                         .Add<UpdateCustomComponentsBlock>();
                     })
-                //.ConfigurePipeline<IPersistEntityPipeline>(
-                //   configure =>
-                //   {
-                //       configure.Add<AddSellableItemToUpdatedSellableItemsListBlock>().Before<PersistEntityBlock>();
-                //   })
+					.ConfigurePipeline<IPersistEntityPipeline>(
+                   configure =>
+                   {
+                       configure.Add<AddSellableItemToUpdatedSellableItemsListBlock>().Before<PersistEntityBlock>();
+                   })
+                .ConfigurePipeline<IRunningPluginsPipeline>(c => { c.Add<RegisteredPluginBlock>().After<RunningPluginsBlock>(); })
                 );
 
             services.RegisterAllCommands(assembly);
